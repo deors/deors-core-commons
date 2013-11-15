@@ -1,0 +1,17 @@
+<project name="helloworld-version-2" default="jar" basedir=".">
+
+    <target name="jar">
+        <mkdir dir="deors/commons"/>
+        <mkdir dir="classloader"/>
+        <copy file="HelloWorld.javano" tofile="deors/core/commons/HelloWorld.java"/>
+        <copy file="sample.txt" tofile="classloader/sample.txt"/>
+        <javac srcdir="." nowarn="yes"
+               destdir="."/>
+        <jar destfile="HelloWorld-version-2.jar"
+             basedir="."
+             includes="classloader/sample.txt deors/core/commons/HelloWorld.class"/>
+        <delete dir="deors"/>
+        <delete dir="classloader"/>
+    </target>
+
+</project>
