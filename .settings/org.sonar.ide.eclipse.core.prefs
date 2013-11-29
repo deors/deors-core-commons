@@ -1,7 +1,0 @@
-analyseLocally=false
-eclipse.preferences.version=1
-extraProperties=sonar.jdbc.password\=sonarsonar\r\nsonar.host.url\=http\://localhost\:9000\r\nsonar.squid.analyse.property.accessors\=false\r\nsonar.findbugs.excludesFilters\=C\:\\projects\\deors.core\\deors.core.commons/findbugs-filter.xml\r\nsonar.jdbc.username\=sonar\r\nsonar.jdbc.url\=jdbc\:mysql\://localhost\:3306/sonar?useUnicode\=true&characterEncoding\=utf8\r\nsonar.jdbc.driver\=com.mysql.jdbc.Driver\r\nsonar.reuseExistingRulesConfiguration\=true\r\nsonar.jacoco.itReportPath\=C\:\\projects\\deors.core\\deors.core.commons\\target/jacoco.itest
-lastAnalysisDate=1375046116000
-projectKey=deors.core\:deors.core.commons
-serverUrl=http\://localhost\:9000
-version=2
