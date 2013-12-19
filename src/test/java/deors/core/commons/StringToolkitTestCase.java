@@ -8,6 +8,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,14 +89,13 @@ public class StringToolkitTestCase {
     }
 
     @Test
-    public void testParagraph() {
+    public void testParagraphBasic() {
 
         assertNull(StringToolkit.paragraph(null, 0));
         assertNull(StringToolkit.paragraph("", 0));
         assertNull(StringToolkit.paragraph("", -5));
 
         List<String> l = new ArrayList<String>();
-        String s = null;
 
         l.add("");
         assertEquals(l, StringToolkit.paragraph("", 10));
@@ -104,8 +104,14 @@ public class StringToolkitTestCase {
         l.add("xx");
         assertEquals(l, StringToolkit.paragraph("xx", 10));
         assertEquals(l, StringToolkit.paragraph("xx", 2));
+    }
 
-        l.clear();
+    @Test
+    public void testParagraphLongParagraph() {
+
+        List<String> l = new ArrayList<String>();
+        String s = null;
+
         l.add("example of a string");
         l.add("that is very long");
         l.add("and it is separated");
@@ -119,8 +125,14 @@ public class StringToolkitTestCase {
             + "thus each line will not exceed the maximum "
             + "requested width.";
         assertEquals(l, StringToolkit.paragraph(s, 20));
+    }
 
-        l.clear();
+    @Test
+    public void testParagraphLongWords() {
+
+        List<String> l = new ArrayList<String>();
+        String s = null;
+
         l.add("example of a string");
         l.add("that is very");
         l.add("loooooooooooooooooooooooong");
@@ -180,6 +192,9 @@ public class StringToolkitTestCase {
         assertEquals("remove test of 'quotes **", StringToolkit.removeAll(s, "'", 20));
         assertEquals("remove test of quotes **", StringToolkit.removeAll(s, '\''));
         assertEquals("remove test of 'quotes **", StringToolkit.removeAll(s, '\'', 20));
+
+        s = "remove test of last char";
+        assertEquals("emove test of last cha", StringToolkit.removeAll(s, "r"));
     }
 
     @Test
@@ -280,6 +295,9 @@ public class StringToolkitTestCase {
 
         s = "change test of ''quotes'' **";
         assertEquals("change test of 'quotes' **", StringToolkit.replaceAll(s, "''", "'"));
+
+        s = "change rr and last char";
+        assertEquals("change XX and last chaX", StringToolkit.replaceAll(s, "r", "X"));
     }
 
     @Test
@@ -391,6 +409,10 @@ public class StringToolkitTestCase {
         s = "change test of ''quotes'' **";
         assertEquals("change tst of 'quots' **", StringToolkit.replaceMultiple(s,
             new String[] {"''", "tes"}, new String[] {"'", "ts"}));
+
+        s = "multiple change test of last chars";
+        assertEquals("multiple change teYt of laYt chaXY", StringToolkit.replaceMultiple(s,
+            new String[] {"r", "s"}, new String[] {"X", "Y"}));
     }
 
     @Test
@@ -399,8 +421,13 @@ public class StringToolkitTestCase {
         Map<String, String> emptyMap = new HashMap<String, String>();
 
         assertNull(StringToolkit.replaceMultiple(null, (Map<String, String>) null));
+        assertNull(StringToolkit.replaceMultiple("x", (Map<String, String>) null));
         assertNull(StringToolkit.replaceMultiple(null, emptyMap));
         assertNull(StringToolkit.replaceMultiple("x", emptyMap));
+        assertNull(StringToolkit.replaceMultiple(null, (Map<String, String>) null, 0));
+        assertNull(StringToolkit.replaceMultiple("x", (Map<String, String>) null, 0));
+        assertNull(StringToolkit.replaceMultiple(null, emptyMap, 0));
+        assertNull(StringToolkit.replaceMultiple("x", emptyMap, 0));
 
         String s1 = "short string";
         Map<String, String> mapX = new HashMap<String, String>();
@@ -423,6 +450,13 @@ public class StringToolkitTestCase {
         mapQ2.put("tes", "ts");
 
         assertEquals("change tst of 'quots' **", StringToolkit.replaceMultiple(s3, mapQ2));
+
+        String s4 = "multiple change test of last chars";
+        Map<String, String> mapQ3 = new HashMap<String, String>();
+        mapQ3.put("r", "X");
+        mapQ3.put("s", "Y");
+
+        assertEquals("multiple change teYt of laYt chaXY", StringToolkit.replaceMultiple(s4, mapQ3));
     }
 
     @Test
@@ -548,14 +582,34 @@ public class StringToolkitTestCase {
     public void testFormatForHTMLViewing() {
 
         String s = "string formatted for HTML\r"
-            + "<tag-name>\n\r  multiple spaces\n"
+            + "<tag-name>\n\r  \u000Bmultiple spaces\n"
             + "&\ttab space\r\nαινσϊΥ";
         String r = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
-            + "&lt;tag-name&gt;<br>&nbsp;&nbsp;multiple"
+            + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
             + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
             + "tab&nbsp;space<br>&#225;&#233;&#237;"
             + "&#243;&#250;&#213;";
         assertEquals(r, StringToolkit.formatForHTMLViewing(s));
+
+        String s2 = "\r\nstring formatted for HTML\r"
+            + "<tag-name>\n\r  \u000Bmultiple spaces\n"
+            + "&\ttab space\r\nαινσϊΥ";
+        String r2 = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
+            + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
+            + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            + "tab&nbsp;space<br>&#225;&#233;&#237;"
+            + "&#243;&#250;&#213;";
+        assertEquals(r2, StringToolkit.formatForHTMLViewing(s2));
+
+        String s3 = "\n\rstring formatted for HTML\r"
+            + "<tag-name>\n\r  \u000Bmultiple spaces\n"
+            + "&\ttab space\r\nαινσϊΥ";
+        String r3 = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
+            + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
+            + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            + "tab&nbsp;space<br>&#225;&#233;&#237;"
+            + "&#243;&#250;&#213;";
+        assertEquals(r3, StringToolkit.formatForHTMLViewing(s3));
     }
 
     @Test
@@ -597,5 +651,38 @@ public class StringToolkitTestCase {
 
         assertTrue(StringToolkit.hasInvalidCharacters("prueba", "p"));
         assertFalse(StringToolkit.hasInvalidCharacters("prueba", "x"));
+    }
+
+    @Test
+    public void testFormatDefaultDateFormat() {
+
+        Calendar now = Calendar.getInstance();
+        now.set(2009, 9, 15, 13, 30, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        String s = "2009/10/15";
+
+        assertEquals(s, StringToolkit.formatWithDefaultDateFormat(now.getTime()));
+    }
+
+    @Test
+    public void testFormatDefaultTimeFormat() {
+
+        Calendar now = Calendar.getInstance();
+        now.set(2009, 9, 15, 13, 30, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        String s = "13:30:00";
+
+        assertEquals(s, StringToolkit.formatWithDefaultTimeFormat(now.getTime()));
+    }
+
+    @Test
+    public void testFormatDefaultDateTimeFormat() {
+
+        Calendar now = Calendar.getInstance();
+        now.set(2009, 9, 15, 13, 30, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        String s = "2009/10/15 13:30:00";
+
+        assertEquals(s, StringToolkit.formatWithDefaultDateTimeFormat(now.getTime()));
     }
 }

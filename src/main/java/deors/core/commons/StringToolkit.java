@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
- * Toolkit methods for working with strings.<br>
+ * Toolkit methods for working with strings.
  *
  * @author deors
  * @version 1.0
@@ -104,7 +104,7 @@ public final class StringToolkit {
     private static final String HTML_ENTITY_NUMBER = "&#"; //$NON-NLS-1$
 
     /**
-     * The HTML entity sufix.
+     * The HTML entity suffix.
      */
     private static final char HTML_ENTITY_SEMICOLON = ';';
 
@@ -158,16 +158,34 @@ public final class StringToolkit {
     /**
      * Capitalizes a string. The first character in each word is upper-cased and the rest characters
      * are lower-cased. Each word is delimited by the characters corresponding to the
-     * <code>/s</code> regular expression tag. Actually, a <code>java.util.StringTokenizer</code>
-     * object is used to provide compatibility with JDK v1.3. The tokenizer uses the string
-     * <code>" \t\n\u000B\f\r"</code> that is the string expanded from the <code>/s</code>
-     * regular expression tag.
+     * <code>/s</code> regular expression tag and capitalized using the rules of the default locale.
+     * Actually, a <code>java.util.StringTokenizer</code> object is used to provide compatibility
+     * with JDK v1.3. The tokenizer uses the string <code>" \t\n\u000B\f\r"</code> that is the string
+     * expanded from the <code>/s</code> regular expression tag.
      *
      * @param source the string to be capitalized
      *
      * @return the capitalized string
      */
     public static String capitalize(String source) {
+
+        return capitalize(source, Locale.getDefault());
+    }
+
+    /**
+     * Capitalizes a string. The first character in each word is upper-cased and the rest characters
+     * are lower-cased. Each word is delimited by the characters corresponding to the
+     * <code>/s</code> regular expression tag and capitalized using the rules of the given locale.
+     * Actually, a <code>java.util.StringTokenizer</code> object is used to provide compatibility
+     * with JDK v1.3. The tokenizer uses the string <code>" \t\n\u000B\f\r"</code> that is the string
+     * expanded from the <code>/s</code> regular expression tag.
+     *
+     * @param source the string to be capitalized
+     * @param locale locale to be used for rules to capitalize words
+     *
+     * @return the capitalized string
+     */
+    public static String capitalize(String source, Locale locale) {
 
         if (source == null) {
             return null;
@@ -181,10 +199,10 @@ public final class StringToolkit {
             word = st.nextToken();
 
             if (word.length() == 1) {
-                sb.append(word.toUpperCase(Locale.getDefault()));
+                sb.append(word.toUpperCase(locale));
             } else {
-                sb.append(word.substring(0, 1).toUpperCase(Locale.getDefault()));
-                sb.append(word.substring(1, word.length()).toLowerCase(Locale.getDefault()));
+                sb.append(word.substring(0, 1).toUpperCase(locale));
+                sb.append(word.substring(1, word.length()).toLowerCase(locale));
             }
         }
 
@@ -218,7 +236,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Adds leading space characters to the given string until the result string has a determinated
+     * Adds leading space characters to the given string until the result string has a given
      * length. If the original string length is greater than the final length, the result string is
      * truncated.
      *
@@ -235,7 +253,7 @@ public final class StringToolkit {
 
     /**
      * Adds leading <code>pad</code> characters to the given string until the result string has a
-     * determinated length. If the original string length is greater than the final length, the
+     * given length. If the original string length is greater than the final length, the
      * result string is truncated.
      *
      * @param source the string to be padded
@@ -249,20 +267,19 @@ public final class StringToolkit {
 
         String temp = (source == null) ? BLANK : source;
 
-        if (length <= temp.length()) {
-            return temp.substring(0, length);
+        int difLength = length - temp.length();
+
+        if (difLength > 0) {
+            temp = repeatCharacter(pad, difLength) + temp;
+        } else {
+            temp = temp.substring(0, length);
         }
 
-        StringBuffer sb = new StringBuffer();
-        for (int j = length - temp.length(); j > 0; j--) {
-            sb.append(pad);
-        }
-
-        return sb.append(temp).toString();
+        return temp;
     }
 
     /**
-     * Adds trailing space characters to the given string until the result string has a determinated
+     * Adds trailing space characters to the given string until the result string has a given
      * length. If the original string length is greater than the final length, the result string is
      * truncated.
      *
@@ -279,7 +296,7 @@ public final class StringToolkit {
 
     /**
      * Adds trailing <code>pad</code> characters to the given string until the result string has a
-     * determinated length. If the original string length is greater than the final length, the
+     * given length. If the original string length is greater than the final length, the
      * result string is truncated.
      *
      * @param source the string to be padded
@@ -293,16 +310,15 @@ public final class StringToolkit {
 
         String temp = (source == null) ? BLANK : source;
 
-        if (length <= temp.length()) {
-            return temp.substring(0, length);
+        int difLength = length - temp.length();
+
+        if (difLength > 0) {
+            temp = temp + repeatCharacter(pad, difLength);
+        } else {
+            temp = temp.substring(0, length);
         }
 
-        StringBuffer sb = new StringBuffer(temp);
-        for (int j = length - temp.length(); j > 0; j--) {
-            sb.append(pad);
-        }
-
-        return sb.toString();
+        return temp;
     }
 
     /**
@@ -329,26 +345,24 @@ public final class StringToolkit {
 
         String token = source;
 
-        int spacePos = -1;
-
         while (token.length() != 0) {
             if (token.length() <= width) {
                 retValue.add(token);
                 break;
             }
-            spacePos = token.lastIndexOf(' ', width);
-            if (spacePos == -1) {
-                spacePos = token.indexOf(' ', width);
-                if (spacePos == -1) {
+            int befSpacePos = token.lastIndexOf(' ', width);
+            if (befSpacePos == -1) {
+                int aftSpacePos = token.indexOf(' ', width);
+                if (aftSpacePos == -1) {
                     retValue.add(token);
-                    break;
+                    token = BLANK;
                 } else {
-                    retValue.add(token.substring(0, spacePos));
-                    token = token.substring(spacePos + 1);
+                    retValue.add(token.substring(0, aftSpacePos));
+                    token = token.substring(aftSpacePos + 1);
                 }
             } else {
-                retValue.add(token.substring(0, spacePos));
-                token = token.substring(spacePos + 1);
+                retValue.add(token.substring(0, befSpacePos));
+                token = token.substring(befSpacePos + 1);
             }
         }
 
@@ -356,21 +370,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence of the string
-     * <code>token</code> and removes it.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     *
-     * @return the string after the remove operation
-     */
-    public static String remove(String source, String token) {
-
-        return remove(source, token, 0);
-    }
-
-    /**
-     * Searches in the string <code>source</code> the first occurence of the character
+     * Searches in the string <code>source</code> the first occurrence of the character
      * <code>token</code> and removes it.
      *
      * @param source the string where to search
@@ -384,7 +384,36 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence, starting in the position
+     * Searches in the string <code>source</code> the first occurrence of the string
+     * <code>token</code> and removes it.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     *
+     * @return the string after the remove operation
+     */
+    public static String remove(String source, String token) {
+
+        return remove(source, token, 0);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the first occurrence, starting in the position
+     * <code>begin</code>, of the character <code>token</code> and removes it.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param begin the starting position
+     *
+     * @return the string after the remove operation
+     */
+    public static String remove(String source, char token, int begin) {
+
+        return remove(source, Character.toString(token), begin);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the first occurrence, starting in the position
      * <code>begin</code>, of the string <code>token</code> and removes it.
      *
      * @param source the string where to search
@@ -416,53 +445,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence, starting in the position
-     * <code>begin</code>, of the character <code>token</code> and removes it.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param begin the starting position
-     *
-     * @return the string after the remove operation
-     */
-    public static String remove(String source, char token, int begin) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (begin > source.length()) {
-            return source;
-        }
-
-        int start = source.substring(begin).indexOf(token);
-
-        if (start == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, begin + start));
-        sb.append(source.substring(begin + start + 1));
-
-        return sb.toString();
-    }
-
-    /**
-     * Searches in the string <code>source</code> all occurences of the string <code>token</code>
-     * and removes them.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     *
-     * @return the string after the remove operation
-     */
-    public static String removeAll(String source, String token) {
-
-        return removeAll(source, token, 0);
-    }
-
-    /**
-     * Searches in the string <code>source</code> all occurences of the character
+     * Searches in the string <code>source</code> all occurrences of the character
      * <code>token</code> and removes them.
      *
      * @param source the string where to search
@@ -476,7 +459,36 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> all occurences, starting in the position
+     * Searches in the string <code>source</code> all occurrences of the string <code>token</code>
+     * and removes them.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     *
+     * @return the string after the remove operation
+     */
+    public static String removeAll(String source, String token) {
+
+        return removeAll(source, token, 0);
+    }
+
+    /**
+     * Searches in the string <code>source</code> all occurrences, starting in the position
+     * <code>begin</code>, of the character <code>token</code> and removes them.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param begin the starting position
+     *
+     * @return the string after the remove operation
+     */
+    public static String removeAll(String source, char token, int begin) {
+
+        return removeAll(source, Character.toString(token), begin);
+    }
+
+    /**
+     * Searches in the string <code>source</code> all occurrences, starting in the position
      * <code>begin</code>, of the string <code>token</code> and removes them.
      *
      * @param source the string where to search
@@ -516,65 +528,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> all occurences, starting in the position
-     * <code>begin</code>, of the character <code>token</code> and removes them.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param begin the starting position
-     *
-     * @return the string after the remove operation
-     */
-    public static String removeAll(String source, char token, int begin) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (begin > source.length()) {
-            return source;
-        }
-
-        if (source.indexOf(token) == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, begin));
-
-        int start = -1;
-        int end = begin;
-        while ((start = source.indexOf(token, end)) != -1) {
-            sb.append(source.substring(end, start));
-            end = start + 1;
-        }
-
-        if (end < source.length()) {
-            sb.append(source.substring(end));
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * Searches in the string <code>source</code> the last occurence of the string
-     * <code>token</code> and removes it.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     *
-     * @return the string after the remove operation
-     */
-    public static String removeLast(String source, String token) {
-
-        if (source == null) {
-            return null;
-        }
-
-        return removeLast(source, token, source.length());
-    }
-
-    /**
-     * Searches in the string <code>source</code> the last occurence of the character
+     * Searches in the string <code>source</code> the last occurrence of the character
      * <code>token</code> and removes it.
      *
      * @param source the string where to search
@@ -592,7 +546,40 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the last occurence, before the position
+     * Searches in the string <code>source</code> the last occurrence of the string
+     * <code>token</code> and removes it.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     *
+     * @return the string after the remove operation
+     */
+    public static String removeLast(String source, String token) {
+
+        if (source == null) {
+            return null;
+        }
+
+        return removeLast(source, token, source.length());
+    }
+
+    /**
+     * Searches in the string <code>source</code> the last occurrence, before the position
+     * <code>end</code>, of the character <code>token</code> and removes it.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param end the ending position
+     *
+     * @return the string after the remove operation
+     */
+    public static String removeLast(String source, char token, int end) {
+
+        return removeLast(source, Character.toString(token), end);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the last occurrence, before the position
      * <code>end</code>, of the string <code>token</code> and removes it.
      *
      * @param source the string where to search
@@ -624,38 +611,6 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the last occurence, before the position
-     * <code>end</code>, of the character <code>token</code> and removes it.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param end the ending position
-     *
-     * @return the string after the remove operation
-     */
-    public static String removeLast(String source, char token, int end) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (end > source.length()) {
-            return source;
-        }
-
-        int start = source.substring(0, end).lastIndexOf(token);
-
-        if (start == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, start));
-        sb.append(source.substring(start + 1));
-
-        return sb.toString();
-    }
-
-    /**
      * Creates a string with the <code>repeat</code> character <code>length</code> times.
      *
      * @param repeat the character used to create the string
@@ -666,7 +621,7 @@ public final class StringToolkit {
     public static String repeatCharacter(char repeat, int length) {
 
         if (length <= 0) {
-            return CommonsContext.BLANK;
+            return BLANK;
         }
 
         StringBuffer sb = new StringBuffer(length);
@@ -679,7 +634,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence of the default token and
+     * Searches in the string <code>source</code> the first occurrence of the default token and
      * replaces it for the string <code>replacement</code>.
      *
      * @param source the source string
@@ -695,22 +650,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence of the string
-     * <code>token</code> and replaces it for the string <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     * @param replacement the replacement string
-     *
-     * @return the string after the replace operation
-     */
-    public static String replace(String source, String token, String replacement) {
-
-        return replace(source, token, replacement, 0);
-    }
-
-    /**
-     * Searches in the string <code>source</code> the first occurence of the character
+     * Searches in the string <code>source</code> the first occurrence of the character
      * <code>token</code> and replaces it for the string <code>replacement</code>.
      *
      * @param source the string where to search
@@ -725,7 +665,39 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence, starting in the position
+     * Searches in the string <code>source</code> the first occurrence of the string
+     * <code>token</code> and replaces it for the string <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     * @param replacement the replacement string
+     *
+     * @return the string after the replace operation
+     */
+    public static String replace(String source, String token, String replacement) {
+
+        return replace(source, token, replacement, 0);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the first occurrence, starting in the position
+     * <code>begin</code>, of the character <code>token</code> and replaces it for the string
+     * <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param replacement the replacement string
+     * @param begin the starting position
+     *
+     * @return the string after the replace operation
+     */
+    public static String replace(String source, char token, String replacement, int begin) {
+
+        return replace(source, Character.toString(token), replacement, begin);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the first occurrence, starting in the position
      * <code>begin</code>, of the string <code>token</code> and replaces it for the string
      * <code>replacement</code>.
      *
@@ -760,57 +732,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the first occurence, starting in the position
-     * <code>begin</code>, of the character <code>token</code> and replaces it for the string
-     * <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param replacement the replacement string
-     * @param begin the starting position
-     *
-     * @return the string after the replace operation
-     */
-    public static String replace(String source, char token, String replacement, int begin) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (begin > source.length()) {
-            return source;
-        }
-
-        int start = source.substring(begin).indexOf(token);
-
-        if (start == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, begin + start));
-        sb.append(replacement);
-        sb.append(source.substring(begin + start + 1));
-
-        return sb.toString();
-    }
-
-    /**
-     * Searches in the string <code>source</code> all occurences of the string <code>token</code>
-     * and replaces them for the string <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     * @param replacement the replacement string
-     *
-     * @return the string after the replace operation
-     */
-    public static String replaceAll(String source, String token, String replacement) {
-
-        return replaceAll(source, token, replacement, 0);
-    }
-
-    /**
-     * Searches in the string <code>source</code> all occurences of the character
+     * Searches in the string <code>source</code> all occurrences of the character
      * <code>token</code> and replaces them for the string <code>replacement</code>.
      *
      * @param source the string where to search
@@ -825,7 +747,39 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> all occurences, starting in the position
+     * Searches in the string <code>source</code> all occurrences of the string <code>token</code>
+     * and replaces them for the string <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     * @param replacement the replacement string
+     *
+     * @return the string after the replace operation
+     */
+    public static String replaceAll(String source, String token, String replacement) {
+
+        return replaceAll(source, token, replacement, 0);
+    }
+
+    /**
+     * Searches in the string <code>source</code> all occurrences, starting in the position
+     * <code>begin</code>, of the character <code>token</code> and replaces them for the string
+     * <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param replacement the replacement string
+     * @param begin the starting position
+     *
+     * @return the string after the replace operation
+     */
+    public static String replaceAll(String source, char token, String replacement, int begin) {
+
+        return replaceAll(source, Character.toString(token), replacement, begin);
+    }
+
+    /**
+     * Searches in the string <code>source</code> all occurrences, starting in the position
      * <code>begin</code>, of the string <code>token</code> and replaces them for the string
      * <code>replacement</code>.
      *
@@ -867,68 +821,7 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> all occurences, starting in the position
-     * <code>begin</code>, of the character <code>token</code> and replaces them for the string
-     * <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param replacement the replacement string
-     * @param begin the starting position
-     *
-     * @return the string after the replace operation
-     */
-    public static String replaceAll(String source, char token, String replacement, int begin) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (begin > source.length()) {
-            return source;
-        }
-
-        if (source.indexOf(token) == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, begin));
-
-        int start = -1;
-        int end = begin;
-        while ((start = source.indexOf(token, end)) != -1) {
-            sb.append(source.substring(end, start)).append(replacement);
-            end = start + 1;
-        }
-
-        if (end < source.length()) {
-            sb.append(source.substring(end));
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     * Searches in the string <code>source</code> the last occurence of the string
-     * <code>token</code> and replaces it for the string <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the string to be searched for
-     * @param replacement the replacement string
-     *
-     * @return the string after the replace operation
-     */
-    public static String replaceLast(String source, String token, String replacement) {
-
-        if (source == null) {
-            return null;
-        }
-
-        return replaceLast(source, token, replacement, source.length());
-    }
-
-    /**
-     * Searches in the string <code>source</code> the last occurence of the character
+     * Searches in the string <code>source</code> the last occurrence of the character
      * <code>token</code> and replaces it for the string <code>replacement</code>.
      *
      * @param source the string where to search
@@ -947,7 +840,43 @@ public final class StringToolkit {
     }
 
     /**
-     * Searches in the string <code>source</code> the last occurence, before the position
+     * Searches in the string <code>source</code> the last occurrence of the string
+     * <code>token</code> and replaces it for the string <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the string to be searched for
+     * @param replacement the replacement string
+     *
+     * @return the string after the replace operation
+     */
+    public static String replaceLast(String source, String token, String replacement) {
+
+        if (source == null) {
+            return null;
+        }
+
+        return replaceLast(source, token, replacement, source.length());
+    }
+
+    /**
+     * Searches in the string <code>source</code> the last occurrence, before the position
+     * <code>end</code>, of the character <code>token</code> and replaces it for the string
+     * <code>replacement</code>.
+     *
+     * @param source the string where to search
+     * @param token the character to be searched for
+     * @param replacement the replacement string
+     * @param end the ending position
+     *
+     * @return the string after the replace operation
+     */
+    public static String replaceLast(String source, char token, String replacement, int end) {
+
+        return replaceLast(source, Character.toString(token), replacement, end);
+    }
+
+    /**
+     * Searches in the string <code>source</code> the last occurrence, before the position
      * <code>end</code>, of the string <code>token</code> and replaces it for the string
      * <code>replacement</code>.
      *
@@ -977,41 +906,6 @@ public final class StringToolkit {
         StringBuffer sb = new StringBuffer(source.substring(0, start));
         sb.append(replacement);
         sb.append(source.substring(start + token.length()));
-
-        return sb.toString();
-    }
-
-    /**
-     * Searches in the string <code>source</code> the last occurence, before the position
-     * <code>end</code>, of the character <code>token</code> and replaces it for the string
-     * <code>replacement</code>.
-     *
-     * @param source the string where to search
-     * @param token the character to be searched for
-     * @param replacement the replacement string
-     * @param end the ending position
-     *
-     * @return the string after the replace operation
-     */
-    public static String replaceLast(String source, char token, String replacement, int end) {
-
-        if (source == null) {
-            return null;
-        }
-
-        if (end > source.length()) {
-            return source;
-        }
-
-        int start = source.substring(0, end).lastIndexOf(token);
-
-        if (start == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, start));
-        sb.append(replacement);
-        sb.append(source.substring(start + 1));
 
         return sb.toString();
     }
@@ -1099,12 +993,7 @@ public final class StringToolkit {
     public static String replaceMultiple(String source, String[] tokens, String[] replacements,
                                          int begin) {
 
-        if (source == null || tokens == null || replacements == null
-            || tokens.length == 0 || replacements.length == 0) {
-            return null;
-        }
-
-        if (tokens.length != replacements.length) {
+        if (!checkReplaceMultipleParameters(source, tokens, replacements)) {
             return null;
         }
 
@@ -1128,6 +1017,25 @@ public final class StringToolkit {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Checks parameters for replaceMultiple() method.
+     *
+     * @param source the source string
+     * @param tokens array with the strings to be searched for
+     * @param replacements array with the replacement strings
+     *
+     * @return whether parameters are valid
+     */
+    private static boolean checkReplaceMultipleParameters(String source, String[] tokens,
+                                                          String[] replacements) {
+        return source != null
+            && tokens != null
+            && replacements != null
+            && tokens.length != 0
+            && replacements.length != 0
+            && tokens.length == replacements.length;
     }
 
     /**

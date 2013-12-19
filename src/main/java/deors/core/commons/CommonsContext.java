@@ -1,16 +1,16 @@
 package deors.core.commons;
 
 /**
- * The Commons library context.<br>
+ * The Commons library context.
  *
  * The context acts as a bridge between the library classes, the configuration
  * properties and the messages stored in the resource bundle created from
- * <code>deors.core.commons.configuration.properties</code> properties file).<br>
+ * <code>deors.core.commons.configuration.properties</code> properties file).
  *
  * The system property <code>deors.core.commons.configuration</code> can be used to
- * inject an alternate properties file.<br>
+ * inject an alternate properties file.
  *
- * The class is a singleton.<br>
+ * The class is a singleton.
  *
  * @author deors
  * @version 1.0
@@ -133,8 +133,7 @@ public final class CommonsContext extends AbstractContext {
     public static String getConfigurationProperty(String propertyName, String defaultValue,
                                                   String[] validValues) {
 
-        return contextInstance.getIConfigurationProperty(
-            propertyName, defaultValue, validValues);
+        return contextInstance.getIConfigurationProperty(propertyName, defaultValue, validValues);
     }
 
     /**
@@ -233,8 +232,7 @@ public final class CommonsContext extends AbstractContext {
     public static String getMessage(String messageKey, String replacementString1,
                                     String replacementString2) {
 
-        return contextInstance.getIMessage(
-            messageKey, replacementString1, replacementString2);
+        return contextInstance.getIMessage(messageKey, replacementString1, replacementString2);
     }
 
     /**
@@ -272,7 +270,6 @@ public final class CommonsContext extends AbstractContext {
     public static String getMessage(String messageKey, String[] replacementTokens,
                                     String[] replacementStrings) {
 
-        return contextInstance.getIMessage(
-            messageKey, replacementTokens, replacementStrings);
+        return contextInstance.getIMessage(messageKey, replacementTokens, replacementStrings);
     }
 }

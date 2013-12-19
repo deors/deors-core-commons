@@ -7,10 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The generic library/module context.<br>
+ * The generic library/module context.
  *
  * The context acts as a bridge between the library classes, the configuration properties
- * and the messages stored in resource bundles.<br>
+ * and the messages stored in resource bundles.
  *
  * @author deors
  * @version 1.0

@@ -11,10 +11,10 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Comparator used to sort collections and lists containing objects that represent dates.<br>
+ * Comparator used to sort collections and lists containing objects that represent dates.
  *
  * The comparator supports <code>java.util.Calendar</code>, <code>java.util.Date</code> and
- * <code>java.lang.String</code> objects.<br>
+ * <code>java.lang.String</code> objects.
  *
  * @author deors
  * @version 1.0
@@ -76,46 +76,38 @@ public final class DateComparator
      */
     public int compare(Object o1, Object o2) {
 
-        Date d1 = null;
-        Date d2 = null;
+        Date d1 = checkObject(o1);
+        Date d2 = checkObject(o2);
 
-        if (o1 instanceof Date) {
-            d1 = (Date) o1;
-        } else if (o1 instanceof Calendar) {
-            d1 = ((Calendar) o1).getTime();
-        } else if (o1 instanceof String) {
+        return d1.compareTo(d2);
+    }
+
+    /**
+     * Check object types and format to later compare the two dates.
+     *
+     * @param o an object that may or may not contain a date value
+     *
+     * @return the value converted if applies to a <code>java.util.Date</code> object
+     */
+    private Date checkObject(Object o) {
+
+        Date d;
+        if (o instanceof Date) {
+            d = (Date) o;
+        } else if (o instanceof Calendar) {
+            d = ((Calendar) o).getTime();
+        } else if (o instanceof String) {
             try {
-                d1 = formatter.parse((String) o1);
+                d = formatter.parse((String) o);
             } catch (ParseException pe) {
                 throw new IllegalArgumentException(
-                    getMessage("DTCMP_ERR_INVALID_STRING", (String) o1), pe); //$NON-NLS-1$
+                    getMessage("DTCMP_ERR_INVALID_STRING", (String) o), pe); //$NON-NLS-1$
             }
         } else {
             throw new IllegalArgumentException(getMessage("DTCMP_ERR_INVALID_CLASS")); //$NON-NLS-1$
         }
 
-        if (o2 instanceof Date) {
-            d2 = (Date) o2;
-        } else if (o2 instanceof Calendar) {
-            d2 = ((Calendar) o2).getTime();
-        } else if (o2 instanceof String) {
-            try {
-                d2 = formatter.parse((String) o2);
-            } catch (ParseException pe) {
-                throw new IllegalArgumentException(
-                    getMessage("DTCMP_ERR_INVALID_STRING", (String) o2), pe); //$NON-NLS-1$
-            }
-        } else {
-            throw new IllegalArgumentException(getMessage("DTCMP_ERR_INVALID_CLASS")); //$NON-NLS-1$
-        }
-
-        if (d1.equals(d2)) {
-            return 0;
-        } else if (d1.before(d2)) {
-            return -1;
-        } else {
-            return 1;
-        }
+        return d;
     }
 
     /**
