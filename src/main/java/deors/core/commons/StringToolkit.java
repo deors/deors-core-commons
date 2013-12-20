@@ -1482,7 +1482,38 @@ public final class StringToolkit {
      */
     public static String formatListAsString(List<String> list) {
 
-        final String separator = ", ";
+        final String separator = ", "; //$NON-NLS-1$
+
+        return formatListAsStringGeneric(list, separator);
+    }
+
+    /**
+     * Formats a list of strings as a single string, separated by new lines.
+     *
+     * @param list the list of strings to be formatted
+     *
+     * @return the list formatted in a single string, separated by new lines
+     */
+    public static String formatListAsMultiLineString(List<String> list) {
+
+        final String separator = "\n"; //$NON-NLS-1$
+
+        return formatListAsStringGeneric(list, separator);
+    }
+
+    /**
+     * Formats a list of strings as a single string, separated by the given separator string.
+     *
+     * @param list the list of strings to be formatted
+     * @param separator the separator string
+     *
+     * @return the list formatted in a single string, separated by the given separator string
+     */
+    public static String formatListAsStringGeneric(List<String> list, final String separator) {
+
+        if (list == null || list.isEmpty()) {
+            return CommonsContext.BLANK;
+        }
 
         StringBuffer buffer = new StringBuffer();
 

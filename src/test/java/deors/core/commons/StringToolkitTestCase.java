@@ -642,6 +642,40 @@ public class StringToolkitTestCase {
     }
 
     @Test
+    public void testFormatListAsMultiLineString() {
+
+        List<String> l1 = new ArrayList<String>();
+        assertEquals("", StringToolkit.formatListAsMultiLineString(l1));
+
+        List<String> l2 = new ArrayList<String>();
+        l2.add("one");
+        assertEquals("one", StringToolkit.formatListAsMultiLineString(l2));
+
+        List<String> l3 = new ArrayList<String>();
+        l3.add("one");
+        l3.add("two");
+        assertEquals("one\ntwo", StringToolkit.formatListAsMultiLineString(l3));
+    }
+
+    @Test
+    public void testFormatListAsStringGeneric() {
+
+        assertEquals("", StringToolkit.formatListAsStringGeneric(null, "xy"));
+
+        List<String> l1 = new ArrayList<String>();
+        assertEquals("", StringToolkit.formatListAsStringGeneric(l1, "xy"));
+
+        List<String> l2 = new ArrayList<String>();
+        l2.add("one");
+        assertEquals("one", StringToolkit.formatListAsStringGeneric(l2, "xy"));
+
+        List<String> l3 = new ArrayList<String>();
+        l3.add("one");
+        l3.add("two");
+        assertEquals("onexytwo", StringToolkit.formatListAsStringGeneric(l3, "xy"));
+    }
+
+    @Test
     public void testHasInvalidCharacters() {
 
         assertFalse(StringToolkit.hasInvalidCharacters(null, "x"));
