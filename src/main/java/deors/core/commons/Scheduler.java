@@ -256,14 +256,25 @@ public final class Scheduler
                 getMessage("SCHED_ERR_KEY_START_NOT_FOUND", taskName)); //$NON-NLS-1$
         }
 
+        return parseStartTime(tempStartTime);
+    }
+
+    /**
+     * Parses the task start time.
+     *
+     * @param timeString the task start time as a string
+     *
+     * @return the task start time
+     */
+    private Calendar parseStartTime(String timeString) {
+
         Calendar taskStartTime = null;
         try {
-            taskStartTime = parseTime(tempStartTime);
+            taskStartTime = parseTime(timeString);
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(
                 getMessage("SCHED_ERR_TASK_INVALID_START_TIME"), iae); //$NON-NLS-1$
         }
-
         return taskStartTime;
     }
 
@@ -286,9 +297,21 @@ public final class Scheduler
                 getMessage("SCHED_ERR_KEY_STOP_NOT_FOUND", taskName)); //$NON-NLS-1$
         }
 
+        return parseStopTime(tempStopTime);
+    }
+
+    /**
+     * Parses the task stop time.
+     *
+     * @param timeString the task stop time as a string
+     *
+     * @return the task stop time
+     */
+    private Calendar parseStopTime(String timeString) {
+
         Calendar taskStoptTime = null;
         try {
-            taskStoptTime = parseTime(tempStopTime);
+            taskStoptTime = parseTime(timeString);
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(
                 getMessage("SCHED_ERR_TASK_INVALID_STOP_TIME"), iae); //$NON-NLS-1$
@@ -323,7 +346,6 @@ public final class Scheduler
     public static void main(String[] args) {
 
         if (args.length != 1) {
-
             LOG.info(getMessage("SCHED_LOG_PARAMETER_INI_FILE")); //$NON-NLS-1$
             return;
         }
@@ -331,14 +353,10 @@ public final class Scheduler
         try {
             Scheduler sch = new Scheduler(args[0]);
             sch.startScheduler();
-
         } catch (IOException ioe) {
-
             LOG.info(getMessage("SCHED_LOG_EXCEPTION_INI_FILE_MISSING", ioe.toString())); //$NON-NLS-1$
             return;
-
         } catch (IllegalArgumentException iae) {
-
             LOG.info(getMessage("SCHED_LOG_EXCEPTION_INI_FILE_INVALID", iae.toString())); //$NON-NLS-1$
             return;
         }
@@ -362,11 +380,11 @@ public final class Scheduler
      */
     static Calendar parseTime(String timeString) {
 
-        try {
-            if (timeString.equals(DAEMON_ID)) {
-                return null;
-            }
+        if (timeString.equals(DAEMON_ID)) {
+            return null;
+        }
 
+        try {
             java.util.StringTokenizer st = new java.util.StringTokenizer(timeString, TIME_SEPARATOR);
 
             Calendar retValue = Calendar.getInstance();
@@ -452,11 +470,7 @@ public final class Scheduler
                     continue;
                 }
 
-                checkRescheduleTask(now, task);
-
-                checkStopTask(now, task);
-
-                checkStartTask(now, task);
+                runChecks(now, task);
             }
 
             try {
@@ -472,35 +486,16 @@ public final class Scheduler
     }
 
     /**
-     * Checks whether the task needs to be started.
+     * Runs checks needed during task execution: start, stop and reschedule task checks.
      *
      * @param now the current time
      * @param task the task
      */
-    private void checkStartTask(Calendar now, SchedulerTask task) {
+    private void runChecks(Calendar now, SchedulerTask task) {
 
-        if (!task.isStarting()
-            && !task.isExecuting()
-            && (now.equals(task.getTaskNextStartTime())
-                || now.after(task.getTaskNextStartTime()))) {
-            task.taskStart();
-        }
-    }
-
-    /**
-     * Checks whether the task needs to be stopped.
-     *
-     * @param now the current time
-     * @param task the task
-     */
-    private void checkStopTask(Calendar now, SchedulerTask task) {
-
-        if (task.isExecuting()
-            && !task.isStopping()
-            && (now.equals(task.getTaskNextStopTime())
-                || now.after(task.getTaskNextStopTime()))) {
-            task.taskStop();
-        }
+        checkRescheduleTask(now, task);
+        checkStopTask(now, task);
+        checkStartTask(now, task);
     }
 
     /**
@@ -529,6 +524,38 @@ public final class Scheduler
                     task.getTaskName(),
                     dateFormatter.format(task.getTaskNextStartTime().getTime()),
                     dateFormatter.format(task.getTaskNextStopTime().getTime())}));
+        }
+    }
+
+    /**
+     * Checks whether the task needs to be stopped.
+     *
+     * @param now the current time
+     * @param task the task
+     */
+    private void checkStopTask(Calendar now, SchedulerTask task) {
+
+        if (task.isExecuting()
+            && !task.isStopping()
+            && (now.equals(task.getTaskNextStopTime())
+                || now.after(task.getTaskNextStopTime()))) {
+            task.taskStop();
+        }
+    }
+
+    /**
+     * Checks whether the task needs to be started.
+     *
+     * @param now the current time
+     * @param task the task
+     */
+    private void checkStartTask(Calendar now, SchedulerTask task) {
+
+        if (!task.isStarting()
+            && !task.isExecuting()
+            && (now.equals(task.getTaskNextStartTime())
+                || now.after(task.getTaskNextStartTime()))) {
+            task.taskStart();
         }
     }
 
@@ -611,28 +638,8 @@ public final class Scheduler
                              Calendar taskStartTime, Calendar taskStopTime) {
 
         synchronized (tasks) {
-            for (SchedulerTask task : tasks) {
-                if (task.getTaskName().equals(taskName)) {
-                    if (!task.isStarting() && !task.isExecuting()) {
-                        if (taskStartTime == null) {
-                            task.setTaskStartTime(null);
-                            task.setTaskStopTime(null);
-                            task.setTaskNextStartTime(null);
-                            task.setTaskNextStopTime(null);
-                            task.setDaemonTask(true);
-                            task.setDaemonExecuted(false);
-                        } else {
-                            task.setTaskStartTime(taskStartTime);
-                            task.setTaskStopTime(taskStopTime);
-                            task.setTaskNextStartTime(null);
-                            task.setTaskNextStopTime(null);
-                            task.setDaemonTask(false);
-                            task.setDaemonExecuted(false);
-                        }
-                    }
-
-                    return;
-                }
+            if (rescheduleIfExist(taskName, taskStartTime, taskStopTime)) {
+                return;
             }
 
             // the task is new
@@ -670,6 +677,44 @@ public final class Scheduler
                     getMessage("SCHED_ERR_TASK_CLASS_INVALID", taskClass.getName(), ite.getTargetException().toString()), ite); //$NON-NLS-1$
             }
         }
+    }
+
+    /**
+     * Checks for the existence of a given task by name and re-schedules it.
+     *
+     * @param taskName the task name
+     * @param taskStartTime the task start time
+     * @param taskStopTime the task stop time
+     *
+     * @return <code>true</code> if the task existed and was rescheduled
+     */
+    private boolean rescheduleIfExist(String taskName, Calendar taskStartTime, Calendar taskStopTime) {
+
+        for (SchedulerTask task : tasks) {
+            if (task.getTaskName().equals(taskName)) {
+                if (!task.isStarting() && !task.isExecuting()) {
+                    if (taskStartTime == null) {
+                        task.setTaskStartTime(null);
+                        task.setTaskStopTime(null);
+                        task.setTaskNextStartTime(null);
+                        task.setTaskNextStopTime(null);
+                        task.setDaemonTask(true);
+                        task.setDaemonExecuted(false);
+                    } else {
+                        task.setTaskStartTime(taskStartTime);
+                        task.setTaskStopTime(taskStopTime);
+                        task.setTaskNextStartTime(null);
+                        task.setTaskNextStopTime(null);
+                        task.setDaemonTask(false);
+                        task.setDaemonExecuted(false);
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
