@@ -15,8 +15,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import deors.core.commons.StringToolkit;
-
 public class StringToolkitTestCase {
 
     public StringToolkitTestCase() {
@@ -49,15 +47,15 @@ public class StringToolkitTestCase {
 
         String s = null;
 
-        s = "sdc.tests string 1";
-        assertEquals("  sdc.tests string 1", StringToolkit.padLeft(s, 20));
-        assertEquals("sdc.tests ", StringToolkit.padLeft(s, 10));
-        assertEquals("oosdc.tests string 1", StringToolkit.padLeft(s, 20, 'o'));
+        s = "deors.tests string 1";
+        assertEquals("  deors.tests string 1", StringToolkit.padLeft(s, 22));
+        assertEquals("deors.tests ", StringToolkit.padLeft(s, 12));
+        assertEquals("oodeors.tests string 1", StringToolkit.padLeft(s, 22, 'o'));
 
-        s = "sdc.tests str 2";
-        assertEquals("     sdc.tests str 2", StringToolkit.padLeft(s, 20));
-        assertEquals("sdc.tests ", StringToolkit.padLeft(s, 10));
-        assertEquals("ooooosdc.tests str 2", StringToolkit.padLeft(s, 20, 'o'));
+        s = "deors.tests str 2";
+        assertEquals("     deors.tests str 2", StringToolkit.padLeft(s, 22));
+        assertEquals("deors.tests ", StringToolkit.padLeft(s, 12));
+        assertEquals("ooooodeors.tests str 2", StringToolkit.padLeft(s, 22, 'o'));
 
         s = "";
         assertEquals("xxxxxxxxxx", StringToolkit.padLeft(s, 10, 'x'));
@@ -71,15 +69,15 @@ public class StringToolkitTestCase {
 
         String s = null;
 
-        s = "sdc.tests string 1";
-        assertEquals("sdc.tests string 1  ", StringToolkit.padRight(s, 20));
-        assertEquals("sdc.tests ", StringToolkit.padRight(s, 10));
-        assertEquals("sdc.tests string 1oo", StringToolkit.padRight(s, 20, 'o'));
+        s = "deors.tests string 1";
+        assertEquals("deors.tests string 1  ", StringToolkit.padRight(s, 22));
+        assertEquals("deors.tests ", StringToolkit.padRight(s, 12));
+        assertEquals("deors.tests string 1oo", StringToolkit.padRight(s, 22, 'o'));
 
-        s = "sdc.tests str 2";
-        assertEquals("sdc.tests str 2     ", StringToolkit.padRight(s, 20));
-        assertEquals("sdc.tests ", StringToolkit.padRight(s, 10));
-        assertEquals("sdc.tests str 2ooooo", StringToolkit.padRight(s, 20, 'o'));
+        s = "deors.tests str 2";
+        assertEquals("deors.tests str 2     ", StringToolkit.padRight(s, 22));
+        assertEquals("deors.tests ", StringToolkit.padRight(s, 12));
+        assertEquals("deors.tests str 2ooooo", StringToolkit.padRight(s, 22, 'o'));
 
         s = "";
         assertEquals("xxxxxxxxxx", StringToolkit.padRight(s, 10, 'x'));

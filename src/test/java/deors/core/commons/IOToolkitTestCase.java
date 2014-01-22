@@ -21,8 +21,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.IOToolkit;
-
 public class IOToolkitTestCase {
 
     @Rule

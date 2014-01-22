@@ -20,8 +20,9 @@
         <sonar.jacoco.itReportPath>${project.build.directory}/jacoco.itest</sonar.jacoco.itReportPath>
 
         <java.version>1.7</java.version>
+        <servlet.version>3.0</servlet.version>
 
-        <slf4j.version>1.6.4</slf4j.version>
+        <slf4j.version>1.7.5</slf4j.version>
         <log4j.version>1.2.16</log4j.version>
         <xstream.version>1.4.3</xstream.version>
 
@@ -120,6 +121,13 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

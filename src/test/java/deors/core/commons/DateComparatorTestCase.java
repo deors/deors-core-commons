@@ -9,9 +9,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.CommonsContext;
-import deors.core.commons.DateComparator;
-
 public class DateComparatorTestCase {
 
     @Rule

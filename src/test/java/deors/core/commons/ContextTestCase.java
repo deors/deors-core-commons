@@ -8,10 +8,6 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import deors.core.commons.AbstractContext;
-import deors.core.commons.CommonsContext;
-import deors.core.commons.Context;
-
 public class ContextTestCase {
 
     public ContextTestCase() {

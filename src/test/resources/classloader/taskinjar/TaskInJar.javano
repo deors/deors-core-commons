@@ -1,0 +1,47 @@
+package deors.core.commons;
+
+import java.util.Calendar;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class TaskInJar
+    extends SchedulerTask {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TaskInJar.class);
+
+    private int count;
+
+    public TaskInJar(String taskName, String taskDescription, Calendar taskStartTime, Calendar taskStopTime) {
+
+        super(taskName, taskDescription, taskStartTime, taskStopTime);
+    }
+
+    @Override
+    protected void taskLogic() {
+
+        LOG.info("task counts " + count++);
+
+        if (count == 100) {
+            taskAutoStop();
+            return;
+        }
+
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException ie) {
+        }
+    }
+
+    @Override
+    protected void taskPrepareStart() throws Throwable {
+
+        LOG.info("starting task");
+    }
+
+    @Override
+    protected void taskPrepareStop() throws Throwable {
+
+        LOG.info("stopping task");
+    }
+}

@@ -15,8 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.INIFileManager;
-
 public class INIFileManagerTestCase {
 
     @Rule
@@ -34,7 +32,7 @@ public class INIFileManagerTestCase {
         thrown.expect(FileNotFoundException.class);
         thrown.expectMessage("not found");
 
-        File f = File.createTempFile("deors.commons.", ".test");
+        File f = File.createTempFile("deors.core.commons.", ".test");
         f.delete();
 
         new INIFileManager(f);
@@ -501,7 +499,7 @@ public class INIFileManagerTestCase {
     public void testUpdateFileNothingToDo()
         throws IOException {
 
-        File f = File.createTempFile("deors.commons.", ".test");
+        File f = File.createTempFile("deors.core.commons.", ".test");
 
         INIFileManager ifm = new INIFileManager(f);
 
@@ -517,7 +515,7 @@ public class INIFileManagerTestCase {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("is not writable");
 
-        File f = File.createTempFile("deors.commons.", ".test");
+        File f = File.createTempFile("deors.core.commons.", ".test");
         f.setReadOnly();
 
         INIFileManager ifm = new INIFileManager(f);
@@ -531,7 +529,7 @@ public class INIFileManagerTestCase {
     public void testUpdateFile()
         throws IOException {
 
-        File f = File.createTempFile("deors.commons.", ".test");
+        File f = File.createTempFile("deors.core.commons.", ".test");
 
         INIFileManager ifm = new INIFileManager(f);
 

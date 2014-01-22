@@ -9,8 +9,6 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import deors.core.commons.RegularExpressionFileFilter;
-
 public class RegularExpressionFileFilterTestCase {
 
     public RegularExpressionFileFilterTestCase() {

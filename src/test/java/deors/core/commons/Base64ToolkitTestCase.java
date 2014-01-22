@@ -14,9 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.Base64Toolkit;
-import deors.core.commons.CommonsContext;
-
 public class Base64ToolkitTestCase {
 
     private static final String NEW_LINE = System.getProperty("line.separator");

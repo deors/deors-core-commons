@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import deors.core.commons.ObjectToolkit;
-
 public class ObjectToolkitTestCase {
 
     public ObjectToolkitTestCase() {

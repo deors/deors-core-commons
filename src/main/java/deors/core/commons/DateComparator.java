@@ -62,7 +62,7 @@ public final class DateComparator
      * is greater than the second. The comparator supports <code>java.util.Calendar</code>,
      * <code>java.util.Date</code> and <code>java.lang.String</code> objects.<br>
      *
-     * A <code>java.lang.IllegalArgumentException</code> is thrown if the objects are of
+     * An <code>IllegalArgumentException</code> is thrown if the objects are of
      * unsupported types or the strings are not valid dates.
      *
      * @param o1 the first object
@@ -72,7 +72,7 @@ public final class DateComparator
      *         both objects represent the same date, and <code>1</code> if the first object is
      *         greater than the second
      *
-     * @see java.util.Comparator#compare(Object, Object)
+     * @see Comparator#compare(Object, Object)
      */
     public int compare(Object o1, Object o2) {
 

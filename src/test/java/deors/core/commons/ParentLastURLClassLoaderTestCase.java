@@ -14,9 +14,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.IOToolkit;
-import deors.core.commons.ParentLastURLClassLoader;
-
 public class ParentLastURLClassLoaderTestCase {
 
     @Rule
@@ -28,7 +25,7 @@ public class ParentLastURLClassLoaderTestCase {
     }
 
     @SuppressWarnings("resource")
-	@Test
+    @Test
     public void testNull() {
 
         thrown.expect(NullPointerException.class);
@@ -53,7 +50,6 @@ public class ParentLastURLClassLoaderTestCase {
         assertNotNull(plcl);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void testLoadClass()
         throws ClassNotFoundException,
@@ -63,6 +59,7 @@ public class ParentLastURLClassLoaderTestCase {
                InvocationTargetException {
 
         URL version1 = this.getClass().getResource("/classloader/version1/HelloWorld-version-1.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl1 = new ParentLastURLClassLoader(new URL[] {version1});
 
         Class<?> c1 = plcl1.loadClass("deors.core.commons.HelloWorld");
@@ -72,6 +69,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("HelloWorld version 1", r1);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl1 = new URLClassLoader(new URL[] {version1});
         c1 = ucl1.loadClass("deors.core.commons.HelloWorld");
         o1 = c1.newInstance();
@@ -81,6 +79,7 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("HelloWorld version 0", r1);
 
         URL version2 = this.getClass().getResource("/classloader/version2/HelloWorld-version-2.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl2 = new ParentLastURLClassLoader(new URL[] {version2});
 
         Class<?> c2 = plcl2.loadClass("deors.core.commons.HelloWorld");
@@ -90,6 +89,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("HelloWorld version 2", r2);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl2 = new URLClassLoader(new URL[] {version2});
         c2 = ucl2.loadClass("deors.core.commons.HelloWorld");
         o2 = c2.newInstance();
@@ -99,7 +99,6 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("HelloWorld version 0", r2);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void testLoadClassDelegated()
         throws ClassNotFoundException,
@@ -109,6 +108,7 @@ public class ParentLastURLClassLoaderTestCase {
                InvocationTargetException {
 
         URL empty = this.getClass().getResource("/classloader/empty.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl = new ParentLastURLClassLoader(new URL[] {empty});
 
         Class<?> c = plcl.loadClass("deors.core.commons.HelloUniverse");
@@ -118,6 +118,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("HelloUniverse only version", r);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl = new URLClassLoader(new URL[] {empty});
         c = ucl.loadClass("deors.core.commons.HelloUniverse");
         o = c.newInstance();
@@ -127,7 +128,6 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("HelloUniverse only version", r);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void testLoadClassDelegated2()
         throws ClassNotFoundException,
@@ -139,6 +139,7 @@ public class ParentLastURLClassLoaderTestCase {
         URL version1 = this.getClass().getResource("/classloader/version1/HelloWorld-version-1.jar");
         ParentLastURLClassLoader plcl1 = new ParentLastURLClassLoader(new URL[] {version1});
         URL version2 = this.getClass().getResource("/classloader/version2/HelloWorld-version-2.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl2 = new ParentLastURLClassLoader(new URL[] {version2}, plcl1);
 
         Class<?> c = plcl2.loadClass("deors.core.commons.HelloWorld");
@@ -148,6 +149,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("HelloWorld version 2", r);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl = new URLClassLoader(new URL[] {version2}, plcl1);
         c = ucl.loadClass("deors.core.commons.HelloWorld");
         o = c.newInstance();
@@ -157,12 +159,12 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("HelloWorld version 1", r);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void testGetResource()
         throws IOException {
 
         URL version1 = this.getClass().getResource("/classloader/version1/HelloWorld-version-1.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl1 = new ParentLastURLClassLoader(new URL[] {version1});
 
         InputStream is1 = plcl1.getResourceAsStream("classloader/sample.txt");
@@ -170,6 +172,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("version 1\r\n", r1);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl1 = new URLClassLoader(new URL[] {version1});
 
         is1 = ucl1.getResourceAsStream("classloader/sample.txt");
@@ -178,6 +181,7 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("version 0\r\n", r1);
 
         URL version2 = this.getClass().getResource("/classloader/version2/HelloWorld-version-2.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl2 = new ParentLastURLClassLoader(new URL[] {version2});
 
         InputStream is2 = plcl2.getResourceAsStream("classloader/sample.txt");
@@ -185,6 +189,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("version 2\r\n", r2);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl2 = new URLClassLoader(new URL[] {version2});
 
         is2 = ucl2.getResourceAsStream("classloader/sample.txt");
@@ -193,12 +198,12 @@ public class ParentLastURLClassLoaderTestCase {
         assertEquals("version 0\r\n", r2);
     }
 
-    @SuppressWarnings("resource")
     @Test
     public void testGetResourceDelegated()
         throws IOException {
 
         URL empty = this.getClass().getResource("/classloader/empty.jar");
+        @SuppressWarnings("resource")
         ParentLastURLClassLoader plcl = new ParentLastURLClassLoader(new URL[] {empty});
 
         InputStream is = plcl.getResourceAsStream("classloader/sample.txt");
@@ -206,6 +211,7 @@ public class ParentLastURLClassLoaderTestCase {
 
         assertEquals("version 0\r\n", r);
 
+        @SuppressWarnings("resource")
         URLClassLoader ucl = new URLClassLoader(new URL[] {empty});
 
         is = ucl.getResourceAsStream("classloader/sample.txt");
