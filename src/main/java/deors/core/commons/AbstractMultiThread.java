@@ -20,14 +20,14 @@ public abstract class AbstractMultiThread
     /**
      * The thread owner.
      */
-    protected MultiThreadPool owner;
+    protected MultiThreadPool<?> owner;
 
     /**
      * Returns the thread owner.
      *
      * @return the thread owner
      */
-    public MultiThreadPool getOwner() {
+    public MultiThreadPool<?> getOwner() {
         return owner;
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractMultiThread
      *
      * @param owner the new thread owner
      */
-    public void setOwner(MultiThreadPool owner) {
+    public void setOwner(MultiThreadPool<?> owner) {
         this.owner = owner;
     }
 

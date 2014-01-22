@@ -14,14 +14,14 @@ public interface MultiThread {
      *
      * @return the thread owner
      */
-    MultiThreadPool getOwner();
+    MultiThreadPool<?> getOwner();
 
     /**
      * Changes the thread owner.
      *
      * @param owner the new thread owner
      */
-    void setOwner(MultiThreadPool owner);
+    void setOwner(MultiThreadPool<?> owner);
 
     /**
      * Releases this thread to the pool.
