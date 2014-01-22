@@ -499,32 +499,7 @@ public final class StringToolkit {
      */
     public static String removeAll(String source, String token, int begin) {
 
-        if (source == null || token == null) {
-            return null;
-        }
-
-        if (begin > source.length()) {
-            return source;
-        }
-
-        if (source.indexOf(token) == -1) {
-            return source;
-        }
-
-        StringBuffer sb = new StringBuffer(source.substring(0, begin));
-
-        int start = -1;
-        int end = begin;
-        while ((start = source.indexOf(token, end)) != -1) {
-            sb.append(source.substring(end, start));
-            end = start + token.length();
-        }
-
-        if (end < source.length()) {
-            sb.append(source.substring(end));
-        }
-
-        return sb.toString();
+        return replaceAll(source, token, null, begin);
     }
 
     /**
@@ -809,7 +784,10 @@ public final class StringToolkit {
         int start = -1;
         int end = begin;
         while ((start = source.indexOf(token, end)) != -1) {
-            sb.append(source.substring(end, start)).append(replacement);
+            sb.append(source.substring(end, start));
+            if (replacement != null) {
+                sb.append(replacement);
+            }
             end = start + token.length();
         }
 
