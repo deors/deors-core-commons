@@ -1,5 +1,6 @@
 package deors.core.commons;
 
+import static deors.core.commons.CommonsContext.BLANK;
 import static deors.core.commons.CommonsContext.getConfigurationProperty;
 import static deors.core.commons.CommonsContext.getMessage;
 
@@ -12,21 +13,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Class for managing INI configuration files.<br>
+ * Class for managing INI configuration files.
  *
  * The INI configuration entries are written in pairs <code><i>key</i>,<i>value</i></code>
  * separated by the character <code>'='</code> and lines starting with the character
- * <code>';'</code> are considered as comments; both characters are configurable.<br>
+ * <code>';'</code> are considered as comments; both characters are configurable.
  *
  * The INI configuration entries are organized in sections. Each section begins in a line that
  * contains the section name surrounded by the characters <code>'['</code> and <code>']'</code>
  * (also configurable). If the file have no sections or there are entries before the first, these
- * entries belong to the default section.<br>
+ * entries belong to the default section.
  *
  * @author deors
  * @version 1.0
@@ -54,14 +54,14 @@ public final class INIFileManager {
     /**
      * Map used to store the values in the INI configuration file. The key in this map is
      * the section plus a dot character and the key of the entry. If the entry belongs to the
-     * default section, the key in this hashtable is the dot character plus the key of the entry.
+     * default section, the key in this hash table is the dot character plus the key of the entry.
      */
     private final Map<String, String> valuesByID = new HashMap<String, String>();
 
     /**
      * Map used to store the comments associated to the entries or sections in the INI
      * configuration file. The key in this map is the section plus a dot character and the
-     * key of the entry. If the entry belongs to the default section, the key in this hashtable is
+     * key of the entry. If the entry belongs to the default section, the key in this hash table is
      * the dot character plus the key of the entry. If the comment belongs to a section, the key
      * is the section only. The default section have not comments associated. The object stored is
      * a List with the comments associated to the entry or section.
@@ -115,7 +115,7 @@ public final class INIFileManager {
     private static final String DOT = "."; //$NON-NLS-1$
 
     /**
-     * Constructor that sets the configuration file.<br>
+     * Constructor that sets the configuration file.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the given file is
      * a directory or cannot be read.
@@ -129,21 +129,7 @@ public final class INIFileManager {
 
         this.iniFile = iniFile;
 
-        if (!iniFile.exists()) {
-            throw new FileNotFoundException(
-                getMessage("INIMGR_ERR_FILE_NOT_FOUND", iniFile.getAbsolutePath())); //$NON-NLS-1$
-        }
-
-        if (iniFile.isDirectory()) {
-            throw new IllegalArgumentException(
-                getMessage("INIMGR_ERR_FILE_IS_DIRECTORY", iniFile.getAbsolutePath())); //$NON-NLS-1$
-        }
-
-        if (!iniFile.canRead()) {
-            throw new IllegalArgumentException(
-                getMessage("INIMGR_ERR_FILE_IS_NOT_READABLE", iniFile.getAbsolutePath())); //$NON-NLS-1$
-        }
-
+        checkFile();
         readFile();
     }
 
@@ -162,7 +148,7 @@ public final class INIFileManager {
 
     /**
      * Adds an entry to the default section and sets its value. If the entry already exists the
-     * method returns <code>false</code>.<br>
+     * method returns <code>false</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -181,7 +167,7 @@ public final class INIFileManager {
     /**
      * Adds an entry to the given section and sets its value. If the entry already exists the method
      * returns <code>false</code>. If the section is <code>null</code> or empty, the entry is
-     * added to the default section.<br>
+     * added to the default section.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -202,7 +188,7 @@ public final class INIFileManager {
      * Adds an entry to the given section and sets its value and its comment. If the entry already
      * exists the method returns <code>false</code>. If the section is <code>null</code> or
      * empty, the entry is added to the default section. If the comment is <code>null</code> or
-     * empty, it will not be added.<br>
+     * empty, it will not be added.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -232,11 +218,11 @@ public final class INIFileManager {
         }
 
         // the value of the new entry is added
-        // to the values hashtable
+        // to the values hash table
         valuesByID.put(entryID, value);
 
         // the comments of the new entry are added
-        // to the comments hashtable
+        // to the comments hash table
         if (comments != null && !comments.isEmpty()) {
             commentsByID.put(entryID, comments);
         }
@@ -307,7 +293,7 @@ public final class INIFileManager {
         keysBySection.put(sectionID, new ArrayList<String>());
 
         // the comments of the new section are added
-        // to the comments hashtable
+        // to the comments hash table
         if (comments != null && !comments.isEmpty()) {
             commentsByID.put(sectionID, comments);
         }
@@ -315,6 +301,30 @@ public final class INIFileManager {
         dataHasChanged = true;
 
         return true;
+    }
+
+    /**
+     * Checks the INI file before the manager is fully initialized.
+     *
+     * @throws FileNotFoundException the INI file is not available or not valid
+     */
+    private void checkFile()
+        throws FileNotFoundException {
+
+        if (!iniFile.exists()) {
+            throw new FileNotFoundException(
+                getMessage("INIMGR_ERR_FILE_NOT_FOUND", iniFile.getAbsolutePath())); //$NON-NLS-1$
+        }
+
+        if (iniFile.isDirectory()) {
+            throw new IllegalArgumentException(
+                getMessage("INIMGR_ERR_FILE_IS_DIRECTORY", iniFile.getAbsolutePath())); //$NON-NLS-1$
+        }
+
+        if (!iniFile.canRead()) {
+            throw new IllegalArgumentException(
+                getMessage("INIMGR_ERR_FILE_IS_NOT_READABLE", iniFile.getAbsolutePath())); //$NON-NLS-1$
+        }
     }
 
     /**
@@ -364,25 +374,16 @@ public final class INIFileManager {
     private String getEntryID(String section, String key) {
 
         String retValue = null;
-        if (section == null || section.length() == 0) {
-            if (key == null || key.length() == 0) {
-                retValue = CommonsContext.BLANK;
-            } else {
-                StringBuffer buffer = new StringBuffer();
-                buffer.append(DOT);
-                buffer.append(key);
-                retValue = buffer.toString();
-            }
+        if (key == null || key.length() == 0) {
+            retValue = (section == null || section.length() == 0) ? BLANK : section;
         } else {
-            if (key == null || key.length() == 0) {
-                retValue = section;
-            } else {
-                StringBuffer buffer = new StringBuffer();
+            StringBuffer buffer = new StringBuffer();
+            if (section != null && section.length() != 0) {
                 buffer.append(section);
-                buffer.append(DOT);
-                buffer.append(key);
-                retValue = buffer.toString();
             }
+            buffer.append(DOT);
+            buffer.append(key);
+            retValue = buffer.toString();
         }
 
         return retValue;
@@ -408,7 +409,7 @@ public final class INIFileManager {
     public List<String> getKeys(String section) {
 
         if (section == null || section.length() == 0) {
-            return keysBySection.get(CommonsContext.BLANK);
+            return keysBySection.get(BLANK);
         }
 
         return keysBySection.get(section);
@@ -426,7 +427,7 @@ public final class INIFileManager {
 
     /**
      * Returns the value for the given entry in the default section. If the entry is not found the
-     * method returns <code>null</code>.<br>
+     * method returns <code>null</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -442,7 +443,7 @@ public final class INIFileManager {
 
     /**
      * Returns the value for the given entry in the given section. If the entry is not found the
-     * method returns <code>null</code>.<br>
+     * method returns <code>null</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -463,7 +464,7 @@ public final class INIFileManager {
 
     /**
      * Returns the value for the given entry in the given section. If the entry is not found the
-     * method returns the given default value.<br>
+     * method returns the given default value.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -485,7 +486,7 @@ public final class INIFileManager {
     }
 
     /**
-     * Returns whether the given entry exists in the default section.<br>
+     * Returns whether the given entry exists in the default section.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -500,7 +501,7 @@ public final class INIFileManager {
     }
 
     /**
-     * Returns whether the given entry exists in the given section.<br>
+     * Returns whether the given entry exists in the given section.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -526,7 +527,7 @@ public final class INIFileManager {
      */
     public boolean hasSection() {
 
-        return sections.contains(CommonsContext.BLANK);
+        return sections.contains(BLANK);
     }
 
     /**
@@ -546,7 +547,7 @@ public final class INIFileManager {
     }
 
     /**
-     * Returns whether the given value exists in any entry in the default section.<br>
+     * Returns whether the given value exists in any entry in the default section.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the value is
      * <code>null</code> or empty.
@@ -561,7 +562,7 @@ public final class INIFileManager {
     }
 
     /**
-     * Returns whether the given value exists in any entry in the given section.<br>
+     * Returns whether the given value exists in any entry in the given section.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the value is
      * <code>null</code> or empty.
@@ -578,16 +579,9 @@ public final class INIFileManager {
         }
 
         // we need the list that keeps the order in the section
-        List<String> keys = null;
-        if (section == null || section.length() == 0) {
-            keys = keysBySection.get(CommonsContext.BLANK);
-        } else {
-            keys = keysBySection.get(section);
-        }
+        List<String> keys = keysBySection.get((section == null || section.length() == 0) ? BLANK : section);
 
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            String key = it.next();
+        for (String key : keys) {
             if (getValue(section, key).equals(value)) {
                 return true;
             }
@@ -616,7 +610,7 @@ public final class INIFileManager {
             while ((line = reader.readLine()) != null) {
                 if (line.trim().length() == 0) {
                     if (tempComments != null) {
-                        tempComments.add(CommonsContext.BLANK);
+                        tempComments.add(BLANK);
                     }
 
                     continue;
@@ -681,7 +675,7 @@ public final class INIFileManager {
 
     /**
      * Removes an entry from the default section. If the entry does not exist the method returns
-     * <code>false</code>.<br>
+     * <code>false</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -698,7 +692,7 @@ public final class INIFileManager {
 
     /**
      * Removes an entry from the given section. If the entry does not exist the method returns
-     * <code>false</code>.<br>
+     * <code>false</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
@@ -768,10 +762,11 @@ public final class INIFileManager {
 
         // the section is removed
         sections.remove(sectionID);
+
+        // the keys are removed
         List<String> keys = keysBySection.get(sectionID);
-        Iterator<String> it = keys.iterator();
-        while (it.hasNext()) {
-            String entryID = getEntryID(section, (String) it.next());
+        for (String key : keys) {
+            String entryID = getEntryID(section, key);
             valuesByID.remove(entryID);
             commentsByID.remove(entryID);
         }
@@ -784,7 +779,7 @@ public final class INIFileManager {
 
     /**
      * Updates the value of an entry in the default section. If the entry does not exist the method
-     * returns <code>false</code>.<br>
+     * returns <code>false</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -802,7 +797,7 @@ public final class INIFileManager {
 
     /**
      * Updates the value of an entry in the given section. If the entry does not exist the method
-     * returns <code>false</code>.<br>
+     * returns <code>false</code>.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -822,7 +817,7 @@ public final class INIFileManager {
     /**
      * Updates the value and the comment of an entry in the given section. If the entry does not
      * exist the method returns <code>false</code>. If the comment is <code>null</code> or
-     * empty, it will not be updated.<br>
+     * empty, it will not be updated.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
@@ -852,11 +847,11 @@ public final class INIFileManager {
         }
 
         // the new value of the entry is added
-        // to the values hashtable
+        // to the values hash table
         valuesByID.put(entryID, value);
 
         // the new comments of the entry are added
-        // to the comments hashtable
+        // to the comments hash table
         if (comments != null && !comments.isEmpty()) {
             commentsByID.put(entryID, comments);
         }
@@ -868,7 +863,7 @@ public final class INIFileManager {
 
     /**
      * Updates the INI configuration file. This method overwrites the existing file with the values
-     * in memory.<br>
+     * in memory.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the given file is
      * a directory or cannot be written.
@@ -895,66 +890,15 @@ public final class INIFileManager {
 
             writer = new BufferedWriter(new FileWriter(tempFile));
 
-            Iterator<String> its = sections.iterator();
-            while (its.hasNext()) {
-                String section = its.next();
+            for (String section : sections) {
 
-                // when the section is not the default section we
                 // write the section comments and the section name
-                if (section.length() != 0) {
-                    List<String> sectionComments = commentsByID.get(section);
-                    if (sectionComments != null && !sectionComments.isEmpty()) {
-                        Iterator<String> itsc = sectionComments.iterator();
-                        while (itsc.hasNext()) {
-                            String comment = itsc.next();
-                            if (comment.length() != 0) {
-                                writer.write(COMMENTS_STARTS_WITH);
-                                writer.write(comment);
-                            }
-                            writer.newLine();
-                        }
-                    }
+                writeSectionHeader(writer, section);
 
-                    writer.write(SECTIONS_STARTS_WITH);
-                    writer.write(section);
-                    writer.write(SECTIONS_ENDS_WITH);
-                    writer.newLine();
-                }
+                List<String> keys = keysBySection.get(section);
 
-                Iterator<String> itk = keysBySection.get(section).iterator();
-
-                // if the section has no keys we write a blank line
-                if (!itk.hasNext()) {
-                    writer.newLine();
-                }
-
-                while (itk.hasNext()) {
-                    String key = itk.next();
-                    String entryID = getEntryID(section, key);
-                    String value = valuesByID.get(entryID);
-
-                    List<String> entryComments = commentsByID.get(entryID);
-                    if (entryComments != null && !entryComments.isEmpty()) {
-                        Iterator<String> itec = entryComments.iterator();
-                        while (itec.hasNext()) {
-                            String comment = itec.next();
-                            if (comment.length() != 0) {
-                                writer.write(COMMENTS_STARTS_WITH);
-                                writer.write(comment);
-                            }
-                            writer.newLine();
-                        }
-                    }
-
-                    writer.write(key);
-                    writer.write(CommonsContext.BLANK);
-                    writer.write(KEY_VALUE_SEPARATOR);
-                    writer.write(CommonsContext.BLANK);
-                    writer.write(value);
-                    writer.newLine();
-
-                    writer.newLine();
-                }
+                // write the section key and value pairs
+                writeSectionValues(writer, section, keys);
             }
 
             writer.close();
@@ -987,6 +931,77 @@ public final class INIFileManager {
     }
 
     /**
+     * Writes the section values portion of the INI file.
+     *
+     * @param writer writer object used to write content to updated INI file
+     * @param section the section which header is going to be written
+     * @param keys the list of keys in the section
+     *
+     * @throws IOException an I/O exception
+     */
+    private void writeSectionValues(BufferedWriter writer, String section, List<String> keys)
+        throws IOException {
+
+        for (String key : keys) {
+            String entryID = getEntryID(section, key);
+            String value = valuesByID.get(entryID);
+
+            List<String> entryComments = commentsByID.get(entryID);
+            if (entryComments != null && !entryComments.isEmpty()) {
+                for (String comment : entryComments) {
+                    if (comment.length() != 0) {
+                        writer.write(COMMENTS_STARTS_WITH);
+                        writer.write(comment);
+                    }
+                    writer.newLine();
+                }
+            }
+
+            writer.write(key);
+            writer.write(BLANK);
+            writer.write(KEY_VALUE_SEPARATOR);
+            writer.write(BLANK);
+            writer.write(value);
+            writer.newLine();
+        }
+
+        writer.newLine();
+    }
+
+    /**
+     * Writes the section header portion of the INI file.
+     *
+     * @param writer writer object used to write content to updated INI file
+     * @param section the section which header is going to be written
+     *
+     * @throws IOException an I/O exception
+     */
+    private void writeSectionHeader(BufferedWriter writer, String section)
+        throws IOException {
+
+        // when the section is the default section the header is skipped
+        if (section.length() == 0) {
+            return;
+        }
+
+        List<String> sectionComments = commentsByID.get(section);
+        if (sectionComments != null && !sectionComments.isEmpty()) {
+            for (String comment : sectionComments) {
+                if (comment.length() != 0) {
+                    writer.write(COMMENTS_STARTS_WITH);
+                    writer.write(comment);
+                    writer.newLine();
+                }
+            }
+        }
+
+        writer.write(SECTIONS_STARTS_WITH);
+        writer.write(section);
+        writer.write(SECTIONS_ENDS_WITH);
+        writer.newLine();
+    }
+
+    /**
      * Updates the comments of the given section. If the section does not exist the method returns
      * <code>false</code>.
      *
@@ -1005,7 +1020,7 @@ public final class INIFileManager {
         }
 
         // the new comments of the section are added
-        // to the comments hashtable
+        // to the comments hash table
         commentsByID.put(sectionID, comments);
 
         dataHasChanged = true;
