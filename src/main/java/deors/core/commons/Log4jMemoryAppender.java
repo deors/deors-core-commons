@@ -33,7 +33,7 @@ public class Log4jMemoryAppender
     /**
      * Adds the given log event to the list in memory.
      *
-     * @param the log event to be logged
+     * @param event the log event to be logged
      */
     @Override
     protected void append(LoggingEvent event) {

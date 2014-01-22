@@ -69,7 +69,7 @@ public final class Scheduler
     /**
      * The logger.
      */
-    protected static final Logger LOG = LoggerFactory.getLogger(Scheduler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Scheduler.class);
 
     /**
      * String that identifies a daemon task. Configurable in the properties file using the key

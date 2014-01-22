@@ -4,7 +4,7 @@
         <mkdir dir="deors/core/commons"/>
         <copy file="TaskInJar.javano" tofile="deors/core/commons/TaskInJar.java"/>
         <javac srcdir="." nowarn="yes"
-               destdir="."
+               destdir="." debug="true"
                classpath="slf4j-api-1.7.5.jar;../../../../../target/classes"/>
         <jar destfile="TaskInJar.jar"
              basedir="."

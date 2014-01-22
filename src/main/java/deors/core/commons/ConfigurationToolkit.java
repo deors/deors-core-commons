@@ -6,7 +6,7 @@ package deors.core.commons;
  * @author deors
  * @version 1.0
  */
-public class ConfigurationToolkit {
+public final class ConfigurationToolkit {
 
     /**
      * Default constructor. This class is a toolkit and therefore it cannot be instantiated.
@@ -27,6 +27,7 @@ public class ConfigurationToolkit {
      *
      * @return the configuration property value
      */
+    @SuppressWarnings("PMD.ConfusingTernary")
     public static String getConfigurationProperty(String sysKey, String envKey, String defValue) {
 
         String retValue = defValue;
@@ -52,6 +53,7 @@ public class ConfigurationToolkit {
      *
      * @return the configuration property value
      */
+    @SuppressWarnings("PMD.ConfusingTernary")
     public static boolean getConfigurationProperty(String sysKey, String envKey, boolean defValue) {
 
         boolean retValue = defValue;

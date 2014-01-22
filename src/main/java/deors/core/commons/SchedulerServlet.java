@@ -1282,7 +1282,7 @@ public final class SchedulerServlet
 
         if (sch != null) {
             sch.stopAllTasks();
-    	}
+        }
         initialized = false;
     }
 
