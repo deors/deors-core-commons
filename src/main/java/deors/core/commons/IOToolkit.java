@@ -97,10 +97,10 @@ public final class IOToolkit {
      *
      * @return whether both input streams contain the same data
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static boolean compareStreams(InputStream stream1, InputStream stream2, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         boolean compareStreams = true;
         BufferedInputStream bis1 = null;
@@ -172,12 +172,12 @@ public final class IOToolkit {
      *
      * @return whether both input streams contains the same data
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static boolean compareStreams(InputStream is1, InputStream is2)
-        throws java.io.IOException {
+        throws IOException {
 
         return compareStreams(is1, is2, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -189,10 +189,10 @@ public final class IOToolkit {
      * @param os the target stream
      * @param bufferSize the buffer size
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static void copyStream(InputStream is, OutputStream os, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
@@ -231,11 +231,11 @@ public final class IOToolkit {
      * @param is the source stream
      * @param os the target stream
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
-    public static void copyStream(InputStream is, OutputStream os) throws java.io.IOException {
+    public static void copyStream(InputStream is, OutputStream os) throws IOException {
 
         copyStream(is, os, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -247,13 +247,13 @@ public final class IOToolkit {
      *
      * @return the temporary file
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see IOToolkit#DELETE_ON_EXIT
      * @see IOToolkit#LEAVE_ON_EXIT
      */
     public static File createTempFile(boolean deleteOnExit)
-        throws java.io.IOException {
+        throws IOException {
 
         File tempFile = File.createTempFile(
             CommonsContext.TEMP_FILE_PREFIX, CommonsContext.TEMP_FILE_SUFFIX);
@@ -274,10 +274,10 @@ public final class IOToolkit {
      * @param out the target writer
      * @param bufferSize the buffer size
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static void printString(String s, Writer out, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         String r = s;
 
@@ -295,12 +295,12 @@ public final class IOToolkit {
      * @param s the source string
      * @param out the target writer
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static void printString(String s, Writer out)
-        throws java.io.IOException {
+        throws IOException {
 
         printString(s, out, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -313,10 +313,10 @@ public final class IOToolkit {
      *
      * @return the stream contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static byte[] readStream(InputStream is, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         BufferedInputStream bis = null;
 
@@ -354,12 +354,12 @@ public final class IOToolkit {
      *
      * @return the stream contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static byte[] readStream(InputStream is)
-        throws java.io.IOException {
+        throws IOException {
 
         return readStream(is, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -372,10 +372,10 @@ public final class IOToolkit {
      *
      * @return the file contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static byte[] readFile(File file, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         FileInputStream fis = null;
         try {
@@ -395,12 +395,12 @@ public final class IOToolkit {
      *
      * @return the file contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static byte[] readFile(File file)
-        throws java.io.IOException {
+        throws IOException {
 
         return readFile(file, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -414,10 +414,10 @@ public final class IOToolkit {
      *
      * @return the file contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static List<String> readTextFile(File file, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         List<String> contents = new ArrayList<String>();
         BufferedReader reader = null;
@@ -450,10 +450,10 @@ public final class IOToolkit {
      *
      * @return the file contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static List<String> readTextFile(File file)
-        throws java.io.IOException {
+        throws IOException {
 
         return readTextFile(file, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -466,42 +466,16 @@ public final class IOToolkit {
      *
      * @return the temporary file with the stream contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static File writeStream(InputStream is, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         File f = createTempFile(LEAVE_ON_EXIT);
 
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
+        FileOutputStream fos = new FileOutputStream(f);
 
-        try {
-            bis = new BufferedInputStream(is, bufferSize);
-            bos = new BufferedOutputStream(new FileOutputStream(f), bufferSize);
-
-            int bytesRead = -1;
-            byte[] buffer = new byte[bufferSize];
-
-            while ((bytesRead = bis.read(buffer)) != -1) {
-                bos.write(buffer, 0, bytesRead);
-            }
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
-            if (bos != null) {
-                try {
-                    bos.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
-        }
+        copyStream(is, fos, bufferSize);
 
         return f;
     }
@@ -513,12 +487,12 @@ public final class IOToolkit {
      *
      * @return the temporary file with the stream contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static File writeStream(InputStream is)
-        throws java.io.IOException {
+        throws IOException {
 
         return writeStream(is, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
@@ -531,10 +505,10 @@ public final class IOToolkit {
      *
      * @return the temporary file with the array contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      */
     public static File writeFile(byte[] data, int bufferSize)
-        throws java.io.IOException {
+        throws IOException {
 
         ByteArrayInputStream bais = null;
         try {
@@ -554,12 +528,12 @@ public final class IOToolkit {
      *
      * @return the temporary file with the array contents
      *
-     * @throws java.io.IOException an I/O exception
+     * @throws IOException an I/O exception
      *
      * @see CommonsContext#DEFAULT_BUFFER_SIZE
      */
     public static File writeFile(byte[] data)
-        throws java.io.IOException {
+        throws IOException {
 
         return writeFile(data, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
