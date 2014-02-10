@@ -885,7 +885,7 @@ public final class SchedulerServlet
                 templateHelp.processTemplate(null, out);
             }
 
-            if (initialized) {
+            if (initialized && sch != null) {
                 // command center add
                 Template templateCommand3 =
                     new Template(this.getClass().getResourceAsStream(TEMPLATE_COMMAND_3));
@@ -1227,11 +1227,13 @@ public final class SchedulerServlet
     }
 
     /**
-     * Clears the last tasks information file name used to initialize the servlet.
+     * Clears the scheduler static fields - to be used by unit tests only.
      */
-    public static void resetScheduler() {
+    static void resetScheduler() {
 
+        initialized = false;
         lastIniFileName = null;
+        sch = null;
     }
 
     /**

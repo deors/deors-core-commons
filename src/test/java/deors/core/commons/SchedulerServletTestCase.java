@@ -339,6 +339,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -424,6 +425,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -453,6 +455,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("stop");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -468,6 +473,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.scheduleTask("task", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
@@ -498,6 +505,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("stop");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -513,6 +523,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -542,6 +554,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
 
@@ -556,6 +571,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -586,6 +603,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -601,6 +621,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             Calendar c1 = Calendar.getInstance();
             c1.add(Calendar.HOUR_OF_DAY, 1);
             Calendar c2 = Calendar.getInstance();
@@ -635,6 +657,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -650,6 +675,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -694,6 +721,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -724,6 +752,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("kill");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -739,6 +770,9 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
+            fSch.set(ss, new Scheduler());
+
             ss.scheduleTask("task", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
@@ -769,6 +803,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("kill");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -784,6 +821,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -828,6 +867,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -878,6 +918,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -912,6 +953,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -931,6 +975,9 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -980,6 +1027,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -1023,6 +1071,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -1071,6 +1120,7 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+
             ss.doGet(request, response);
 
             verify(request);
@@ -1103,6 +1153,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -1120,6 +1173,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.doGet(request, response);
 
             verify(request);
@@ -1150,6 +1205,9 @@ public class SchedulerServletTestCase {
         Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
         fInit.setAccessible(true);
 
+        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
+        fSch.setAccessible(true);
+
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -1167,6 +1225,8 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             fInit.setBoolean(ss, true);
+            fSch.set(ss, new Scheduler());
+
             ss.scheduleTask("task", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
