@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet used to initialize and manager a task scheduler using HTTP request.
+ * Servlet used to initialise and manager a task scheduler using HTTP request.
  *
- * The scheduler is started when the servlet is initialized if the <code>iniFileName</code>
+ * The scheduler is started when the servlet is initialised if the <code>iniFileName</code>
  * servlet parameter is informed.
  *
  * To change the schedule list, HTTP GET and POST requests can be sent to the servlet. The
@@ -57,7 +57,7 @@ public final class SchedulerServlet
     extends HttpServlet {
 
     /**
-     * Serialization ID.
+     * Serialisation ID.
      */
     private static final long serialVersionUID = 4170931961517840836L;
 
@@ -1209,6 +1209,10 @@ public final class SchedulerServlet
      * @see java.lang.ThreadDeath
      */
     public static void killTask(String taskName) {
+
+        if (sch == null) {
+            return;
+        }
 
         final String t = taskName;
 
