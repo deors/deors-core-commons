@@ -322,9 +322,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandStartAlreadyInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("start");
 
@@ -332,18 +329,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -408,9 +409,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandStopIfInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("stop");
 
@@ -418,18 +416,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -452,12 +454,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandStopTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("stop");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -466,20 +462,23 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.scheduleTask("task", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -502,39 +501,36 @@ public class SchedulerServletTestCase {
     public void testServletCommandStopMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("stop");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
 
         HttpServletResponse response = createNiceMock(HttpServletResponse.class);
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue(s.contains("Task task does not exist<br/>"));
+            assertTrue(s.contains("Task task1 does not exist<br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -551,12 +547,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandRemoveNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
 
@@ -564,19 +554,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -600,44 +593,42 @@ public class SchedulerServletTestCase {
     public void testServletCommandRemoveTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
 
         HttpServletResponse response = createNiceMock(HttpServletResponse.class);
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
+            ss.init(config);
 
             Calendar c1 = Calendar.getInstance();
             c1.add(Calendar.HOUR_OF_DAY, 1);
             Calendar c2 = Calendar.getInstance();
             c2.add(Calendar.HOUR_OF_DAY, 2);
-            ss.scheduleTask("task", MyTask.class, "description", c1, c2);
+            ss.scheduleTask("task1", MyTask.class, "description", c1, c2);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue(s.contains("<b>Task task was asked to stop and removed from scheduler</b><br/>"));
+            assertTrue(s.contains("<b>Task task1 was asked to stop and removed from scheduler</b><br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -654,40 +645,37 @@ public class SchedulerServletTestCase {
     public void testServletCommandRemoveMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("remove");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
 
         HttpServletResponse response = createNiceMock(HttpServletResponse.class);
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
             assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue(s.contains("Task task does not exist<br/>"));
+            assertTrue(s.contains("Task task1 does not exist<br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -704,9 +692,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandKillNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("kill");
 
@@ -714,18 +699,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -749,41 +738,37 @@ public class SchedulerServletTestCase {
     public void testServletCommandKillTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("kill");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
 
         HttpServletResponse response = createNiceMock(HttpServletResponse.class);
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
-            fSch.set(ss, new Scheduler());
-
-            ss.scheduleTask("task", MyTask.class, "description", null, null);
+            ss.init(config);
+            ss.scheduleTask("task1", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue(s.contains("<b>Task task killed</b><br/>"));
+            assertTrue(s.contains("<b>Task task1 killed</b><br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -800,40 +785,37 @@ public class SchedulerServletTestCase {
     public void testServletCommandKillMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("kill");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
 
         HttpServletResponse response = createNiceMock(HttpServletResponse.class);
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
             assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue(s.contains("Task task does not exist<br/>"));
+            assertTrue(s.contains("Task task1 does not exist<br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -850,9 +832,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandAddNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
 
@@ -860,18 +839,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -899,9 +882,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandAddBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
         expect(request.getParameter("taskStartTime")).andReturn("bad");
@@ -911,18 +891,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -950,12 +934,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandAddBadClass()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
         expect(request.getParameter("taskName")).andReturn("task");
@@ -968,20 +946,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -1005,12 +985,9 @@ public class SchedulerServletTestCase {
     public void testServletCommandAddOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
         expect(request.getParameter("taskClassName")).andReturn("deors.core.commons.SchedulerServletTestCase$MyTask");
         expect(request.getParameter("taskDescription")).andReturn("description");
         expect(request.getParameter("taskStartTime")).andReturn("*");
@@ -1020,24 +997,28 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue(s.contains("<b>Task task scheduled</b><br/>"));
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1054,9 +1035,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandScheduleNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
 
@@ -1064,18 +1042,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -1101,9 +1083,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandScheduleBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
         expect(request.getParameter("taskStartTime")).andReturn("bad");
@@ -1113,18 +1092,22 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
@@ -1150,15 +1133,9 @@ public class SchedulerServletTestCase {
     public void testServletCommandScheduleMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
         expect(request.getParameter("taskStartTime")).andReturn("*");
         expect(request.getParameter("taskStopTime")).andReturn("*");
 
@@ -1166,26 +1143,29 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
+            ss.init(config);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
             assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue(s.contains("Task task does not exist<br/>"));
+            assertTrue(s.contains("Task task1 does not exist<br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1202,15 +1182,9 @@ public class SchedulerServletTestCase {
     public void testServletCommandScheduleOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        Field fInit = SchedulerServlet.class.getDeclaredField("initialized");
-        fInit.setAccessible(true);
-
-        Field fSch = SchedulerServlet.class.getDeclaredField("sch");
-        fSch.setAccessible(true);
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("schedule");
-        expect(request.getParameter("taskName")).andReturn("task");
+        expect(request.getParameter("taskName")).andReturn("task1");
         expect(request.getParameter("taskStartTime")).andReturn("*");
         expect(request.getParameter("taskStopTime")).andReturn("*");
 
@@ -1218,26 +1192,29 @@ public class SchedulerServletTestCase {
         File temp = File.createTempFile("deors.core.commons.", ".test");
         expect(response.getWriter()).andReturn(new PrintWriter(temp));
 
+        ServletConfig config = createNiceMock(ServletConfig.class);
+        expect(config.getInitParameter("iniFileName")).andReturn("");
+
         replay(request);
         replay(response);
+        replay(config);
 
         try {
             SchedulerServlet ss = new SchedulerServlet();
 
-            fInit.setBoolean(ss, true);
-            fSch.set(ss, new Scheduler());
-
-            ss.scheduleTask("task", MyTask.class, "description", null, null);
+            ss.init(config);
+            ss.scheduleTask("task1", MyTask.class, "description", null, null);
             ss.doGet(request, response);
 
             verify(request);
             verify(response);
+            verify(config);
 
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
             assertTrue(s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue(s.contains("<b>Task task scheduled</b><br/>"));
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"));
 
             ss.stopAllTasks();
             ss.resetScheduler();

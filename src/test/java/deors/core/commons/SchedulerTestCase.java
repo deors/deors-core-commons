@@ -632,10 +632,12 @@ public class SchedulerTestCase {
 
         sch.startScheduler();
 
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException ie) {
-        }
+        do {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ie) {
+            }
+        } while (sch.getTask("testScheduleErrorStarting").isStarting());
 
         List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
         for (LoggingEvent e : events) {
@@ -748,7 +750,7 @@ public class SchedulerTestCase {
                     break;
                 }
             }
-            assertTrue(found);
+            assertTrue("expected message not found", found);
         }
     }
 

@@ -20,9 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet used to initialise and manager a task scheduler using HTTP request.
+ * Servlet used to initialize and manager a task scheduler using HTTP request.
  *
- * The scheduler is started when the servlet is initialised if the <code>iniFileName</code>
+ * The scheduler is started when the servlet is initialized if the <code>iniFileName</code>
  * servlet parameter is informed.
  *
  * To change the schedule list, HTTP GET and POST requests can be sent to the servlet. The
@@ -57,19 +57,19 @@ public final class SchedulerServlet
     extends HttpServlet {
 
     /**
-     * Serialisation ID.
+     * Serialization ID.
      */
     private static final long serialVersionUID = 4170931961517840836L;
-
-    /**
-     * Flag that indicates whether the scheduler is running.
-     */
-    private static boolean initialized;
 
     /**
      * The scheduler.
      */
     private static Scheduler sch;
+
+    /**
+     * Flag that indicates whether the scheduler is running.
+     */
+    private static boolean initialized;
 
     /**
      * The last tasks information file name used.
@@ -427,7 +427,65 @@ public final class SchedulerServlet
 
         if (iniFileName != null && iniFileName.length() != 0) {
             runScheduler(iniFileName);
+        } else {
+            runScheduler();
         }
+    }
+
+    /**
+     * Runs the scheduler without tasks.
+     *
+     * @throws ServletException a servlet exception
+     */
+    private void runScheduler()
+        throws ServletException {
+
+        if (initialized) {
+            return;
+        }
+
+        sch = new Scheduler();
+
+        sch.schedulerThread = new Thread(sch);
+        sch.schedulerThread.start();
+
+        initialized = true;
+        lastIniFileName = null;
+    }
+
+    /**
+     * Runs the scheduler.
+     *
+     * @param iniFileName the name of the file with the tasks information
+     *
+     * @throws ServletException a servlet exception
+     */
+    private void runScheduler(String iniFileName)
+        throws ServletException {
+
+        if (initialized) {
+            return;
+        }
+
+        if (iniFileName == null || iniFileName.length() == 0) {
+            throw new ServletException(getMessage("SCHED_LOG_PARAMETER_INI_FILE")); //$NON-NLS-1$
+        }
+
+        try {
+            sch = new Scheduler(iniFileName);
+
+            sch.schedulerThread = new Thread(sch);
+            sch.schedulerThread.start();
+        } catch (IOException ioe) {
+            throw new ServletException(getMessage(
+                "SCHED_LOG_EXCEPTION_INI_FILE_MISSING", ioe.toString()), ioe); //$NON-NLS-1$
+        } catch (IllegalArgumentException iae) {
+            throw new ServletException(getMessage(
+                "SCHED_LOG_EXCEPTION_INI_FILE_INVALID", iae.toString()), iae); //$NON-NLS-1$
+        }
+
+        initialized = true;
+        lastIniFileName = iniFileName;
     }
 
     /**
@@ -789,6 +847,7 @@ public final class SchedulerServlet
                 taskStopTime = sch.parseTime(tempStopTime);
 
             } catch (IllegalArgumentException iae) {
+
                 newErrors.add(getMessage("SCHED_SERVLET_ERR_INVALID_TASK_STOP")); //$NON-NLS-1$
             }
         }
@@ -1001,21 +1060,23 @@ public final class SchedulerServlet
         templateTaskHeader.processTemplate(replacements, out);
 
         // each task uses the scheduler-task-item template
-        List<SchedulerTask> tasks = sch.getTasks();
-        if (!tasks.isEmpty()) {
-            Template templateTaskItem1 =
-                new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_1));
-            Template templateTaskItem2 =
-                new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_2));
-            Template templateTaskItem3 =
-                new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_3));
+        if (initialized && sch != null) {
+            List<SchedulerTask> tasks = sch.getTasks();
+            if (!tasks.isEmpty()) {
+                Template templateTaskItem1 =
+                    new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_1));
+                Template templateTaskItem2 =
+                    new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_2));
+                Template templateTaskItem3 =
+                    new Template(this.getClass().getResourceAsStream(TEMPLATE_TASK_ITEM_3));
 
-            int i = 0;
-            for (SchedulerTask task : tasks) {
-                i++;
-                createSectionTask(task, i,
-                    templateTaskItem1, templateTaskItem2, templateTaskItem3,
-                    replacements, out);
+                int i = 0;
+                for (SchedulerTask task : tasks) {
+                    i++;
+                    createSectionTask(task, i,
+                        templateTaskItem1, templateTaskItem2, templateTaskItem3,
+                        replacements, out);
+                }
             }
         }
 
@@ -1132,62 +1193,6 @@ public final class SchedulerServlet
     }
 
     /**
-     * Runs the scheduler without tasks.
-     *
-     * @throws ServletException a servlet exception
-     */
-    private void runScheduler()
-        throws ServletException {
-
-        if (initialized) {
-            return;
-        }
-
-        sch = new Scheduler();
-
-        sch.schedulerThread = new Thread(sch);
-        sch.schedulerThread.start();
-
-        initialized = true;
-        lastIniFileName = null;
-    }
-
-    /**
-     * Runs the scheduler.
-     *
-     * @param iniFileName the name of the file with the tasks information
-     *
-     * @throws ServletException a servlet exception
-     */
-    private void runScheduler(String iniFileName)
-        throws ServletException {
-
-        if (initialized) {
-            return;
-        }
-
-        if (iniFileName == null || iniFileName.length() == 0) {
-            throw new ServletException(getMessage("SCHED_LOG_PARAMETER_INI_FILE")); //$NON-NLS-1$
-        }
-
-        try {
-            sch = new Scheduler(iniFileName);
-
-            sch.schedulerThread = new Thread(sch);
-            sch.schedulerThread.start();
-        } catch (IOException ioe) {
-            throw new ServletException(getMessage(
-                "SCHED_LOG_EXCEPTION_INI_FILE_MISSING", ioe.toString()), ioe); //$NON-NLS-1$
-        } catch (IllegalArgumentException iae) {
-            throw new ServletException(getMessage(
-                "SCHED_LOG_EXCEPTION_INI_FILE_INVALID", iae.toString()), iae); //$NON-NLS-1$
-        }
-
-        initialized = true;
-        lastIniFileName = iniFileName;
-    }
-
-    /**
      * Checks the existence of a task with the given name.
      *
      * @return whether a task with the given name exists
@@ -1228,16 +1233,6 @@ public final class SchedulerServlet
         };
 
         killThread.start();
-    }
-
-    /**
-     * Clears the scheduler static fields - to be used by unit tests only.
-     */
-    static void resetScheduler() {
-
-        initialized = false;
-        lastIniFileName = null;
-        sch = null;
     }
 
     /**
@@ -1315,5 +1310,15 @@ public final class SchedulerServlet
         if (sch != null) {
             sch.stopTask(taskName);
         }
+    }
+
+    /**
+     * Clears the scheduler static fields - to be used by unit tests only.
+     */
+    static void resetScheduler() {
+
+        lastIniFileName = null;
+        initialized = false;
+        sch = null;
     }
 }

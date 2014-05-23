@@ -122,9 +122,9 @@ public final class Scheduler
     private static final long SCHEDULER_SLEEP_TIME = 100;
 
     /**
-     * The finalizer guardian.
+     * The finalize guardian.
      */
-    final Object finalizerGuardian = new Object() {
+    final Object finalizeGuardian = new Object() {
 
         /**
          * Finalizes the object by stopping the current running tasks and the scheduler process.
@@ -275,6 +275,7 @@ public final class Scheduler
             throw new IllegalArgumentException(
                 getMessage("SCHED_ERR_TASK_INVALID_START_TIME"), iae); //$NON-NLS-1$
         }
+
         return taskStartTime;
     }
 
@@ -437,6 +438,7 @@ public final class Scheduler
      * @see Scheduler#tasks
      */
     public List<SchedulerTask> getTasks() {
+
         return tasks;
     }
 
@@ -719,7 +721,7 @@ public final class Scheduler
 
     /**
      * Schedules a new task or re-schedules an existing task. If the task exists and it is running,
-     * the method does nothing. THe class is loaded using the scheduler class loader.
+     * the method does nothing. The class is loaded using the scheduler class loader.
      *
      * An <code>IllegalArgumentException</code> exception is thrown if the task class
      * could not be successfully created.
