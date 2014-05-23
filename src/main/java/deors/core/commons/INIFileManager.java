@@ -203,11 +203,11 @@ public final class INIFileManager {
      */
     public boolean addEntry(String section, String key, String value, List<String> comments) {
 
-        if (key == null || key.length() == 0) {
+        if (checkString(key)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_KEY_NULL")); //$NON-NLS-1$
         }
 
-        if (value == null || value.length() == 0) {
+        if (checkString(value)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_VALUE_NULL")); //$NON-NLS-1$
         }
 
@@ -328,6 +328,15 @@ public final class INIFileManager {
     }
 
     /**
+     * Checks the given value and returns <code>true</code> if it is <code>null</code>
+     * or the empty string.
+     */
+    private boolean checkString(String value) {
+
+        return value == null || value.isEmpty();
+    }
+
+    /**
      * Returns the comments for the given entry in the default section. If the entry is not found
      * the method returns <code>null</code>.
      *
@@ -359,6 +368,30 @@ public final class INIFileManager {
     }
 
     /**
+     * Returns the entry ID for keys in the default section.
+     *
+     * @param key the key
+     *
+     * @return the entry ID
+     *
+     * @see #getEntryID(String, String)
+     */
+    private String getEntryID(String key) {
+
+        String retValue = null;
+        if (checkString(key)) {
+            retValue = BLANK;
+        } else {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(DOT);
+            buffer.append(key);
+            retValue = buffer.toString();
+        }
+
+        return retValue;
+    }
+
+    /**
      * Returns the entry ID. For the default section (the section and the key are <code>null</code>
      * or empty), the entry ID is a blank string. For keys in the default section (the section is
      * <code>null</code> or empty), the entry ID is the dot character plus the key. For other
@@ -373,19 +406,10 @@ public final class INIFileManager {
      */
     private String getEntryID(String section, String key) {
 
-        String retValue = null;
-        if (key == null || key.length() == 0) {
-            retValue = (section == null || section.length() == 0) ? BLANK : section;
-        } else {
-            StringBuffer buffer = new StringBuffer();
-            if (section != null && section.length() != 0) {
-                buffer.append(section);
-            }
-            buffer.append(DOT);
-            buffer.append(key);
-            retValue = buffer.toString();
+        String retValue = getEntryID(key);
+        if (!checkString(section)) {
+            retValue = section + retValue;
         }
-
         return retValue;
     }
 
@@ -408,7 +432,7 @@ public final class INIFileManager {
      */
     public List<String> getKeys(String section) {
 
-        if (section == null || section.length() == 0) {
+        if (checkString(section)) {
             return keysBySection.get(BLANK);
         }
 
@@ -435,6 +459,8 @@ public final class INIFileManager {
      * @param key key of the entry
      *
      * @return the entry value or <code>null</code> if the entry is not found
+     *
+     * @see #getValue(String, String)
      */
     public String getValue(String key) {
 
@@ -455,7 +481,7 @@ public final class INIFileManager {
      */
     public String getValue(String section, String key) {
 
-        if (key == null || key.length() == 0) {
+        if (checkString(key)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_KEY_NULL")); //$NON-NLS-1$
         }
 
@@ -474,6 +500,8 @@ public final class INIFileManager {
      * @param defaultValue default value
      *
      * @return the entry value or <code>null</code> if the entry is not found
+     *
+     * @see #getValue(String, String)
      */
     public String getValue(String section, String key, String defaultValue) {
 
@@ -513,7 +541,7 @@ public final class INIFileManager {
      */
     public boolean hasEntry(String section, String key) {
 
-        if (key == null || key.length() == 0) {
+        if (checkString(key)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_KEY_NULL")); //$NON-NLS-1$
         }
 
@@ -539,7 +567,7 @@ public final class INIFileManager {
      */
     public boolean hasSection(String section) {
 
-        if (section == null || section.length() == 0) {
+        if (checkString(section)) {
             return hasSection();
         }
 
@@ -574,12 +602,12 @@ public final class INIFileManager {
      */
     public boolean hasValue(String section, String value) {
 
-        if (value == null || value.length() == 0) {
+        if (checkString(value)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_VALUE_NULL")); //$NON-NLS-1$
         }
 
         // we need the list that keeps the order in the section
-        List<String> keys = keysBySection.get((section == null || section.length() == 0) ? BLANK : section);
+        List<String> keys = keysBySection.get(checkString(section) ? BLANK : section);
 
         for (String key : keys) {
             if (getValue(section, key).equals(value)) {
@@ -608,7 +636,7 @@ public final class INIFileManager {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.trim().length() == 0) {
+                if (line.trim().isEmpty()) {
                     if (tempComments != null) {
                         tempComments.add(BLANK);
                     }
@@ -646,7 +674,7 @@ public final class INIFileManager {
                     String key = line.substring(0, sepPos).trim();
                     String value = line.substring(sepPos + 1).trim();
 
-                    if (key.length() == 0 || value.length() == 0) {
+                    if (key.isEmpty() || value.isEmpty()) {
                         continue;
                     }
 
@@ -705,7 +733,7 @@ public final class INIFileManager {
      */
     public boolean removeEntry(String section, String key) {
 
-        if (key == null || key.length() == 0) {
+        if (checkString(key)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_KEY_NULL")); //$NON-NLS-1$
         }
 
@@ -832,11 +860,11 @@ public final class INIFileManager {
      */
     public boolean updateEntry(String section, String key, String value, List<String> comments) {
 
-        if (key == null || key.length() == 0) {
+        if (checkString(key)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_KEY_NULL")); //$NON-NLS-1$
         }
 
-        if (value == null || value.length() == 0) {
+        if (checkString(value)) {
             throw new IllegalArgumentException(getMessage("INIMGR_ERR_VALUE_NULL")); //$NON-NLS-1$
         }
 
@@ -980,7 +1008,7 @@ public final class INIFileManager {
         throws IOException {
 
         // when the section is the default section the header is skipped
-        if (section.length() == 0) {
+        if (section.isEmpty()) {
             return;
         }
 

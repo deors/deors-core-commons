@@ -425,10 +425,10 @@ public final class SchedulerServlet
 
         String iniFileName = config.getInitParameter(PARAM_INI_FILE_NAME);
 
-        if (iniFileName != null && iniFileName.length() != 0) {
-            runScheduler(iniFileName);
-        } else {
+        if (iniFileName == null || iniFileName.isEmpty()) {
             runScheduler();
+        } else {
+            runScheduler(iniFileName);
         }
     }
 
@@ -818,6 +818,7 @@ public final class SchedulerServlet
                 taskStartTime = sch.parseTime(tempStartTime);
 
             } catch (IllegalArgumentException iae) {
+
                 newErrors.add(getMessage("SCHED_SERVLET_ERR_INVALID_TASK_START")); //$NON-NLS-1$
             }
         }
