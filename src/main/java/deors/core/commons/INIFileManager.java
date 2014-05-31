@@ -330,6 +330,10 @@ public final class INIFileManager {
     /**
      * Checks the given value and returns <code>true</code> if it is <code>null</code>
      * or the empty string.
+     *
+     * @param value the string that will be checked
+     *
+     * @return whether the string is empty or not
      */
     private boolean checkString(String value) {
 
