@@ -22,16 +22,16 @@
         <log4j.version>1.2.16</log4j.version>
         <xstream.version>1.4.3</xstream.version>
 
-        <junit.version>4.10</junit.version>
-        <easymock.version>3.1</easymock.version>
-        <powermock.version>1.5.1</powermock.version>
+        <junit.version>4.11</junit.version>
+        <easymock.version>3.2</easymock.version>
+        <powermock.version>1.5.5</powermock.version>
 
-        <jacoco.version>0.7.1.201405082137</jacoco.version>
+        <jacoco.version>0.7.0.201403182114</jacoco.version>
         <jacoco.path>${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar</jacoco.path>
         <jacoco.report>${project.build.directory}/jacoco.itest</jacoco.report>
         <jacoco.agentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.report}</jacoco.agentConfig>
 
-        <jacoco-listeners.version>2.2.1</jacoco-listeners.version>
+        <jacoco-listeners.version>2.3</jacoco-listeners.version>
 
         <sonar.jacoco.itReportPath>${jacoco.report}</sonar.jacoco.itReportPath>
         <sonar.squid.analyse.property.accessors>false</sonar.squid.analyse.property.accessors>
@@ -46,8 +46,6 @@
                 <version>3.1</version>
                 <configuration>
                     <verbose>true</verbose>
-                    <fork>true</fork>
-                    <executable>${java.home}/../bin/javac</executable>
                     <compilerVersion>${java.version}</compilerVersion>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -56,7 +54,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.15</version>
+                <version>2.17</version>
                 <configuration>
                     <excludes>
                         <exclude>**/it/*TestCase.java</exclude>
@@ -66,7 +64,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.15</version>
+                <version>2.17</version>
                 <configuration>
                     <includes>
                         <include>**/it/*TestCase.java</include>
@@ -85,7 +83,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5</version>
                 <configuration>
                     <outputDirectory>deliverables</outputDirectory>
                 </configuration>

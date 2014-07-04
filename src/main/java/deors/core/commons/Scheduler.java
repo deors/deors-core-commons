@@ -22,10 +22,13 @@ import org.slf4j.LoggerFactory;
  *
  * The tasks are read from an INI configuration file. Each task appears as a section in the INI
  * file, and the task name is the section name. Inside a section, four entries configures the task:
+ *
+ * <ol>
  * <li><code>class</code> is the fully qualified name of the class that implements the task.</li>
  * <li><code>description</code> is the description used when showing task information.</li>
  * <li><code>start</code> is the task start time in HH:MM:SS format.</li>
  * <li><code>stop</code> is the task stop time in HH:MM:SS format.</li>
+ * </ol>
  *
  * When the task start time equals the string <code>*</code> (the configurable daemon id string)
  * the task is then a daemon, and does not stop until the task itself ends.

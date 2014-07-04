@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * To change the schedule list, HTTP GET and POST requests can be sent to the servlet. The
  * <code>command</code> request parameter value is the configuration command that is requested:
  *
+ * <ol>
  * <li>The <code>help</code> command includes help information in the servlet output.</li>
  *
  * <li>The <code>start</code> command starts the scheduler using the configuration file
@@ -49,6 +50,7 @@ import javax.servlet.http.HttpServletResponse;
  * parameters are given by the request parameters <code>taskName</code>,
  * <code>taskStartTime</code> and <code>taskStopTime</code>. A daemon is created using as
  * starting time the configured daemon id string. Scheduling times are in HH:MM:SS format.</li>
+ * </ol>
  *
  * @author deors
  * @version 1.0
