@@ -42,6 +42,8 @@ public class ContextTestCase {
 
         assertEquals("yyyy/MM/dd", CommonsContext.getConfigurationProperty("commons.defaultDateFormat", ""));
 
+        assertEquals("default", CommonsContext.getConfigurationProperty("commons.defaultDateFormat", "default", new String[] {"dmy", "mdy"}));
+
         assertEquals(';', CommonsContext.getConfigurationProperty("inimgr.commentsStartsWith", '0'));
 
         assertEquals(";", CommonsContext.getConfigurationProperty("inimgr.commentsStartsWith", ";", new String[] {";", "#"}));
