@@ -65,9 +65,9 @@ public abstract class AbstractFileTool {
     private final String filterRegex;
 
     /**
-     * The logger.
+     * The logger. It is protected so it can be overriden by subclasses.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractFileTool.class);
+    protected static Logger logger = LoggerFactory.getLogger(AbstractFileTool.class);
 
     /**
      * The compiled pattern created from the given regular expression.
@@ -187,7 +187,7 @@ public abstract class AbstractFileTool {
      */
     protected boolean isDebugEnabled() {
 
-        return LOG.isDebugEnabled();
+        return logger.isDebugEnabled();
     }
 
     /**
@@ -200,7 +200,7 @@ public abstract class AbstractFileTool {
 
         String fmtMessage = getMessage("FTOOL_DEB_FMT", message); //$NON-NLS-1$
 
-        LOG.debug(message);
+        logger.debug(message);
         messages.add(fmtMessage);
 
         for (ActivityListener listener : listeners) {
@@ -253,7 +253,7 @@ public abstract class AbstractFileTool {
 
         errors++;
 
-        LOG.error(message);
+        logger.error(message);
         messages.add(fmtMessage);
 
         for (ActivityListener listener : listeners) {
@@ -301,7 +301,7 @@ public abstract class AbstractFileTool {
     protected void logInfo(String message) {
 
         messages.add(message);
-        LOG.info(message);
+        logger.info(message);
 
         for (ActivityListener listener : listeners) {
             listener.activityLog(message);
@@ -353,7 +353,7 @@ public abstract class AbstractFileTool {
      */
     protected void doProcessInDirectory(File directory) {
 
-        if (LOG.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
             logDebug(getMessage("FTOOL_DEB_PROCESSING_DIRECTORY", directory.getAbsolutePath())); //$NON-NLS-1$
         }
 
@@ -371,8 +371,8 @@ public abstract class AbstractFileTool {
             for (File file : list) {
                 if (file.isFile()
                     && ((filter && matchesRegexPattern(file.getName())) || !filter)) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug(getMessage("FTOOL_DEB_ACTIONS_FILE", file.getAbsolutePath())); //$NON-NLS-1$
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(getMessage("FTOOL_DEB_ACTIONS_FILE", file.getAbsolutePath())); //$NON-NLS-1$
                     }
                     applyActionsToFile(file);
                 }
@@ -381,8 +381,8 @@ public abstract class AbstractFileTool {
 
         if (applyToDirectories
             && ((filter && matchesRegexPattern(directory.getName())) || !filter)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(getMessage("FTOOL_DEB_ACTIONS_DIRECTORY", directory.getAbsolutePath())); //$NON-NLS-1$
+            if (logger.isDebugEnabled()) {
+                logger.debug(getMessage("FTOOL_DEB_ACTIONS_DIRECTORY", directory.getAbsolutePath())); //$NON-NLS-1$
             }
             applyActionsToDirectory(directory);
         }
@@ -451,7 +451,7 @@ public abstract class AbstractFileTool {
      */
     public Logger getLogger() {
 
-        return LOG;
+        return logger;
     }
 
     /**
