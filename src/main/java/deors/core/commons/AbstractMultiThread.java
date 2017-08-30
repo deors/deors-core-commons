@@ -7,7 +7,7 @@ package deors.core.commons;
  * When used within a thread pool, each thread needs to release itself to the pool when its run
  * method ends (typically in the <code>finally</code> block.
  *
- * The class default constructor must be implement and the owner must be set before running
+ * The class default constructor must be implemented and the owner must be set before running
  * the thread.
  *
  * @author deors
