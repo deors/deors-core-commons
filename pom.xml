@@ -24,17 +24,17 @@
 
         <junit.version>4.12</junit.version>
         <easymock.version>3.4</easymock.version>
-        <powermock.version>1.6.6</powermock.version>
-        <pitest.version>1.1.10</pitest.version>
+        <powermock.version>1.7.1</powermock.version>
+        <pitest.version>1.2.2</pitest.version>
 
-        <jacoco.version>0.7.6.201602180812</jacoco.version>
+        <jacoco.version>0.7.9</jacoco.version>
         <jacoco.path>${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar</jacoco.path>
         <jacoco.utReport>${project.build.directory}/jacoco.exec</jacoco.utReport>
         <jacoco.itReport>${project.build.directory}/jacoco-it.exec</jacoco.itReport>
         <jacoco.utAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.utReport}</jacoco.utAgentConfig>
         <jacoco.itAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.itReport}</jacoco.itAgentConfig>
 
-        <jacoco-listeners.version>4.3.0.7717</jacoco-listeners.version>
+        <jacoco-listeners.version>4.11.0.10660</jacoco-listeners.version>
 
         <sonar.findbugs.excludesFilters>${project.basedir}/findbugs-filter.xml</sonar.findbugs.excludesFilters>
     </properties>
@@ -44,7 +44,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.6.2</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -53,7 +53,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
+                <version>2.20</version>
                 <configuration>
                     <argLine>${jacoco.utAgentConfig}</argLine>
                     <excludes>
@@ -70,7 +70,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.17</version>
+                <version>2.20</version>
                 <configuration>
                     <argLine>${jacoco.itAgentConfig}</argLine>
                     <includes>
@@ -106,7 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.0.2</version>
                 <configuration>
                     <outputDirectory>deliverables</outputDirectory>
                 </configuration>
@@ -114,7 +114,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>3.0.1</version>
                 <configuration>
                     <outputDirectory>deliverables</outputDirectory>
                 </configuration>
@@ -130,7 +130,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <jarOutputDirectory>deliverables</jarOutputDirectory>
                 </configuration>
