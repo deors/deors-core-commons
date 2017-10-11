@@ -191,7 +191,7 @@ public final class StringToolkit {
             return null;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(source, CAPITALIZATION_SEPARATORS, true);
 
         String word = BLANK;
@@ -438,7 +438,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer(source.substring(0, begin + start));
+        StringBuilder sb = new StringBuilder(source.substring(0, begin + start));
         sb.append(source.substring(begin + start + token.length()));
 
         return sb.toString();
@@ -579,7 +579,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer(source.substring(0, start));
+        StringBuilder sb = new StringBuilder(source.substring(0, start));
         sb.append(source.substring(start + token.length()));
 
         return sb.toString();
@@ -599,7 +599,7 @@ public final class StringToolkit {
             return BLANK;
         }
 
-        StringBuffer sb = new StringBuffer(length);
+        StringBuilder sb = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
             sb.append(repeat);
@@ -699,7 +699,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer(source.substring(0, begin + start));
+        StringBuilder sb = new StringBuilder(source.substring(0, begin + start));
         sb.append(replacement);
         sb.append(source.substring(begin + start + token.length()));
 
@@ -779,7 +779,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer(source.substring(0, begin));
+        StringBuilder sb = new StringBuilder(source.substring(0, begin));
 
         int start = -1;
         int end = begin;
@@ -881,7 +881,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer(source.substring(0, start));
+        StringBuilder sb = new StringBuilder(source.substring(0, start));
         sb.append(replacement);
         sb.append(source.substring(start + token.length()));
 
@@ -927,7 +927,7 @@ public final class StringToolkit {
             tokens[index3] = DEFAULT_FOURTH_TOKEN;
         } else {
             for (int i = 0; i < tokens.length; i++) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append(TOKEN_START);
                 sb.append(i);
                 sb.append(TOKEN_END);
@@ -979,7 +979,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         int firstFoundIndex = -1;
         int start = -1;
@@ -1054,7 +1054,7 @@ public final class StringToolkit {
             return source;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         Set<String> tokens = replacementMap.keySet();
         String firstFoundString = null;
@@ -1178,7 +1178,7 @@ public final class StringToolkit {
                         if (item.endsWith(String.valueOf(surrounder))) {
                             tokens.add(item.substring(1, item.length() - 1));
                         } else {
-                            StringBuffer buffer = new StringBuffer();
+                            StringBuilder buffer = new StringBuilder();
                             buffer.append(item.substring(1));
                             while (st.hasMoreElements()) {
                                 String childItem = (String) st.nextElement();
@@ -1324,7 +1324,7 @@ public final class StringToolkit {
         final int zeroLeftLimit = 0x10;
         final int hexadecimalBase = 16;
 
-        StringBuffer buffer = new StringBuffer(source.length * bytesPerCharacter);
+        StringBuilder buffer = new StringBuilder(source.length * bytesPerCharacter);
 
         for (int i = 0; i < source.length; i++) {
             // source[i] is casted implicitly to int
@@ -1381,7 +1381,7 @@ public final class StringToolkit {
 
         final int firstExtendedCharacter = 127;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] c = source.toCharArray();
 
         for (int i = 0; i < c.length; i++) {
@@ -1428,7 +1428,7 @@ public final class StringToolkit {
 
         final int firstExtendedCharacter = 127;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char[] c = source.toCharArray();
 
         for (int i = 0; i < c.length; i++) {
@@ -1493,7 +1493,7 @@ public final class StringToolkit {
             return CommonsContext.BLANK;
         }
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         for (String element : list) {
             if (buffer.length() != 0) {
