@@ -921,6 +921,8 @@ public final class INIFileManager {
                 writeSectionValues(writer, section, keys);
             }
 
+            writer.close();
+
             if (!iniFile.delete()) {
                 throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
             }
