@@ -236,9 +236,6 @@ public class SchedulerServletTestCase {
     public void testServletCommandStartMissingFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
-        thrown.expect(ServletException.class);
-        thrown.expectMessage("[scheduler] the configuration file is either missing or inaccessible:");
-
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("start");
         expect(request.getParameter("iniFileName")).andReturn("target/test-classes/missing.ini");
@@ -254,6 +251,15 @@ public class SchedulerServletTestCase {
             SchedulerServlet ss = new SchedulerServlet();
 
             ss.doGet(request, response);
+
+            verify(request);
+            verify(response);
+
+            byte[] output = IOToolkit.readFile(temp);
+            String s = new String(output);
+
+            assertTrue(s.contains("[scheduler] the configuration file is either missing or inaccessible:"));
+
         } finally {
             temp.delete();
         }

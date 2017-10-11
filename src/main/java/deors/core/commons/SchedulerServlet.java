@@ -540,9 +540,10 @@ public final class SchedulerServlet
      */
     private void doRequest(HttpServletRequest request, HttpServletResponse response) {
 
-    	try {
-	        List<String> messages = new ArrayList<>();
-	        List<String> errors = new ArrayList<>();
+        List<String> messages = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
+
+        try {
 
 	        boolean help = false;
 
@@ -574,7 +575,8 @@ public final class SchedulerServlet
     	} catch (IOException | ServletException ex) {
 
     		try {
-    			createServletResponse(request, response, new ArrayList<>(), new ArrayList<>(), true);
+    			errors.add(ex.getMessage());
+    			createServletResponse(request, response, messages, errors, true);
     		} catch (IOException ioe) {
     			LOG.error(getMessage("SCHED_SERVLET_ERR_UNABLE_TO_WRITE")); //$NON-NLS-1$
     		}
