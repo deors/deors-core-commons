@@ -119,9 +119,9 @@ public final class StringToolkit {
     public static final String BLANK = ""; //$NON-NLS-1$
 
     /**
-     * The decimal number zero as a string.
+     * The decimal number zero as a char.
      */
-    private static final String ZERO = "0"; //$NON-NLS-1$
+    private static final char ZERO = '0'; //$NON-NLS-1$
 
     /**
      * Date formatter using the default date format.
