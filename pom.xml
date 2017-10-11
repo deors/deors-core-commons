@@ -35,8 +35,6 @@
         <jacoco.itAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.itReport}</jacoco.itAgentConfig>
 
         <jacoco-listeners.version>4.11.0.10660</jacoco-listeners.version>
-
-        <sonar.findbugs.excludesFilters>${project.basedir}/findbugs-filter.xml</sonar.findbugs.excludesFilters>
     </properties>
 
     <build>
