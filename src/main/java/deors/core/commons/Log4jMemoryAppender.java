@@ -1,6 +1,7 @@
 package deors.core.commons;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class Log4jMemoryAppender
      */
     public static List<LoggingEvent> getEventList() {
 
-        return new ArrayList<LoggingEvent>(EVENT_LIST);
+        return Collections.unmodifiableList(EVENT_LIST);
     }
 
     /**
