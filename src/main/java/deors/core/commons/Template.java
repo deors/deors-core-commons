@@ -147,7 +147,7 @@ public final class Template {
                 if (startPos == -1) {
                     processedContents.add(line);
                 } else {
-                    StringBuffer newLine = new StringBuffer();
+                    StringBuilder newLine = new StringBuilder();
 
                     while ((startPos = line.indexOf(TEMPLATE_TAG_START)) != -1) {
                         // two tag start characters together mean
