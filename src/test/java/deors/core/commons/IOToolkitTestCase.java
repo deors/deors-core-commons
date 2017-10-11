@@ -165,7 +165,8 @@ public class IOToolkitTestCase {
     public void testCopyStreamNull()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
+        thrown.expect(IOException.class);
+        thrown.expectMessage("Stream closed");
         IOToolkit.copyStream(null, null);
     }
 

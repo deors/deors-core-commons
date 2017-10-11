@@ -103,12 +103,9 @@ public final class IOToolkit {
         throws IOException {
 
         boolean compareStreams = true;
-        BufferedInputStream bis1 = null;
-        BufferedInputStream bis2 = null;
 
-        try {
-            bis1 = new BufferedInputStream(stream1, bufferSize);
-            bis2 = new BufferedInputStream(stream2, bufferSize);
+        try (BufferedInputStream bis1 = new BufferedInputStream(stream1, bufferSize);
+             BufferedInputStream bis2 = new BufferedInputStream(stream2, bufferSize)) {
 
             int bytesRead1 = -1;
             int bytesRead2 = -1;
@@ -144,21 +141,6 @@ public final class IOToolkit {
             }
 
             return compareStreams;
-        } finally {
-            if (bis1 != null) {
-                try {
-                    bis1.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
-            if (bis2 != null) {
-                try {
-                    bis2.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
         }
     }
 
@@ -194,33 +176,14 @@ public final class IOToolkit {
     public static void copyStream(InputStream is, OutputStream os, int bufferSize)
         throws IOException {
 
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-
-        try {
-            bis = new BufferedInputStream(is, bufferSize);
-            bos = new BufferedOutputStream(os, bufferSize);
+        try (BufferedInputStream bis = new BufferedInputStream(is, bufferSize);
+             BufferedOutputStream bos = new BufferedOutputStream(os, bufferSize)) {
 
             int bytesRead = -1;
             byte[] buffer = new byte[bufferSize];
 
             while ((bytesRead = bis.read(buffer)) != -1) {
                 bos.write(buffer, 0, bytesRead);
-            }
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
-            if (bos != null) {
-                try {
-                    bos.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
             }
         }
     }
@@ -318,10 +281,7 @@ public final class IOToolkit {
     public static byte[] readStream(InputStream is, int bufferSize)
         throws IOException {
 
-        BufferedInputStream bis = null;
-
-        try {
-            bis = new BufferedInputStream(is, bufferSize);
+        try (BufferedInputStream bis = new BufferedInputStream(is, bufferSize)) {
 
             long length = bis.available();
 
@@ -340,10 +300,6 @@ public final class IOToolkit {
             }
 
             return bytes;
-        } finally {
-            if (bis != null) {
-                bis.close();
-            }
         }
     }
 
@@ -377,14 +333,8 @@ public final class IOToolkit {
     public static byte[] readFile(File file, int bufferSize)
         throws IOException {
 
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
+        try (FileInputStream fis = new FileInputStream(file)) {
             return readStream(fis, bufferSize);
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
         }
     }
 
@@ -419,26 +369,14 @@ public final class IOToolkit {
     public static List<String> readTextFile(File file, int bufferSize)
         throws IOException {
 
-        List<String> contents = new ArrayList<String>();
-        BufferedReader reader = null;
+        List<String> contents = new ArrayList<>();
 
-        try {
-            reader = new BufferedReader(new FileReader(file), bufferSize);
-
+        try (BufferedReader reader = new BufferedReader(new FileReader(file), bufferSize)) {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 contents.add(line);
             }
-
             return contents;
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ioe) {
-                    ioe = null;
-                }
-            }
         }
     }
 
@@ -510,14 +448,8 @@ public final class IOToolkit {
     public static File writeFile(byte[] data, int bufferSize)
         throws IOException {
 
-        ByteArrayInputStream bais = null;
-        try {
-            bais = new ByteArrayInputStream(data);
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(data)) {
             return writeStream(bais, bufferSize);
-        } finally {
-            if (bais != null) {
-                bais.close();
-            }
         }
     }
 
