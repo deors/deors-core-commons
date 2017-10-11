@@ -82,10 +82,7 @@ public final class Template {
      */
     public void loadTemplate() throws TemplateException {
 
-        BufferedReader templateReader = null;
-
-        try {
-            templateReader = new BufferedReader(new InputStreamReader(templateSource));
+        try (BufferedReader templateReader = new BufferedReader(new InputStreamReader(templateSource))) {
 
             templateContents = new ArrayList<String>();
             String templateLine = null;
@@ -97,15 +94,6 @@ public final class Template {
 
             throw new TemplateException(
                 CommonsContext.getMessage("TMPL_ERR_NOT_LOADED"), ioe); //$NON-NLS-1$
-        } finally {
-            if (templateReader != null) {
-                try {
-                    templateReader.close();
-                } catch (IOException ioe) {
-                    throw new TemplateException(
-                        CommonsContext.getMessage("TMPL_ERR_NOT_CLOSED"), ioe); //$NON-NLS-1$
-                }
-            }
         }
     }
 
