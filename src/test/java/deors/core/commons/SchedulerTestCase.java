@@ -621,80 +621,84 @@ public class SchedulerTestCase {
     @Test
     public void testScheduleErrorStarting() {
 
-        Log4jMemoryAppender.clear();
+        synchronized (Log4jMemoryAppender.class) {
+            Log4jMemoryAppender.clear();
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorStarting",
-            "deors.core.commons.SchedulerTestCase$ErrorStartingTask",
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorStarting",
+                "deors.core.commons.SchedulerTestCase$ErrorStartingTask",
+                "taskDescription",
+                null, null);
 
-        sch.startScheduler();
+            sch.startScheduler();
 
-        do {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ie) {
-            }
-        } while (sch.getTask("testScheduleErrorStarting").isStarting());
+            do {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ie) {
+                }
+            } while (sch.getTask("testScheduleErrorStarting").isStarting());
 
-        List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
-        for (LoggingEvent e : events) {
-            System.out.println(e.getMessage().toString());
+            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
+            assertMessageEndingWithExists(events, "error starting testScheduleErrorStarting: java.lang.Exception: 5 is not my favorite number");
+
+            Log4jMemoryAppender.clear();
         }
-
-        assertMessageEndingWithExists("error starting testScheduleErrorStarting: java.lang.Exception: 5 is not my favorite number");
-
-        Log4jMemoryAppender.clear();
     }
 
     @Test
     public void testScheduleErrorStopping() {
 
-        Log4jMemoryAppender.clear();
+        synchronized (Log4jMemoryAppender.class) {
+            Log4jMemoryAppender.clear();
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorStopping",
-            "deors.core.commons.SchedulerTestCase$ErrorStoppingTask",
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorStopping",
+                "deors.core.commons.SchedulerTestCase$ErrorStoppingTask",
+                "taskDescription",
+                null, null);
 
-        sch.startScheduler();
+            sch.startScheduler();
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ie) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ie) {
+            }
+
+            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
+            assertMessageEndingWithExists(events, "error stopping testScheduleErrorStopping: java.lang.Exception: 5 is not my favorite number");
+
+            Log4jMemoryAppender.clear();
         }
-
-        assertMessageEndingWithExists("error stopping testScheduleErrorStopping: java.lang.Exception: 5 is not my favorite number");
-
-        Log4jMemoryAppender.clear();
     }
 
     @Test
     public void testScheduleErrorRunning() {
 
-        Log4jMemoryAppender.clear();
+        synchronized (Log4jMemoryAppender.class) {
+            Log4jMemoryAppender.clear();
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorRunning",
-            "deors.core.commons.SchedulerTestCase$ErrorRunningTask",
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorRunning",
+                "deors.core.commons.SchedulerTestCase$ErrorRunningTask",
+                "taskDescription",
+                null, null);
 
-        sch.startScheduler();
+            sch.startScheduler();
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ie) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ie) {
+            }
+
+            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
+            assertMessageEndingWithExists(events, "unexpected error running testScheduleErrorRunning: java.lang.RuntimeException: 5 is not my favorite number");
+
+            Log4jMemoryAppender.clear();
         }
-
-        assertMessageEndingWithExists("unexpected error running testScheduleErrorRunning: java.lang.RuntimeException: 5 is not my favorite number");
-
-        Log4jMemoryAppender.clear();
     }
 
     @Test
@@ -736,22 +740,17 @@ public class SchedulerTestCase {
         assertNull(task);
     }
 
-    private void assertMessageEndingWithExists(String message) {
+    private void assertMessageEndingWithExists(List<LoggingEvent> events, String message) {
 
-        synchronized (Log4jMemoryAppender.class) {
+        boolean found = false;
 
-            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
-
-            boolean found = false;
-
-            for (LoggingEvent event : events) {
-                if (event.getMessage().toString().endsWith(message)) {
-                    found = true;
-                    break;
-                }
+        for (LoggingEvent event : events) {
+            if (event.getMessage().toString().endsWith(message)) {
+                found = true;
+                break;
             }
-            assertTrue("expected message not found", found);
         }
+        assertTrue("expected message not found", found);
     }
 
     public static class InvalidTask {
