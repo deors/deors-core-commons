@@ -126,9 +126,9 @@ public final class ExtensionFileFilter
     /**
      * Returns the extension of the given file.
      *
-     * @return the file extension withouth the <code>.</code> character
-     *
      * @param f <code>java.io.File</code> object referencing the file
+     *
+     * @return the file extension withouth the <code>.</code> character
      *
      * @see java.io.FileFilter#accept(java.io.File)
      */
