@@ -423,7 +423,7 @@ public final class IOToolkit {
         BufferedReader reader = null;
 
         try {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new FileReader(file), bufferSize);
 
             String line = null;
             while ((line = reader.readLine()) != null) {
