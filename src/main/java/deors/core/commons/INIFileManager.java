@@ -113,7 +113,7 @@ public final class INIFileManager {
     /**
      * The dot character, used to separate section names from key names when composing key ID's.
      */
-    private static final String DOT = "."; //$NON-NLS-1$
+    private static final char DOT = '.'; //$NON-NLS-1$
 
     /**
      * Constructor that sets the configuration file.
@@ -388,7 +388,7 @@ public final class INIFileManager {
         if (checkString(key)) {
             retValue = BLANK;
         } else {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append(DOT);
             buffer.append(key);
             retValue = buffer.toString();
@@ -633,10 +633,7 @@ public final class INIFileManager {
     private void readFile()
         throws IOException {
 
-        BufferedReader reader = null;
-
-        try {
-            reader = new BufferedReader(new FileReader(iniFile));
+        try (BufferedReader reader = new BufferedReader(new FileReader(iniFile))) {
 
             ArrayList<String> tempComments = null;
             String section = null;
@@ -696,15 +693,6 @@ public final class INIFileManager {
         } catch (IOException ioe) {
             throw new IOException(
                 getMessage("INIMGR_ERR_IO_READ", ioe.toString()), ioe); //$NON-NLS-1$
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException ioe) {
-                throw new IOException(
-                    getMessage("INIMGR_ERR_IO_READ", ioe.toString()), ioe); //$NON-NLS-1$
-            }
         }
     }
 
