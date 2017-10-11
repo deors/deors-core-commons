@@ -179,11 +179,11 @@ public abstract class AbstractContext implements Context {
 
         if (bundle != null) {
             try {
-                retValue = bundle.getString(propertyName).toCharArray()[0];
+                retValue = bundle.getString(propertyName).charAt(0);
                 lookInBase = false;
             } catch (MissingResourceException mre) {
                 lookInBase = true;
-            } catch (ArrayIndexOutOfBoundsException aioobe) {
+            } catch (StringIndexOutOfBoundsException sioobe) {
                 lookInBase = true;
             }
         }
@@ -213,7 +213,7 @@ public abstract class AbstractContext implements Context {
 
         if (bundle != null) {
             try {
-                retValue = Boolean.valueOf(bundle.getString(propertyName)).booleanValue();
+                retValue = Boolean.parseBoolean(bundle.getString(propertyName));
                 lookInBase = false;
             } catch (MissingResourceException mre) {
                 lookInBase = true;
