@@ -8,10 +8,10 @@ import java.util.Stack;
  * Threads intending to use the pool must subclass the <code>AbstractMultiThread</code>
  * abstract class.
  *
- * @param <T> the type of the objects that will be pooled by any given instance of this class
- *
  * @author deors
  * @version 1.0
+ *
+ * @param <T> the type of the objects that will be pooled by any given instance of this class
  */
 public final class MultiThreadPool<T extends AbstractMultiThread> {
 

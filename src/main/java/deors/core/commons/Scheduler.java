@@ -412,10 +412,10 @@ public final class Scheduler
      * Returns the task with the given name. If the task does not exist, the method returns
      * <code>null</code>.
      *
+     * @param taskName the task name
+     *
      * @return the task with the given name or <code>null</code> if a task with the given name
      *         does not exist
-     *
-     * @param taskName the task name
      *
      * @see Scheduler#tasks
      * @see Scheduler#existsTask(String)
@@ -590,9 +590,9 @@ public final class Scheduler
     /**
      * Checks the existence of a task with the given name.
      *
-     * @return whether a task with the given name exists
-     *
      * @param taskName the task name
+     *
+     * @return whether a task with the given name exists
      */
     public boolean existsTask(String taskName) {
 

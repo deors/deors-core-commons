@@ -1211,9 +1211,9 @@ public final class SchedulerServlet
     /**
      * Checks the existence of a task with the given name.
      *
-     * @return whether a task with the given name exists
-     *
      * @param taskName the task name
+     *
+     * @return whether a task with the given name exists
      */
     public static boolean existsTask(String taskName) {
 
