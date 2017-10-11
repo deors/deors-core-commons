@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Servlet used to initialize and manager a task scheduler using HTTP request.
  *
@@ -197,6 +200,11 @@ public final class SchedulerServlet
      * Token used in templates to print a message.
      */
     private static final String TEMPLATE_MESSAGE = "MESSAGE"; //$NON-NLS-1$
+
+    /**
+     * The logger.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(SchedulerServlet.class);
 
     /**
      * The date formatter.
@@ -529,42 +537,48 @@ public final class SchedulerServlet
      *
      * @param request the HTTP request
      * @param response the HTTP response
-     *
-     * @throws ServletException a servlet exception
-     * @throws IOException an i/o exception
      */
-    private void doRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    private void doRequest(HttpServletRequest request, HttpServletResponse response) {
 
-        List<String> messages = new ArrayList<String>();
-        List<String> errors = new ArrayList<String>();
+    	try {
+	        List<String> messages = new ArrayList<>();
+	        List<String> errors = new ArrayList<>();
 
-        boolean help = false;
+	        boolean help = false;
 
-        String command = request.getParameter(PARAM_COMMAND);
-        if (command == null || command.length() == 0) {
-            help = true;
-        } else {
-            if (command.equalsIgnoreCase(MODE_HELP)) {
-                help = true;
-            } else if (command.equalsIgnoreCase(MODE_START)) {
-                processCommandStart(request, messages);
-            } else if (command.equalsIgnoreCase(MODE_STOP)) {
-                processCommandStop(request, messages, errors);
-            } else if (command.equalsIgnoreCase(MODE_REMOVE)) {
-                processCommandRemove(request, messages, errors);
-            } else if (command.equalsIgnoreCase(MODE_ADD)) {
-                processCommandAdd(request, messages, errors);
-            } else if (command.equalsIgnoreCase(MODE_SCHEDULE)) {
-                processCommandSchedule(request, messages, errors);
-            } else if (command.equalsIgnoreCase(MODE_KILL)) {
-                processCommandKill(request, messages, errors);
-            } else {
-                help = true;
-            }
-        }
+	        String command = request.getParameter(PARAM_COMMAND);
+	        if (command == null || command.length() == 0) {
+	            help = true;
+	        } else {
+	            if (command.equalsIgnoreCase(MODE_HELP)) {
+	                help = true;
+	            } else if (command.equalsIgnoreCase(MODE_START)) {
+	                processCommandStart(request, messages);
+	            } else if (command.equalsIgnoreCase(MODE_STOP)) {
+	                processCommandStop(request, messages, errors);
+	            } else if (command.equalsIgnoreCase(MODE_REMOVE)) {
+	                processCommandRemove(request, messages, errors);
+	            } else if (command.equalsIgnoreCase(MODE_ADD)) {
+	                processCommandAdd(request, messages, errors);
+	            } else if (command.equalsIgnoreCase(MODE_SCHEDULE)) {
+	                processCommandSchedule(request, messages, errors);
+	            } else if (command.equalsIgnoreCase(MODE_KILL)) {
+	                processCommandKill(request, messages, errors);
+	            } else {
+	                help = true;
+	            }
+	        }
 
-        createServletResponse(request, response, messages, errors, help);
+	        createServletResponse(request, response, messages, errors, help);
+
+    	} catch (IOException | ServletException ex) {
+
+    		try {
+    			createServletResponse(request, response, new ArrayList<>(), new ArrayList<>(), true);
+    		} catch (IOException ioe) {
+    			LOG.error(getMessage("SCHED_SERVLET_ERR_UNABLE_TO_WRITE")); //$NON-NLS-1$
+    		}
+    	}
     }
 
     /**
