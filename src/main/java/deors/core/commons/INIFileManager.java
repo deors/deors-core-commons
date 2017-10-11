@@ -905,13 +905,10 @@ public final class INIFileManager {
                 getMessage("INIMGR_ERR_FILE_IS_NOT_WRITABLE", iniFile.getAbsolutePath())); //$NON-NLS-1$
         }
 
-        BufferedWriter writer = null;
+        File tempFile = File.createTempFile(
+            CommonsContext.TEMP_FILE_PREFIX, CommonsContext.TEMP_FILE_SUFFIX);
 
-        try {
-            File tempFile = File.createTempFile(
-                CommonsContext.TEMP_FILE_PREFIX, CommonsContext.TEMP_FILE_SUFFIX);
-
-            writer = new BufferedWriter(new FileWriter(tempFile));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
             for (String section : sections) {
 
@@ -923,9 +920,6 @@ public final class INIFileManager {
                 // write the section key and value pairs
                 writeSectionValues(writer, section, keys);
             }
-
-            writer.close();
-            writer = null;
 
             if (!iniFile.delete()) {
                 throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
@@ -941,15 +935,6 @@ public final class INIFileManager {
         } catch (IOException ioe) {
             throw new IOException(
                 getMessage("INIMGR_ERR_IO_UPDATE", ioe.toString()), ioe); //$NON-NLS-1$
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException ioe) {
-                throw new IOException(
-                    getMessage("INIMGR_ERR_IO_UPDATE", ioe.toString()), ioe); //$NON-NLS-1$
-            }
         }
     }
 
