@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -368,7 +369,8 @@ public final class INIFileManager {
      */
     public List<String> getComments(String section, String key) {
 
-        return commentsByID.get(getEntryID(section, key));
+    	List<String> comments = commentsByID.get(getEntryID(section, key));
+        return comments == null ? null : Collections.unmodifiableList(comments);
     }
 
     /**
@@ -436,11 +438,12 @@ public final class INIFileManager {
      */
     public List<String> getKeys(String section) {
 
+    	String sectionToReturn = section;
         if (checkString(section)) {
-            return keysBySection.get(BLANK);
+            sectionToReturn = BLANK;
         }
 
-        return keysBySection.get(section);
+        return Collections.unmodifiableList(keysBySection.get(sectionToReturn));
     }
 
     /**
@@ -450,7 +453,7 @@ public final class INIFileManager {
      */
     public List<String> getSections() {
 
-        return sections;
+        return Collections.unmodifiableList(sections);
     }
 
     /**
