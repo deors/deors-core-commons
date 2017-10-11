@@ -548,26 +548,23 @@ public final class SchedulerServlet
             boolean help = false;
 
             String command = request.getParameter(PARAM_COMMAND);
-            if (command == null || command.length() == 0) {
+
+            if (MODE_HELP.equalsIgnoreCase(command)) {
                 help = true;
+            } else if (MODE_START.equalsIgnoreCase(command)) {
+                processCommandStart(request, messages);
+            } else if (MODE_STOP.equalsIgnoreCase(command)) {
+                processCommandStop(request, messages, errors);
+            } else if (MODE_REMOVE.equalsIgnoreCase(command)) {
+                processCommandRemove(request, messages, errors);
+            } else if (MODE_ADD.equalsIgnoreCase(command)) {
+                processCommandAdd(request, messages, errors);
+            } else if (MODE_SCHEDULE.equalsIgnoreCase(command)) {
+                processCommandSchedule(request, messages, errors);
+            } else if (MODE_KILL.equalsIgnoreCase(command)) {
+                processCommandKill(request, messages, errors);
             } else {
-                if (command.equalsIgnoreCase(MODE_HELP)) {
-                    help = true;
-                } else if (command.equalsIgnoreCase(MODE_START)) {
-                    processCommandStart(request, messages);
-                } else if (command.equalsIgnoreCase(MODE_STOP)) {
-                    processCommandStop(request, messages, errors);
-                } else if (command.equalsIgnoreCase(MODE_REMOVE)) {
-                    processCommandRemove(request, messages, errors);
-                } else if (command.equalsIgnoreCase(MODE_ADD)) {
-                    processCommandAdd(request, messages, errors);
-                } else if (command.equalsIgnoreCase(MODE_SCHEDULE)) {
-                    processCommandSchedule(request, messages, errors);
-                } else if (command.equalsIgnoreCase(MODE_KILL)) {
-                    processCommandKill(request, messages, errors);
-                } else {
-                    help = true;
-                }
+                help = true;
             }
 
             createServletResponse(request, response, messages, errors, help);
