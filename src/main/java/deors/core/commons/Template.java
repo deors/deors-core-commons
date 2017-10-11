@@ -152,8 +152,7 @@ public final class Template {
                     while ((startPos = line.indexOf(TEMPLATE_TAG_START)) != -1) {
                         // two tag start characters together mean
                         // that this is not a token definition
-                        if (line.substring(startPos + 1, startPos + 2).toCharArray()[0]
-                                == TEMPLATE_TAG_START) {
+                        if (line.charAt(startPos + 1) == TEMPLATE_TAG_START) {
                             newLine.append(line.substring(0, startPos + 2));
                             line = line.substring(startPos + 2);
                         } else {
