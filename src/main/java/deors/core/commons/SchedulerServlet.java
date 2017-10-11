@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Servlet used to initialize and manager a task scheduler using HTTP request.
  *
- * The scheduler is started when the servlet is initialized if the <code>iniFileName</code>
+ * <p>The scheduler is started when the servlet is initialized if the <code>iniFileName</code>
  * servlet parameter is informed.
  *
- * To change the schedule list, HTTP GET and POST requests can be sent to the servlet. The
+ * <p>To change the schedule list, HTTP GET and POST requests can be sent to the servlet. The
  * <code>command</code> request parameter value is the configuration command that is requested:
  *
  * <ol>
@@ -830,7 +830,7 @@ public final class SchedulerServlet
 
         } else {
             try {
-                taskStartTime = sch.parseTime(tempStartTime);
+                taskStartTime = Scheduler.parseTime(tempStartTime);
 
             } catch (IllegalArgumentException iae) {
 
@@ -860,7 +860,7 @@ public final class SchedulerServlet
 
         } else {
             try {
-                taskStopTime = sch.parseTime(tempStopTime);
+                taskStopTime = Scheduler.parseTime(tempStopTime);
 
             } catch (IllegalArgumentException iae) {
 
@@ -999,9 +999,7 @@ public final class SchedulerServlet
             messages.add(getMessage("SCHED_SERVLET_LOG_NOT_RUNNING")); //$NON-NLS-1$
         }
 
-        int n = messages.size();
-
-        if (n != 0) {
+        if (!messages.isEmpty()) {
             // process the scheduler-message-header template
             Template templateMessageHeader =
                 new Template(this.getClass().getResourceAsStream(TEMPLATE_MESSAGE_HEADER));
@@ -1011,8 +1009,8 @@ public final class SchedulerServlet
             Template templateMessageItem =
                 new Template(this.getClass().getResourceAsStream(TEMPLATE_MESSAGE_ITEM));
 
-            for (int i = 0; i < n; i++) {
-                replacements.put(TEMPLATE_MESSAGE, messages.get(i));
+            for (String message : messages) {
+                replacements.put(TEMPLATE_MESSAGE, message);
                 templateMessageItem.processTemplate(replacements, out);
             }
 
@@ -1035,9 +1033,7 @@ public final class SchedulerServlet
     private void createSectionErrors(List<String> errors, Map<String, String> replacements, PrintWriter out)
         throws TemplateException {
 
-        int n = errors.size();
-
-        if (n != 0) {
+        if (!errors.isEmpty()) {
             // process the scheduler-error-header template
             Template templateErrorHeader =
                 new Template(this.getClass().getResourceAsStream(TEMPLATE_ERROR_HEADER));
@@ -1047,8 +1043,8 @@ public final class SchedulerServlet
             Template templateErrorItem =
                 new Template(this.getClass().getResourceAsStream(TEMPLATE_ERROR_ITEM));
 
-            for (int i = 0; i < n; i++) {
-                replacements.put(TEMPLATE_ERROR, errors.get(i));
+            for (String error : errors) {
+                replacements.put(TEMPLATE_ERROR, error);
                 templateErrorItem.processTemplate(replacements, out);
             }
 
@@ -1217,7 +1213,7 @@ public final class SchedulerServlet
      */
     public static boolean existsTask(String taskName) {
 
-        return sch == null ? false : sch.existsTask(taskName);
+        return !(sch == null) && sch.existsTask(taskName);
     }
 
     /**
@@ -1254,7 +1250,7 @@ public final class SchedulerServlet
     /**
      * Schedules a new task or re-schedules an existing task.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the task class
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the task class
      * could not be successfully created.
      *
      * @param taskName the task name
@@ -1274,7 +1270,7 @@ public final class SchedulerServlet
     /**
      * Schedules a new task or re-schedules an existing task.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the task class
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the task class
      * could not be successfully created.
      *
      * @param taskName the task name

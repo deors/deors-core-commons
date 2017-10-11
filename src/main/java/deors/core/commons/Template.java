@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Loads and processes templates.
  *
- * A template is a collection of strings with special tokens that can be substituted by replacements
+ * <p>A template is a collection of strings with special tokens that can be substituted by replacements
  * using the token content as the key for substitutions.
  *
  * @author deors
@@ -192,8 +192,8 @@ public final class Template {
 
         List<String> outputContents = processTemplate(replacements);
 
-        for (int i = 0, n = outputContents.size(); i < n; i++) {
-            target.println(outputContents.get(i));
+        for (String content : outputContents) {
+            target.println(content);
         }
     }
 

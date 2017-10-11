@@ -3,14 +3,14 @@ package deors.core.commons;
 /**
  * The Commons library context.
  *
- * The context acts as a bridge between the library classes, the configuration
+ * <p>The context acts as a bridge between the library classes, the configuration
  * properties and the messages stored in the resource bundle created from
  * <code>deors.core.commons.configuration.properties</code> properties file).
  *
- * The system property <code>deors.core.commons.configuration</code> can be used to
+ * <p>The system property <code>deors.core.commons.configuration</code> can be used to
  * inject an alternate properties file.
  *
- * The class is a singleton.
+ * <p>The class is a singleton.
  *
  * @author deors
  * @version 1.0

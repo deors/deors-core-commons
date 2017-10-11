@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Task scheduler.
  *
- * The tasks are read from an INI configuration file. Each task appears as a section in the INI
+ * <p>The tasks are read from an INI configuration file. Each task appears as a section in the INI
  * file, and the task name is the section name. Inside a section, four entries configures the task:
  *
  * <ol>
@@ -30,12 +30,12 @@ import org.slf4j.LoggerFactory;
  * <li><code>stop</code> is the task stop time in HH:MM:SS format.</li>
  * </ol>
  *
- * When the task start time equals the string <code>*</code> (the configurable daemon id string)
+ * <p>When the task start time equals the string <code>*</code> (the configurable daemon id string)
  * the task is then a daemon, and does not stop until the task itself ends.
  *
- * The tasks are implemented extending the abstract class <code>SchedulerTask</code>.
+ * <p>The tasks are implemented extending the abstract class <code>SchedulerTask</code>.
  *
- * By default new tasks are loaded using the scheduler thread class loader, but it can
+ * <p>By default new tasks are loaded using the scheduler thread class loader, but it can
  * be configured to use any initialized class loader.
  *
  * @author deors
@@ -163,7 +163,7 @@ public final class Scheduler
     /**
      * Constructor that sets the file that contains the tasks information.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if a required key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if a required key is
      * missing in the configuration file or a task class could not be successfully created or a task
      * start or stop time are not valid.
      *
@@ -201,7 +201,7 @@ public final class Scheduler
     /**
      * Reads the task class name.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the class name
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the class name
      * is not found in the configuration file.
      *
      * @param ifm the configuration file manager
@@ -222,7 +222,7 @@ public final class Scheduler
     /**
      * Reads the task description.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the description
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the description
      * is not found in the configuration file.
      *
      * @param ifm the configuration file manager
@@ -243,7 +243,7 @@ public final class Scheduler
     /**
      * Reads the task start time.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the start time
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the start time
      * is not found in the configuration file or the value is not a valid time.
      *
      * @param ifm the configuration file manager
@@ -285,7 +285,7 @@ public final class Scheduler
     /**
      * Reads the task stop time.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the stop time
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the stop time
      * is not found in the configuration file or the value is not a valid time.
      *
      * @param ifm the configuration file manager
@@ -327,7 +327,7 @@ public final class Scheduler
     /**
      * Constructor that sets the file that contains the tasks information using its name.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if a required key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if a required key is
      * missing in the configuration file or the task class could not be successfully created or a
      * task start or stop time are not valid.
      *
@@ -372,7 +372,7 @@ public final class Scheduler
      * <code>java.util.Calendar</code> object date is the current date and its time is the parsed
      * time.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the input string
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the input string
      * is not valid.
      *
      * @param timeString the string to be parsed
@@ -628,9 +628,45 @@ public final class Scheduler
 
     /**
      * Schedules a new task or re-schedules an existing task. If the task exists and it is running,
+     * the method does nothing. The class is loaded using the scheduler class loader.
+     *
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the task class
+     * could not be successfully created.
+     *
+     * @param taskName the task name
+     * @param taskClassName the task class name
+     * @param taskDescription the task description
+     * @param taskStartTime the task start time
+     * @param taskStopTime the task stop time
+     *
+     * @see Scheduler#schedulerClassLoader
+     */
+    public void scheduleTask(String taskName, String taskClassName, String taskDescription,
+                             Calendar taskStartTime, Calendar taskStopTime) {
+
+        synchronized (tasks) {
+            if (taskClassName == null || taskClassName.length() == 0) {
+                throw new IllegalArgumentException(
+                    getMessage("SCHED_ERR_TASK_INCOMPLETE")); //$NON-NLS-1$
+            }
+
+            try {
+                Class<?> taskClass = Class.forName(taskClassName, true, schedulerClassLoader);
+
+                scheduleTask(taskName, taskClass, taskDescription, taskStartTime, taskStopTime);
+
+            } catch (ClassNotFoundException cnfe) {
+                throw new IllegalArgumentException(
+                    getMessage("SCHED_ERR_TASK_NOT_FOUND", taskClassName, cnfe.toString()), cnfe); //$NON-NLS-1$
+            }
+        }
+    }
+
+    /**
+     * Schedules a new task or re-schedules an existing task. If the task exists and it is running,
      * the method does nothing.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the task class
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the task class
      * could not be successfully created.
      *
      * @param taskName the task name
@@ -655,10 +691,10 @@ public final class Scheduler
 
             try {
                 SchedulerTask task =
-                    (SchedulerTask) taskClass
-                        .getConstructor(new Class[] {
-                            String.class, String.class, Calendar.class, Calendar.class})
-                        .newInstance(new Object[] {
+                    (SchedulerTask) taskClass.
+                        getConstructor(new Class[] {
+                            String.class, String.class, Calendar.class, Calendar.class}).
+                        newInstance(new Object[] {
                             taskName, taskDescription, taskStartTime, taskStopTime});
 
                 if (taskStartTime == null) {
@@ -720,42 +756,6 @@ public final class Scheduler
         }
 
         return false;
-    }
-
-    /**
-     * Schedules a new task or re-schedules an existing task. If the task exists and it is running,
-     * the method does nothing. The class is loaded using the scheduler class loader.
-     *
-     * An <code>IllegalArgumentException</code> exception is thrown if the task class
-     * could not be successfully created.
-     *
-     * @param taskName the task name
-     * @param taskClassName the task class name
-     * @param taskDescription the task description
-     * @param taskStartTime the task start time
-     * @param taskStopTime the task stop time
-     *
-     * @see Scheduler#schedulerClassLoader
-     */
-    public void scheduleTask(String taskName, String taskClassName, String taskDescription,
-                             Calendar taskStartTime, Calendar taskStopTime) {
-
-        synchronized (tasks) {
-            if (taskClassName == null || taskClassName.length() == 0) {
-                throw new IllegalArgumentException(
-                    getMessage("SCHED_ERR_TASK_INCOMPLETE")); //$NON-NLS-1$
-            }
-
-            try {
-                Class<?> taskClass = Class.forName(taskClassName, true, schedulerClassLoader);
-
-                scheduleTask(taskName, taskClass, taskDescription, taskStartTime, taskStopTime);
-
-            } catch (ClassNotFoundException cnfe) {
-                throw new IllegalArgumentException(
-                    getMessage("SCHED_ERR_TASK_NOT_FOUND", taskClassName, cnfe.toString()), cnfe); //$NON-NLS-1$
-            }
-        }
     }
 
     /**

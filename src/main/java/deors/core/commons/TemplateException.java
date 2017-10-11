@@ -3,6 +3,9 @@ package deors.core.commons;
 /**
  * Generic exception class for template processing.
  *
+ * <p>This exception class is used to identify errors occurring during template processing
+ * outside other common input/output or runtime exceptions.
+ *
  * @author deors
  * @version 1.0
  */

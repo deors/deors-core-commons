@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract class that represents a scheduler task.
  *
- * Classes that extends <code>SchedulerTask</code> must implement the
+ * <p>Classes that extends <code>SchedulerTask</code> must implement the
  * <code>taskPrepareStart()</code>, <code>taskPrepareStop()</code> and <code>taskLogic()</code>
  * methods.
  *

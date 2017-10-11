@@ -13,7 +13,7 @@ import java.util.Locale;
 /**
  * Comparator used to sort collections and lists containing objects that represent dates.
  *
- * The comparator supports <code>java.util.Calendar</code>, <code>java.util.Date</code> and
+ * <p>The comparator supports <code>java.util.Calendar</code>, <code>java.util.Date</code> and
  * <code>java.lang.String</code> objects.
  *
  * @author deors
@@ -60,9 +60,9 @@ public final class DateComparator
      * Compares two objects and returns <code>-1</code> if the first is less than the second,
      * <code>0</code> if both objects represent the same date, and <code>1</code> if the first
      * is greater than the second. The comparator supports <code>java.util.Calendar</code>,
-     * <code>java.util.Date</code> and <code>java.lang.String</code> objects.<br>
+     * <code>java.util.Date</code> and <code>java.lang.String</code> objects.
      *
-     * An <code>IllegalArgumentException</code> is thrown if the objects are of
+     * <p>An <code>IllegalArgumentException</code> is thrown if the objects are of
      * unsupported types or the strings are not valid dates.
      *
      * @param o1 the first object

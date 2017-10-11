@@ -3,10 +3,10 @@ package deors.core.commons;
 /**
  * An abstract daemon.
  *
- * Daemons created extending this class have to override the methods <code>daemonStart</code>,
+ * <p>Daemons created extending this class have to override the methods <code>daemonStart</code>,
  * <code>daemonStop</code> and <code>daemonLogic</code> to implement the daemon logic.
  *
- * The daemons are not compatible with the Scheduler system, but are compatible with multi-thread
+ * <p>The daemons are not compatible with the Scheduler system, but are compatible with multi-thread
  * pools.
  *
  * @author deors

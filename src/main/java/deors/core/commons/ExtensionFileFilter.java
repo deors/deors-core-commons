@@ -8,10 +8,10 @@ import java.util.Locale;
 
 /**
  * An implementation of <code>java.io.FileFilter</code> interface that filters out all
- * files except those which extension is configured.<br>
+ * files except those which extension is configured.
  *
- * Directories are always accepted. If there is no extension configured the filter only
- * accepts directories.<br>
+ * <p>Directories are always accepted. If there is no extension configured the filter only
+ * accepts directories.
  *
  * @author deors
  * @version 1.0

@@ -1,7 +1,7 @@
 package deors.core.commons;
 
 /**
- * Interface for context classes.<br>
+ * Interface for context classes.
  *
  * @author deors
  * @version 1.0

@@ -6,7 +6,7 @@ import java.net.URLStreamHandlerFactory;
 
 /**
  * An URL-based class loader implementation that performs the search
- * for classes and resources using a parent-last policy.<br>
+ * for classes and resources using a parent-last policy.
  *
  * @author deors
  * @version 1.0

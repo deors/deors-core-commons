@@ -4,10 +4,10 @@ package deors.core.commons;
  * Implementation of a thread that can be controlled using a <code>MultiThreadPool</code> object
  * allowing this threads to be executed concurrently.
  *
- * When used within a thread pool, each thread needs to release itself to the pool when its run
+ * <p>When used within a thread pool, each thread needs to release itself to the pool when its run
  * method ends (typically in the <code>finally</code> block.
  *
- * The class default constructor must be implemented and the owner must be set before running
+ * <p>The class default constructor must be implemented and the owner must be set before running
  * the thread.
  *
  * @author deors
@@ -21,6 +21,13 @@ public abstract class AbstractMultiThread
      * The thread owner.
      */
     protected MultiThreadPool<?> owner;
+
+    /**
+     * Default constructor.
+     */
+    public AbstractMultiThread() {
+        super();
+    }
 
     /**
      * Returns the thread owner.

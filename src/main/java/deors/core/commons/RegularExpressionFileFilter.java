@@ -5,9 +5,9 @@ import java.io.FileFilter;
 
 /**
  * An implementation of <code>java.io.FileFilter</code> interface that filters out all
- * files except those which name matches the regular expression configured in the filter.<br>
+ * files except those which name matches the regular expression configured in the filter.
  *
- * Directories are always accepted. By default the filter returns all files and directories.<br>
+ * <p>Directories are always accepted. By default the filter returns all files and directories.
  *
  * @author deors
  * @version 1.0

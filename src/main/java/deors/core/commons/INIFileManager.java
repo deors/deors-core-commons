@@ -20,11 +20,11 @@ import java.util.Map;
 /**
  * Class for managing INI configuration files.
  *
- * The INI configuration entries are written in pairs <code><i>key</i>,<i>value</i></code>
+ * <p>The INI configuration entries are written in pairs <code><i>key</i>,<i>value</i></code>
  * separated by the character <code>'='</code> and lines starting with the character
  * <code>';'</code> are considered as comments; both characters are configurable.
  *
- * The INI configuration entries are organized in sections. Each section begins in a line that
+ * <p>The INI configuration entries are organized in sections. Each section begins in a line that
  * contains the section name surrounded by the characters <code>'['</code> and <code>']'</code>
  * (also configurable). If the file have no sections or there are entries before the first, these
  * entries belong to the default section.
@@ -118,7 +118,7 @@ public final class INIFileManager {
     /**
      * Constructor that sets the configuration file.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the given file is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the given file is
      * a directory or cannot be read.
      *
      * @param iniFile the file with the configuration information
@@ -151,7 +151,7 @@ public final class INIFileManager {
      * Adds an entry to the default section and sets its value. If the entry already exists the
      * method returns <code>false</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param key the key of the new entry
@@ -170,7 +170,7 @@ public final class INIFileManager {
      * returns <code>false</code>. If the section is <code>null</code> or empty, the entry is
      * added to the default section.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param section the section of the new entry
@@ -191,7 +191,7 @@ public final class INIFileManager {
      * empty, the entry is added to the default section. If the comment is <code>null</code> or
      * empty, it will not be added.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param section the section of the new entry
@@ -345,7 +345,7 @@ public final class INIFileManager {
      * Returns the comments for the given entry in the default section. If the entry is not found
      * the method returns <code>null</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param key key of the entry
@@ -460,7 +460,7 @@ public final class INIFileManager {
      * Returns the value for the given entry in the default section. If the entry is not found the
      * method returns <code>null</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param key key of the entry
@@ -478,7 +478,7 @@ public final class INIFileManager {
      * Returns the value for the given entry in the given section. If the entry is not found the
      * method returns <code>null</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param section section of the entry
@@ -499,7 +499,7 @@ public final class INIFileManager {
      * Returns the value for the given entry in the given section. If the entry is not found the
      * method returns the given default value.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param section section of the entry
@@ -523,7 +523,7 @@ public final class INIFileManager {
     /**
      * Returns whether the given entry exists in the default section.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param key the key of the entry
@@ -538,7 +538,7 @@ public final class INIFileManager {
     /**
      * Returns whether the given entry exists in the given section.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param section the section of the entry
@@ -584,7 +584,7 @@ public final class INIFileManager {
     /**
      * Returns whether the given value exists in any entry in the default section.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the value is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the value is
      * <code>null</code> or empty.
      *
      * @param value the value of the entry
@@ -599,7 +599,7 @@ public final class INIFileManager {
     /**
      * Returns whether the given value exists in any entry in the given section.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the value is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the value is
      * <code>null</code> or empty.
      *
      * @param section the section of the entry
@@ -700,7 +700,7 @@ public final class INIFileManager {
      * Removes an entry from the default section. If the entry does not exist the method returns
      * <code>false</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param key the key of the entry
@@ -717,7 +717,7 @@ public final class INIFileManager {
      * Removes an entry from the given section. If the entry does not exist the method returns
      * <code>false</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key is
      * <code>null</code> or empty.
      *
      * @param section the section of the entry
@@ -804,7 +804,7 @@ public final class INIFileManager {
      * Updates the value of an entry in the default section. If the entry does not exist the method
      * returns <code>false</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param key the key of the entry
@@ -822,7 +822,7 @@ public final class INIFileManager {
      * Updates the value of an entry in the given section. If the entry does not exist the method
      * returns <code>false</code>.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param section the section of the entry
@@ -842,7 +842,7 @@ public final class INIFileManager {
      * exist the method returns <code>false</code>. If the comment is <code>null</code> or
      * empty, it will not be updated.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the key and/or the
      * value are <code>null</code> or empty.
      *
      * @param section the section of the entry
@@ -888,7 +888,7 @@ public final class INIFileManager {
      * Updates the INI configuration file. This method overwrites the existing file with the values
      * in memory.
      *
-     * An <code>IllegalArgumentException</code> exception is thrown if the given file is
+     * <p>An <code>IllegalArgumentException</code> exception is thrown if the given file is
      * a directory or cannot be written.
      *
      * @throws IOException an I/O exception

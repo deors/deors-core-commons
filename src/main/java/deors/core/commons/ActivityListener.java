@@ -6,6 +6,7 @@ package deors.core.commons;
  * @author deors
  * @version 1.0
  */
+@FunctionalInterface
 public interface ActivityListener {
 
     /**

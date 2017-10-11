@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Toolkit methods for encoding and decoding data in Base 64.<br>
+ * Toolkit methods for encoding and decoding data in Base 64.
  *
  * @author deors
  * @version 1.0

@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Abstract base class for generic file processing tools.<br>
+ * Abstract base class for generic file processing tools.
  *
  * @author deors
  * @version 1.0

@@ -5,7 +5,7 @@ import java.util.Stack;
 /**
  * Thread pool implementation used to control the parallel execution of multi-threaded tasks.
  *
- * Threads intending to use the pool must subclass the <code>AbstractMultiThread</code>
+ * <p>Threads intending to use the pool must subclass the <code>AbstractMultiThread</code>
  * abstract class.
  *
  * @author deors

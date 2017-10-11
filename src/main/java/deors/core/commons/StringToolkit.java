@@ -13,6 +13,10 @@ import java.util.StringTokenizer;
 /**
  * Toolkit methods for working with strings.
  *
+ * <p>Most of the functions in this toolkit are replacements to functions in popular open source
+ * libraries and are useful when relying on external, open source libraries, is not possible or
+ * by doing so it brings on integration issues between other dependencies.
+ *
  * @author deors
  * @version 1.0
  */
@@ -998,25 +1002,6 @@ public final class StringToolkit {
     }
 
     /**
-     * Checks parameters for replaceMultiple() method.
-     *
-     * @param source the source string
-     * @param tokens array with the strings to be searched for
-     * @param replacements array with the replacement strings
-     *
-     * @return whether parameters are valid
-     */
-    private static boolean checkReplaceMultipleParameters(String source, String[] tokens,
-                                                          String[] replacements) {
-        return source != null
-            && tokens != null
-            && replacements != null
-            && tokens.length != 0
-            && replacements.length != 0
-            && tokens.length == replacements.length;
-    }
-
-    /**
      * Performs a multiple string replacement in the string <code>source</code> using
      * the string pairs located in the map <code>replacementMap</code>.<br>
      *
@@ -1071,6 +1056,25 @@ public final class StringToolkit {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Checks parameters for replaceMultiple() method.
+     *
+     * @param source the source string
+     * @param tokens array with the strings to be searched for
+     * @param replacements array with the replacement strings
+     *
+     * @return whether parameters are valid
+     */
+    private static boolean checkReplaceMultipleParameters(String source, String[] tokens,
+                                                          String[] replacements) {
+        return source != null
+            && tokens != null
+            && replacements != null
+            && tokens.length != 0
+            && replacements.length != 0
+            && tokens.length == replacements.length;
     }
 
     /**

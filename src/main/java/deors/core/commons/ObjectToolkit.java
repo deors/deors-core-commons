@@ -1,7 +1,7 @@
 package deors.core.commons;
 
 /**
- * Toolkit methods for working with objects.<br>
+ * Toolkit methods for working with objects.
  *
  * @author deors
  * @version 1.0

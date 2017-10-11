@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Toolkit methods for working with streams and files.<br>
+ * Toolkit methods for working with streams and files.
  *
  * @author deors
  * @version 1.0
