@@ -545,42 +545,42 @@ public final class SchedulerServlet
 
         try {
 
-	        boolean help = false;
+            boolean help = false;
 
-	        String command = request.getParameter(PARAM_COMMAND);
-	        if (command == null || command.length() == 0) {
-	            help = true;
-	        } else {
-	            if (command.equalsIgnoreCase(MODE_HELP)) {
-	                help = true;
-	            } else if (command.equalsIgnoreCase(MODE_START)) {
-	                processCommandStart(request, messages);
-	            } else if (command.equalsIgnoreCase(MODE_STOP)) {
-	                processCommandStop(request, messages, errors);
-	            } else if (command.equalsIgnoreCase(MODE_REMOVE)) {
-	                processCommandRemove(request, messages, errors);
-	            } else if (command.equalsIgnoreCase(MODE_ADD)) {
-	                processCommandAdd(request, messages, errors);
-	            } else if (command.equalsIgnoreCase(MODE_SCHEDULE)) {
-	                processCommandSchedule(request, messages, errors);
-	            } else if (command.equalsIgnoreCase(MODE_KILL)) {
-	                processCommandKill(request, messages, errors);
-	            } else {
-	                help = true;
-	            }
-	        }
+            String command = request.getParameter(PARAM_COMMAND);
+            if (command == null || command.length() == 0) {
+                help = true;
+            } else {
+                if (command.equalsIgnoreCase(MODE_HELP)) {
+                    help = true;
+                } else if (command.equalsIgnoreCase(MODE_START)) {
+                    processCommandStart(request, messages);
+                } else if (command.equalsIgnoreCase(MODE_STOP)) {
+                    processCommandStop(request, messages, errors);
+                } else if (command.equalsIgnoreCase(MODE_REMOVE)) {
+                    processCommandRemove(request, messages, errors);
+                } else if (command.equalsIgnoreCase(MODE_ADD)) {
+                    processCommandAdd(request, messages, errors);
+                } else if (command.equalsIgnoreCase(MODE_SCHEDULE)) {
+                    processCommandSchedule(request, messages, errors);
+                } else if (command.equalsIgnoreCase(MODE_KILL)) {
+                    processCommandKill(request, messages, errors);
+                } else {
+                    help = true;
+                }
+            }
 
-	        createServletResponse(request, response, messages, errors, help);
+            createServletResponse(request, response, messages, errors, help);
 
-    	} catch (IOException | ServletException ex) {
+        } catch (IOException | ServletException ex) {
 
-    		try {
-    			errors.add(ex.getMessage());
-    			createServletResponse(request, response, messages, errors, true);
-    		} catch (IOException ioe) {
-    			LOG.error(getMessage("SCHED_SERVLET_ERR_UNABLE_TO_WRITE")); //$NON-NLS-1$
-    		}
-    	}
+            try {
+                errors.add(ex.getMessage());
+                createServletResponse(request, response, messages, errors, true);
+            } catch (IOException ioe) {
+                LOG.error(getMessage("SCHED_SERVLET_ERR_UNABLE_TO_WRITE")); //$NON-NLS-1$
+            }
+        }
     }
 
     /**

@@ -369,7 +369,7 @@ public final class INIFileManager {
      */
     public List<String> getComments(String section, String key) {
 
-    	List<String> comments = commentsByID.get(getEntryID(section, key));
+        List<String> comments = commentsByID.get(getEntryID(section, key));
         return comments == null ? null : Collections.unmodifiableList(comments);
     }
 
@@ -438,7 +438,7 @@ public final class INIFileManager {
      */
     public List<String> getKeys(String section) {
 
-    	String sectionToReturn = section;
+        String sectionToReturn = section;
         if (checkString(section)) {
             sectionToReturn = BLANK;
         }
