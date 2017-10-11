@@ -258,7 +258,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue(s.contains("[scheduler] the configuration file is either missing or inaccessible:"));
+            assertTrue("error message must be included in servlet outout",
+                s.contains("[scheduler] the configuration file is either missing or inaccessible:"));
 
         } finally {
             temp.delete();
