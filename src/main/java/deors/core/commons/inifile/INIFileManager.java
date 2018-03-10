@@ -922,22 +922,22 @@ public final class INIFileManager {
                 // write the section key and value pairs
                 writeSectionValues(writer, section, keys);
             }
-
-            if (!iniFile.delete()) {
-                throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
-            }
-
-            if (!tempFile.renameTo(iniFile)) {
-                throw new IOException(getMessage("INIMGR_ERR_INI_NO_RENAME")); //$NON-NLS-1$
-            }
-
-            iniFile = tempFile;
-
-            dataHasChanged = false;
         } catch (IOException ioe) {
             throw new IOException(
                 getMessage("INIMGR_ERR_IO_UPDATE", ioe.toString()), ioe); //$NON-NLS-1$
         }
+
+        if (!iniFile.delete()) {
+            throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
+        }
+
+        if (!tempFile.renameTo(iniFile)) {
+            throw new IOException(getMessage("INIMGR_ERR_INI_NO_RENAME")); //$NON-NLS-1$
+        }
+
+        iniFile = tempFile;
+
+        dataHasChanged = false;
     }
 
     /**
