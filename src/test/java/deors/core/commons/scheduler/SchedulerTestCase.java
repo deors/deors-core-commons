@@ -18,8 +18,8 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import deors.core.commons.Log4jMemoryAppender;
 import deors.core.commons.ParentLastURLClassLoader;
+import deors.core.commons.log.Log4jMemoryAppender;
 import deors.core.commons.scheduler.Scheduler;
 import deors.core.commons.scheduler.SchedulerTask;
 

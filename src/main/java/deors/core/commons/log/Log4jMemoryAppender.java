@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.log;
 
 import java.util.Collections;
 import java.util.LinkedList;
