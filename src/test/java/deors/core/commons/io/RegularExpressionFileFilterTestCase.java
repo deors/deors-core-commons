@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.io;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.junit.Test;
+
+import deors.core.commons.io.RegularExpressionFileFilter;
 
 public class RegularExpressionFileFilterTestCase {
 

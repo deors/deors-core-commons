@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.io;
 
 import static deors.core.commons.CommonsContext.getMessage;
 
@@ -16,6 +16,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+
+import deors.core.commons.CommonsContext;
 
 /**
  * Toolkit methods for working with streams and files.

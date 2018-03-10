@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.io;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,6 +20,8 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import deors.core.commons.io.IOToolkit;
 
 public class IOToolkitTestCase {
 

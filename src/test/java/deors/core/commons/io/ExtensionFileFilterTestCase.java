@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import deors.core.commons.io.ExtensionFileFilter;
 
 public class ExtensionFileFilterTestCase {
 

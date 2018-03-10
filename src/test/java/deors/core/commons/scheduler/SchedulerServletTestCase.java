@@ -28,7 +28,7 @@ import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import deors.core.commons.IOToolkit;
+import deors.core.commons.io.IOToolkit;
 import deors.core.commons.scheduler.Scheduler;
 import deors.core.commons.scheduler.SchedulerServlet;
 import deors.core.commons.scheduler.SchedulerTask;

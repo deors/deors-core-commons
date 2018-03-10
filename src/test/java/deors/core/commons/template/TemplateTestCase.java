@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import deors.core.commons.CommonsContext;
-import deors.core.commons.IOToolkit;
+import deors.core.commons.io.IOToolkit;
 import deors.core.commons.template.Template;
 import deors.core.commons.template.TemplateException;
 
