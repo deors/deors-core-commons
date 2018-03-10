@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import deors.core.commons.CommonsContext;
+import deors.core.commons.io.IOToolkit;
 
 /**
  * Class for managing INI configuration files.
@@ -293,7 +295,7 @@ public final class INIFileManager {
 
         // the section is added to the end of the file
         sections.add(sectionID);
-        keysBySection.put(sectionID, new ArrayList<String>());
+        keysBySection.put(sectionID, new ArrayList<>());
 
         // the comments of the new section are added
         // to the comments hash table
@@ -907,8 +909,7 @@ public final class INIFileManager {
                 getMessage("INIMGR_ERR_FILE_IS_NOT_WRITABLE", iniFile.getAbsolutePath())); //$NON-NLS-1$
         }
 
-        File tempFile = File.createTempFile(
-            CommonsContext.TEMP_FILE_PREFIX, CommonsContext.TEMP_FILE_SUFFIX);
+        File tempFile = IOToolkit.createTempFile(false);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
@@ -927,15 +928,17 @@ public final class INIFileManager {
                 getMessage("INIMGR_ERR_IO_UPDATE", ioe.toString()), ioe); //$NON-NLS-1$
         }
 
-        if (!iniFile.delete()) {
-            throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
+        try {
+            Files.delete(iniFile.toPath());
+        } catch (IOException ioe) {
+            throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE"), ioe); //$NON-NLS-1$
         }
 
-        if (!tempFile.renameTo(iniFile)) {
-            throw new IOException(getMessage("INIMGR_ERR_INI_NO_RENAME")); //$NON-NLS-1$
+        try {
+            Files.move(tempFile.toPath(), iniFile.toPath());
+        } catch (IOException ioe) {
+            throw new IOException(getMessage("INIMGR_ERR_INI_NO_RENAME"), ioe); //$NON-NLS-1$
         }
-
-        iniFile = tempFile;
 
         dataHasChanged = false;
     }

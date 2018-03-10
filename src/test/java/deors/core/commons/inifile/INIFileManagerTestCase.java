@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import deors.core.commons.inifile.INIFileManager;
+import deors.core.commons.io.IOToolkit;
 
 public class INIFileManagerTestCase {
 
@@ -34,7 +35,7 @@ public class INIFileManagerTestCase {
         thrown.expect(FileNotFoundException.class);
         thrown.expectMessage("not found");
 
-        File f = File.createTempFile("deors.core.commons.", ".test");
+        File f = IOToolkit.createTempFile(false);
         f.delete();
 
         new INIFileManager(f);
@@ -531,11 +532,11 @@ public class INIFileManagerTestCase {
     public void testUpdateFile()
         throws IOException {
 
-        File f = File.createTempFile("deors.core.commons.", ".test");
+        File f = IOToolkit.createTempFile(true);
 
         INIFileManager ifm = new INIFileManager(f);
 
-        List<String> comments = new ArrayList<String>();
+        List<String> comments = new ArrayList<>();
         comments.add("some comments");
 
         ifm.addEntry("key", "value");
