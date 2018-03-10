@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.scheduler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,6 +17,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import deors.core.commons.Log4jMemoryAppender;
+import deors.core.commons.ParentLastURLClassLoader;
+import deors.core.commons.scheduler.Scheduler;
+import deors.core.commons.scheduler.SchedulerTask;
 
 public class SchedulerTestCase {
 
@@ -338,7 +343,7 @@ public class SchedulerTestCase {
     public void testScheduleErrorInvalidClass() {
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("class deors.core.commons.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.SchedulerTestCase$InvalidTask.<init>(java.lang.String, java.lang.String, java.util.Calendar, java.util.Calendar)");
+        thrown.expectMessage("class deors.core.commons.scheduler.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.scheduler.SchedulerTestCase$InvalidTask.<init>(java.lang.String, java.lang.String, java.util.Calendar, java.util.Calendar)");
 
         Scheduler sch = new Scheduler();
         sch.scheduleTask(
@@ -386,7 +391,7 @@ public class SchedulerTestCase {
         Scheduler sch = new Scheduler();
         sch.scheduleTask(
             "testScheduleByName",
-            "deors.core.commons.SchedulerTestCase$MyTask",
+            "deors.core.commons.scheduler.SchedulerTestCase$MyTask",
             "taskDescription",
             start, stop);
 
@@ -560,7 +565,7 @@ public class SchedulerTestCase {
         sch.setSchedulerClassLoader(cl);
         sch.scheduleTask(
             "testScheduleClassLoader",
-            "deors.core.commons.TaskInJar",
+            "deors.core.commons.scheduler.TaskInJar",
             "taskDescription",
             start, stop);
 
@@ -577,7 +582,7 @@ public class SchedulerTestCase {
         SchedulerTask task = sch.getTask("testScheduleClassLoader");
 
         assertNotNull(task);
-        assertEquals("deors.core.commons.TaskInJar", task.getClass().getCanonicalName());
+        assertEquals("deors.core.commons.scheduler.TaskInJar", task.getClass().getCanonicalName());
         assertFalse(task.isDaemonTask());
         assertFalse(task.isDaemonExecuted());
         assertTrue(task.isExecuting());
@@ -627,7 +632,7 @@ public class SchedulerTestCase {
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
                 "testScheduleErrorStarting",
-                "deors.core.commons.SchedulerTestCase$ErrorStartingTask",
+                "deors.core.commons.scheduler.SchedulerTestCase$ErrorStartingTask",
                 "taskDescription",
                 null, null);
 
@@ -656,7 +661,7 @@ public class SchedulerTestCase {
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
                 "testScheduleErrorStopping",
-                "deors.core.commons.SchedulerTestCase$ErrorStoppingTask",
+                "deors.core.commons.scheduler.SchedulerTestCase$ErrorStoppingTask",
                 "taskDescription",
                 null, null);
 
@@ -683,7 +688,7 @@ public class SchedulerTestCase {
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
                 "testScheduleErrorRunning",
-                "deors.core.commons.SchedulerTestCase$ErrorRunningTask",
+                "deors.core.commons.scheduler.SchedulerTestCase$ErrorRunningTask",
                 "taskDescription",
                 null, null);
 
@@ -707,7 +712,7 @@ public class SchedulerTestCase {
         Scheduler sch = new Scheduler();
         sch.scheduleTask(
             "testScheduleKill",
-            "deors.core.commons.SchedulerTestCase$MyTask",
+            "deors.core.commons.scheduler.SchedulerTestCase$MyTask",
             "taskDescription",
             null, null);
 

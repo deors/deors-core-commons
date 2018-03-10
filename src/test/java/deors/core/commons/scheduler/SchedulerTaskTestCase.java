@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.scheduler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -9,6 +9,8 @@ import java.util.Calendar;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import deors.core.commons.scheduler.SchedulerTask;
 
 public class SchedulerTaskTestCase {
 

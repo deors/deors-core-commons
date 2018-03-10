@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.scheduler;
 
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
@@ -27,6 +27,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import deors.core.commons.IOToolkit;
+import deors.core.commons.scheduler.Scheduler;
+import deors.core.commons.scheduler.SchedulerServlet;
+import deors.core.commons.scheduler.SchedulerTask;
 
 public class SchedulerServletTestCase {
 
@@ -995,7 +1000,7 @@ public class SchedulerServletTestCase {
         HttpServletRequest request = createNiceMock(HttpServletRequest.class);
         expect(request.getParameter("command")).andReturn("add");
         expect(request.getParameter("taskName")).andReturn("task1");
-        expect(request.getParameter("taskClassName")).andReturn("deors.core.commons.SchedulerServletTestCase$MyTask");
+        expect(request.getParameter("taskClassName")).andReturn("deors.core.commons.scheduler.SchedulerServletTestCase$MyTask");
         expect(request.getParameter("taskDescription")).andReturn("description");
         expect(request.getParameter("taskStartTime")).andReturn("*");
         expect(request.getParameter("taskStopTime")).andReturn("*");

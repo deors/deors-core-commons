@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.scheduler;
 
 import static deors.core.commons.CommonsContext.getConfigurationProperty;
 import static deors.core.commons.CommonsContext.getMessage;
@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import deors.core.commons.CommonsContext;
 import deors.core.commons.template.Template;
 import deors.core.commons.template.TemplateException;
 
