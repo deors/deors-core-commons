@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,11 @@ public final class Template {
     private List<String> templateContents;
 
     /**
+     * The charset used to process the template.
+     */
+    private Charset templateCharset;
+
+    /**
      * The template tag start character.
      */
     private static final char TEMPLATE_TAG_START = '[';
@@ -51,16 +57,42 @@ public final class Template {
     }
 
     /**
-     * Constructor that initializes the template source and loads its contents.
+     * Constructor that initializes the template source and loads its contents
+     * using the platform's default charset.
      *
      * @param templateSource the template source stream
      *
      * @throws TemplateException an exception loading the template
      */
     public Template(InputStream templateSource) throws TemplateException {
+        this(templateSource, Charset.defaultCharset());
+    }
+
+    /**
+     * Constructor that initializes the template source and encoding charset.
+     *
+     * @param templateSource the template source stream
+     * @param templateCharset the encoding charset for the content in the template
+     *
+     * @throws TemplateException an exception loading the template
+     */
+    public Template(InputStream templateSource, String templateCharset) throws TemplateException {
+        this(templateSource, Charset.forName(templateCharset));
+    }
+
+    /**
+     * Constructor that initializes the template source and encoding charset.
+     *
+     * @param templateSource the template source stream
+     * @param templateCharset the encoding charset for the content in the template
+     *
+     * @throws TemplateException an exception loading the template
+     */
+    public Template(InputStream templateSource, Charset templateCharset) throws TemplateException {
         this();
 
         this.templateSource = templateSource;
+        this.templateCharset = templateCharset;
         loadTemplate();
     }
 
@@ -77,6 +109,18 @@ public final class Template {
     }
 
     /**
+     * Returns the <code>templateCharset</code> property value.
+     *
+     * @return the property value
+     *
+     * @see Template#templateCharset
+     * @see Template#setTemplateCharset(java.nio.charset.Charset)
+     */
+    public Charset getTemplateCharset() {
+        return templateCharset;
+    }
+
+    /**
      * Loads the template. The method reads the template source file and stores its contents as an
      * array.
      *
@@ -84,7 +128,8 @@ public final class Template {
      */
     public void loadTemplate() throws TemplateException {
 
-        try (BufferedReader templateReader = new BufferedReader(new InputStreamReader(templateSource))) {
+        try (BufferedReader templateReader = new BufferedReader(
+                new InputStreamReader(templateSource, templateCharset))) {
 
             templateContents = new ArrayList<>();
             String templateLine = null;
@@ -209,6 +254,19 @@ public final class Template {
      */
     public void setTemplateSource(InputStream templateSource) {
         this.templateSource = templateSource;
+        this.templateContents = null;
+    }
+
+    /**
+     * Sets the <code>templateCharset</code> property value and resets the template contents.
+     *
+     * @param templateCharset the property new value
+     *
+     * @see Template#templateCharset
+     * @see Template#getTemplateCharset()
+     */
+    public void setTemplateCharset(Charset templateCharset) {
+        this.templateCharset = templateCharset;
         this.templateContents = null;
     }
 }

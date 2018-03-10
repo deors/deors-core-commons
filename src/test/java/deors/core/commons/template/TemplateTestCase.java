@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,8 @@ public class TemplateTestCase {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private static final String TEMPLATE_FILE_NAME = "/test.tmpl";
+    private static final String TEMPLATE_1_FILE_NAME = "/test1.tmpl";
+    private static final String TEMPLATE_2_FILE_NAME = "/test2.tmpl";
 
     public TemplateTestCase() {
 
@@ -60,21 +61,41 @@ public class TemplateTestCase {
     }
 
     @Test
-    public void testProcessTemplate()
+    public void testProcessTemplateDefaultCharset()
         throws TemplateException {
 
-        Template t = new Template(this.getClass().getResourceAsStream(TEMPLATE_FILE_NAME));
+        Template t = new Template(this.getClass().getResourceAsStream(TEMPLATE_2_FILE_NAME));
 
         assertNotNull(t.getTemplateSource());
 
-        Map<String, String> h = new HashMap<String, String>();
-        h.put("línea", "valor-de-línea");
-        h.put("tiene", "valor-de-tiene");
-        h.put("final", "valor-de-final");
-        h.put("de", "valor-de-de");
-        h.put("mas", "valor-de-mas");
-        h.put("son", "valor-de-son");
-        h.put("necesarias", "valor-de-necesarias");
+        Map<String, String> replacements = new HashMap<String, String>();
+        replacements.put("template", "plantilla");
+
+        List<String> expected = new ArrayList<String>();
+        expected.add("prueba de plantilla");
+        expected.add("muy sencilla");
+
+        List<String> processed = t.processTemplate(replacements);
+
+        assertEquals(expected, processed);
+    }
+
+    @Test
+    public void testProcessTemplateCharsetAsString()
+        throws TemplateException {
+
+        Template t = new Template(this.getClass().getResourceAsStream(TEMPLATE_1_FILE_NAME), "ISO-8859-1");
+
+        assertNotNull(t.getTemplateSource());
+
+        Map<String, String> replacements = new HashMap<String, String>();
+        replacements.put("línea", "valor-de-línea");
+        replacements.put("tiene", "valor-de-tiene");
+        replacements.put("final", "valor-de-final");
+        replacements.put("de", "valor-de-de");
+        replacements.put("mas", "valor-de-mas");
+        replacements.put("son", "valor-de-son");
+        replacements.put("necesarias", "valor-de-necesarias");
 
         List<String> expected = new ArrayList<String>();
         expected.add("prueba de template");
@@ -88,7 +109,41 @@ public class TemplateTestCase {
         expected.add("pruebas valor-de-mas completas valor-de-son valor-de-necesarias final");
         expected.add("pruebas [[mas] completas valor-de-son valor-de-necesarias");
 
-        List<String> processed = t.processTemplate(h);
+        List<String> processed = t.processTemplate(replacements);
+
+        assertEquals(expected, processed);
+    }
+
+    @Test
+    public void testProcessTemplateCharsetAsObject()
+        throws TemplateException {
+
+        Template t = new Template(this.getClass().getResourceAsStream(TEMPLATE_1_FILE_NAME), Charset.forName("ISO-8859-1"));
+
+        assertNotNull(t.getTemplateSource());
+
+        Map<String, String> replacements = new HashMap<String, String>();
+        replacements.put("línea", "valor-de-línea");
+        replacements.put("tiene", "valor-de-tiene");
+        replacements.put("final", "valor-de-final");
+        replacements.put("de", "valor-de-de");
+        replacements.put("mas", "valor-de-mas");
+        replacements.put("son", "valor-de-son");
+        replacements.put("necesarias", "valor-de-necesarias");
+
+        List<String> expected = new ArrayList<String>();
+        expected.add("prueba de template");
+        expected.add("esta línea no tiene tokens");
+        expected.add("esta línea tiene [[ un carácter de apertura");
+        expected.add("esta valor-de-línea tiene uno ] de cierre");
+        expected.add("esta línea tiene un [token no cerrado");
+        expected.add("esta línea valor-de-tiene un token");
+        expected.add("esta línea valor-de-tiene tres [tokens] uno justo al valor-de-final");
+        expected.add("una [[ mezla valor-de-de [ cosas");
+        expected.add("pruebas valor-de-mas completas valor-de-son valor-de-necesarias final");
+        expected.add("pruebas [[mas] completas valor-de-son valor-de-necesarias");
+
+        List<String> processed = t.processTemplate(replacements);
 
         assertEquals(expected, processed);
     }
@@ -98,10 +153,13 @@ public class TemplateTestCase {
         throws TemplateException {
 
         Template t = new Template();
-        t.setTemplateSource(this.getClass().getResourceAsStream(TEMPLATE_FILE_NAME));
-        t.loadTemplate();
+        t.setTemplateSource(this.getClass().getResourceAsStream(TEMPLATE_1_FILE_NAME));
+        t.setTemplateCharset(Charset.forName("ISO-8859-1"));
 
         assertNotNull(t.getTemplateSource());
+        assertNotNull(t.getTemplateCharset());
+
+        t.loadTemplate();
 
         List<String> expected = new ArrayList<String>();
         expected.add("prueba de template");
@@ -125,21 +183,24 @@ public class TemplateTestCase {
         throws TemplateException, IOException {
 
         Template t = new Template();
-        t.setTemplateSource(this.getClass().getResourceAsStream(TEMPLATE_FILE_NAME));
-        t.loadTemplate();
+        t.setTemplateSource(this.getClass().getResourceAsStream(TEMPLATE_1_FILE_NAME));
+        t.setTemplateCharset(Charset.forName("ISO-8859-1"));
 
         assertNotNull(t.getTemplateSource());
+        assertNotNull(t.getTemplateCharset());
+
+        t.loadTemplate();
 
         File file = IOToolkit.createTempFile(true);
-        PrintWriter pw = new PrintWriter(file);
+        PrintWriter pw = new PrintWriter(file, "ISO-8859-1");
 
         t.processTemplate(null, pw);
         pw.close();
 
-        byte[] expected = IOToolkit.readStream(this.getClass().getResourceAsStream(TEMPLATE_FILE_NAME));
-        byte[] actual = IOToolkit.readFile(file);
+        List<String> expected = IOToolkit.readTextStream(this.getClass().getResourceAsStream(TEMPLATE_1_FILE_NAME));
+        List<String> actual = IOToolkit.readTextFile(file);
 
-        assertArrayEquals(expected, actual);
+        assertEquals(expected, actual);
 
         file.delete();
     }
