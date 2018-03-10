@@ -279,6 +279,30 @@ public class IOToolkitTestCase {
     }
 
     @Test
+    public void testReadTextStreamNull()
+        throws IOException {
+
+        thrown.expect(NullPointerException.class);
+        IOToolkit.readTextStream(null);
+    }
+
+    @Test
+    public void testReadTextStream()
+        throws IOException, URISyntaxException {
+
+        String s0 = "sample file for unit test cases";
+        String s1 = "second line of the sample file";
+        String s2 = "the last line - the fine ends with a new line";
+        InputStream is = this.getClass().getResourceAsStream("/samplefile.txt");
+        List<String> contents = IOToolkit.readTextStream(is);
+
+        assertEquals(3, contents.size());
+        assertEquals(s0, contents.get(0));
+        assertEquals(s1, contents.get(1));
+        assertEquals(s2, contents.get(2));
+    }
+
+    @Test
     public void testReadTextFileNull()
         throws IOException {
 

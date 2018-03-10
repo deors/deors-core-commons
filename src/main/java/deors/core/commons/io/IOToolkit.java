@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -355,6 +356,47 @@ public final class IOToolkit {
         throws IOException {
 
         return readFile(file, CommonsContext.DEFAULT_BUFFER_SIZE);
+    }
+
+    /**
+     * Returns a list of strings with the contents of the given text stream using
+     * the given buffer size.
+     *
+     * @param is the source text stream
+     * @param bufferSize the buffer size
+     *
+     * @return the file contents
+     *
+     * @throws IOException an I/O exception
+     */
+    public static List<String> readTextStream(InputStream is, int bufferSize)
+        throws IOException {
+
+        List<String> contents = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is), bufferSize)) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                contents.add(line);
+            }
+            return contents;
+        }
+    }
+
+    /**
+     * Returns a list of strings with the contents of the given text stream using
+     * the default buffer size.
+     *
+     * @param is the source text stream
+     *
+     * @return the file contents
+     *
+     * @throws IOException an I/O exception
+     */
+    public static List<String> readTextStream(InputStream is)
+        throws IOException {
+
+        return readTextStream(is, CommonsContext.DEFAULT_BUFFER_SIZE);
     }
 
     /**
