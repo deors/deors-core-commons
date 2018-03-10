@@ -41,7 +41,6 @@
         <compiler-plugin.version>3.7.0</compiler-plugin.version>
         <surefire-plugin.version>2.20.1</surefire-plugin.version>
         <failsafe-plugin.version>2.20.1</failsafe-plugin.version>
-        <jar-plugin.version>3.0.2</jar-plugin.version>
         <source-plugin.version>3.0.1</source-plugin.version>
         <javadoc-plugin.version>3.0.0</javadoc-plugin.version>
     </properties>
@@ -118,22 +117,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${jar-plugin.version}</version>
-                <configuration>
-                    <outputDirectory>deliverables</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${source-plugin.version}</version>
-                <configuration>
-                    <outputDirectory>deliverables</outputDirectory>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -144,12 +131,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${javadoc-plugin.version}</version>
-                <configuration>
-                    <jarOutputDirectory>deliverables</jarOutputDirectory>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
