@@ -1,4 +1,5 @@
 /**
- * Components that encapsulate common data handling and other common functions.
+ * core-commons is a collection of reusable components and
+ * functions for Java language.
  */
 package deors.core.commons;
