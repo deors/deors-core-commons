@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.base64;
 
 import static deors.core.commons.CommonsContext.getMessage;
 

@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.base64;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +13,9 @@ import java.io.UnsupportedEncodingException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import deors.core.commons.CommonsContext;
+import deors.core.commons.base64.Base64Toolkit;
 
 public class Base64ToolkitTestCase {
 
