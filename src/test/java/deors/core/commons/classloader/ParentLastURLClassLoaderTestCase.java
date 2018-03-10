@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.classloader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import deors.core.commons.classloader.ParentLastURLClassLoader;
 import deors.core.commons.io.IOToolkit;
 
 public class ParentLastURLClassLoaderTestCase {

@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.classloader;
 
 import java.net.URL;
 import java.net.URLClassLoader;
