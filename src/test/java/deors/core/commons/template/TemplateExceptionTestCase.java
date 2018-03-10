@@ -1,9 +1,11 @@
-package deors.core.commons;
+package deors.core.commons.template;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+
+import deors.core.commons.template.TemplateException;
 
 public class TemplateExceptionTestCase {
 

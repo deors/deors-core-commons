@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.template;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
@@ -21,6 +21,11 @@ import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import deors.core.commons.CommonsContext;
+import deors.core.commons.IOToolkit;
+import deors.core.commons.template.Template;
+import deors.core.commons.template.TemplateException;
 
 public class TemplateTestCase {
 

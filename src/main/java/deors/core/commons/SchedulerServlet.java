@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import deors.core.commons.template.Template;
+import deors.core.commons.template.TemplateException;
+
 /**
  * Servlet used to initialize and manager a task scheduler using HTTP request.
  *

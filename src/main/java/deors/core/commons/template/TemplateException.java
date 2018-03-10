@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.template;
 
 /**
  * Generic exception class for template processing.

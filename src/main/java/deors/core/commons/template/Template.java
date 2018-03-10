@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.template;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import deors.core.commons.CommonsContext;
 
 /**
  * Loads and processes templates.
