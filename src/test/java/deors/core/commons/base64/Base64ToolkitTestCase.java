@@ -19,7 +19,7 @@ import deors.core.commons.base64.Base64Toolkit;
 
 public class Base64ToolkitTestCase {
 
-    private static final String NEW_LINE = System.getProperty("line.separator");
+    private static final String NEW_LINE = "\n";
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -36,28 +36,28 @@ public class Base64ToolkitTestCase {
             new byte[0],
             Base64Toolkit.encode(new byte[0]));
         assertArrayEquals(
-            new byte[] {70, 65, 61, 61, 13, 10},
+            new byte[] {70, 65, 61, 61, 10},
             Base64Toolkit.encode(new byte[] {20}));
         assertArrayEquals(
-            new byte[] {55, 65, 61, 61, 13, 10},
+            new byte[] {55, 65, 61, 61, 10},
             Base64Toolkit.encode(new byte[] {-20}));
         assertArrayEquals(
-            new byte[] {101, 65, 61, 61, 13, 10},
+            new byte[] {101, 65, 61, 61, 10},
             Base64Toolkit.encode(new byte[] {120}));
         assertArrayEquals(
-            new byte[] {105, 65, 61, 61, 13, 10},
+            new byte[] {105, 65, 61, 61, 10},
             Base64Toolkit.encode(new byte[] {-120}));
         assertArrayEquals(
-            new byte[] {70, 68, 99, 61, 13, 10},
+            new byte[] {70, 68, 99, 61, 10},
             Base64Toolkit.encode(new byte[] {20, 55}));
         assertArrayEquals(
-            new byte[] {55, 77, 107, 61, 13, 10},
+            new byte[] {55, 77, 107, 61, 10},
             Base64Toolkit.encode(new byte[] {-20, -55}));
         assertArrayEquals(
-            new byte[] {101, 72, 77, 61, 13, 10},
+            new byte[] {101, 72, 77, 61, 10},
             Base64Toolkit.encode(new byte[] {120, 115}));
         assertArrayEquals(
-            new byte[] {105, 73, 48, 61, 13, 10},
+            new byte[] {105, 73, 48, 61, 10},
             Base64Toolkit.encode(new byte[] {-120, -115}));
     }
 
@@ -84,7 +84,6 @@ public class Base64ToolkitTestCase {
         assertEquals("b3JpZ2luYWwgc3RyaW5n" + NEW_LINE, Base64Toolkit.encode("original string"));
         assertEquals("dGhpcyBpcyBhIGxvbmcsIGEgdmVyeSB2ZXJ5IGxvbmcsIG9yaWdpbmFsIHN0cmluZw==" + NEW_LINE, Base64Toolkit.encode("this is a long, a very very long, original string"));
         assertEquals("dGhpcyBpcyBhbiBpbmNyZWRpYmx5IGxvbmcgb3JpZ2luYWwgc3RyaW5nLCBidXQgYSByZWFsIGlu" + NEW_LINE + "Y3JlZGlibHkgdmVyeSB2ZXJ5IGxvbmcgb3JpZ2luYWwgc3RyaW5n" + NEW_LINE, Base64Toolkit.encode("this is an incredibly long original string, but a real incredibly very very long original string"));
-        assertEquals("4ent8/rx" + NEW_LINE, Base64Toolkit.encode("αινσϊρ"));
     }
 
     @Test
@@ -109,28 +108,28 @@ public class Base64ToolkitTestCase {
             Base64Toolkit.decode(new byte[] {65}));
         assertArrayEquals(
             new byte[] {20},
-            Base64Toolkit.decode(new byte[] {70, 65, 61, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {70, 65, 61, 61, 10}));
         assertArrayEquals(
             new byte[] {-20},
-            Base64Toolkit.decode(new byte[] {55, 65, 61, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {55, 65, 61, 61, 10}));
         assertArrayEquals(
             new byte[] {120},
-            Base64Toolkit.decode(new byte[] {101, 65, 61, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {101, 65, 61, 61, 10}));
         assertArrayEquals(
             new byte[] {-120},
-            Base64Toolkit.decode(new byte[] {105, 65, 61, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {105, 65, 61, 61, 10}));
         assertArrayEquals(
             new byte[] {20, 55},
-            Base64Toolkit.decode(new byte[] {70, 68, 99, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {70, 68, 99, 61, 10}));
         assertArrayEquals(
             new byte[] {-20, -55},
-            Base64Toolkit.decode(new byte[] {55, 77, 107, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {55, 77, 107, 61, 10}));
         assertArrayEquals(
             new byte[] {120, 115},
-            Base64Toolkit.decode(new byte[] {101, 72, 77, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {101, 72, 77, 61, 10}));
         assertArrayEquals(
             new byte[] {-120, -115},
-            Base64Toolkit.decode(new byte[] {105, 73, 48, 61, 13, 10}));
+            Base64Toolkit.decode(new byte[] {105, 73, 48, 61, 10}));
     }
 
     @Test
@@ -172,7 +171,6 @@ public class Base64ToolkitTestCase {
         assertEquals("original string", Base64Toolkit.decode("b3JpZ2luYWwgc3RyaW5n"));
         assertEquals("this is a long, a very very long, original string", Base64Toolkit.decode("dGhpcyBpcyBhIGxvbmcsIGEgdmVyeSB2ZXJ5IGxvbmcsIG9yaWdpbmFsIHN0cmluZw=="));
         assertEquals("this is an incredibly long original string, but a real incredibly very very long original string", Base64Toolkit.decode("dGhpcyBpcyBhbiBpbmNyZWRpYmx5IGxvbmcgb3JpZ2luYWwgc3RyaW5nLCBidXQgYSByZWFsIGlu" + NEW_LINE + "Y3JlZGlibHkgdmVyeSB2ZXJ5IGxvbmcgb3JpZ2luYWwgc3RyaW5n"));
-        assertEquals("αινσϊρ", Base64Toolkit.decode("4ent8/rx"));
     }
 
     @Test
@@ -210,8 +208,8 @@ public class Base64ToolkitTestCase {
 
         assertTrue(Base64Toolkit.isBase64("b3JpZ2luYWwgc3RyaW5n"));
         assertTrue(Base64Toolkit.isBase64("4ent8/rx"));
-        assertFalse(Base64Toolkit.isBase64("()&%$"));
 
+        assertFalse(Base64Toolkit.isBase64("()&%$"));
         assertFalse(Base64Toolkit.isBase64(" \t\r\n\f"));
         assertFalse(Base64Toolkit.isBase64("="));
         assertFalse(Base64Toolkit.isBase64("=A"));

@@ -52,9 +52,9 @@ public final class Base64Toolkit {
     private static final int ENCODED_STRING_PACKET_SIZE = 4;
 
     /**
-     * The platform-specific new line character(s).
+     * The Unix/Linux new line character(s).
      */
-    private static final String NEW_LINE = System.getProperty("line.separator"); //$NON-NLS-1$
+    private static final char NEW_LINE_CHAR = '\n'; //$NON-NLS-1$
 
     /**
      * The Base 64 character matrix.
@@ -240,15 +240,14 @@ public final class Base64Toolkit {
 
             if (lineWidth >= maxLineWidth) {
 
-                os.write(NEW_LINE.getBytes());
+                os.write(NEW_LINE_CHAR);
                 lineWidth = 0;
             }
         }
 
         if (lineWidth >= 1) {
 
-            os.write(NEW_LINE.getBytes());
-            lineWidth = 0;
+            os.write(NEW_LINE_CHAR);
         }
 
         os.flush();
