@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.threadpool;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

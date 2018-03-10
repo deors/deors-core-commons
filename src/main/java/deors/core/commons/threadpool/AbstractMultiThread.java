@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.threadpool;
 
 /**
  * Implementation of a thread that can be controlled using a <code>MultiThreadPool</code> object
