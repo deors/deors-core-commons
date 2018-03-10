@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.inifile;
 
 import static deors.core.commons.CommonsContext.BLANK;
 import static deors.core.commons.CommonsContext.getConfigurationProperty;
@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import deors.core.commons.CommonsContext;
 
 /**
  * Class for managing INI configuration files.

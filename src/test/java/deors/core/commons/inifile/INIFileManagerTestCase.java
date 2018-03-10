@@ -1,4 +1,4 @@
-package deors.core.commons;
+package deors.core.commons.inifile;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -14,6 +14,8 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import deors.core.commons.inifile.INIFileManager;
 
 public class INIFileManagerTestCase {
 
