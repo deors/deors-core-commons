@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>deors-core-commons</name>
-    <description>deors' core commons library</description>
+    <description>core-commons is a collection of reusable components and functions for the Java language</description>
 
     <properties>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
