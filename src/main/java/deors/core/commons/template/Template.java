@@ -86,7 +86,7 @@ public final class Template {
 
         try (BufferedReader templateReader = new BufferedReader(new InputStreamReader(templateSource))) {
 
-            templateContents = new ArrayList<String>();
+            templateContents = new ArrayList<>();
             String templateLine = null;
             while ((templateLine = templateReader.readLine()) != null) {
                 templateContents.add(templateLine);
@@ -123,7 +123,7 @@ public final class Template {
             throw new TemplateException(CommonsContext.getMessage("TMPL_ERR_NEED_LOAD")); //$NON-NLS-1$
         }
 
-        List<String> processedContents = new ArrayList<String>();
+        List<String> processedContents = new ArrayList<>();
 
         Iterator<String> it = templateContents.iterator();
         while (it.hasNext()) {

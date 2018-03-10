@@ -45,21 +45,21 @@ public final class INIFileManager {
      * List used to keep the order of the sections in the INI configuration file. The default
      * section, if present, is indexed using a blank string as its name.
      */
-    private final List<String> sections = new ArrayList<String>();
+    private final List<String> sections = new ArrayList<>();
 
     /**
      * Map used to keep the order of the entries in a section in the INI configuration file.
      * The key in this map is the section name. A blank string is used for the default section.
      * The object stored is a List with the keys of the entries that belong to the section.
      */
-    private final Map<String, List<String>> keysBySection = new HashMap<String, List<String>>();
+    private final Map<String, List<String>> keysBySection = new HashMap<>();
 
     /**
      * Map used to store the values in the INI configuration file. The key in this map is
      * the section plus a dot character and the key of the entry. If the entry belongs to the
      * default section, the key in this hash table is the dot character plus the key of the entry.
      */
-    private final Map<String, String> valuesByID = new HashMap<String, String>();
+    private final Map<String, String> valuesByID = new HashMap<>();
 
     /**
      * Map used to store the comments associated to the entries or sections in the INI
@@ -69,7 +69,7 @@ public final class INIFileManager {
      * is the section only. The default section have not comments associated. The object stored is
      * a List with the comments associated to the entry or section.
      */
-    private final Map<String, List<String>> commentsByID = new HashMap<String, List<String>>();
+    private final Map<String, List<String>> commentsByID = new HashMap<>();
 
     /**
      * Flag to know whether there are changes in the file contents in memory.
@@ -652,7 +652,7 @@ public final class INIFileManager {
 
                 if (line.startsWith(COMMENTS_STARTS_WITH)) {
                     if (tempComments == null) {
-                        tempComments = new ArrayList<String>();
+                        tempComments = new ArrayList<>();
                     }
 
                     tempComments.add(line.substring(1).trim());
@@ -922,8 +922,6 @@ public final class INIFileManager {
                 // write the section key and value pairs
                 writeSectionValues(writer, section, keys);
             }
-
-            writer.close();
 
             if (!iniFile.delete()) {
                 throw new IOException(getMessage("INIMGR_ERR_INI_NO_DELETE")); //$NON-NLS-1$
