@@ -1,5 +1,8 @@
 package deors.core.commons;
 
+import static deors.core.commons.CommonsContext.BLANK;
+import static deors.core.commons.CommonsContext.SPACE;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -118,11 +121,6 @@ public final class StringToolkit {
     private static final char NO_SURROUNDER = '\u0000';
 
     /**
-     * A blank string.
-     */
-    public static final String BLANK = ""; //$NON-NLS-1$
-
-    /**
      * The decimal number zero as a char.
      */
     private static final char ZERO = '0'; //$NON-NLS-1$
@@ -211,6 +209,51 @@ public final class StringToolkit {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Combines a list of strings into one single string using single
+     * space characters to separate them.
+     *
+     * @param inputStrings the list of strings to be combined into one
+     *
+     * @return the strings combined
+     */
+    public static String combine(List<String> inputStrings) {
+
+        return combine(inputStrings, SPACE);
+    }
+
+    /**
+     * Combines a list of strings into one single string using the given EOL
+     * char(s) to separate them (any arbitrary string is allowed).
+     *
+     * @param inputStrings the list of strings to be combined into one
+     * @param eol the EOL char(s) to be used to separate them
+     *
+     * @return the strings combined
+     */
+    public static String combine(List<String> inputStrings, String eol) {
+
+        if (inputStrings == null) {
+            return null;
+        }
+
+        if (inputStrings.isEmpty()) {
+            return BLANK;
+        }
+
+        boolean addEol = (eol != null && !eol.isEmpty());
+
+        StringBuilder combined = new StringBuilder();
+        for (int i = 0, n = inputStrings.size(); i < n; i++) {
+            combined.append(inputStrings.get(i));
+            if (addEol && i < n - 1) {
+                combined.append(eol);
+            }
+        }
+
+        return combined.toString();
     }
 
     /**
@@ -1494,7 +1537,7 @@ public final class StringToolkit {
     public static String formatListAsStringGeneric(List<String> list, final String separator) {
 
         if (list == null || list.isEmpty()) {
-            return CommonsContext.BLANK;
+            return BLANK;
         }
 
         StringBuilder buffer = new StringBuilder();

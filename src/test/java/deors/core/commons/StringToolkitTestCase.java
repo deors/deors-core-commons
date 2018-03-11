@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertArrayEquals;
+import static deors.core.commons.CommonsContext.BLANK;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -30,6 +31,101 @@ public class StringToolkitTestCase {
         String s = "capitalization string test";
         String r = "Capitalization String Test";
         assertEquals(r, StringToolkit.capitalize(s));
+    }
+
+    @Test
+    public void testCombineNullInput() {
+
+        assertNull(StringToolkit.combine(null));
+    }
+
+    @Test
+    public void testCombineEmptyInput() {
+
+        assertEquals(BLANK, StringToolkit.combine(new ArrayList<String>()));
+    }
+
+    @Test
+    public void testCombine() {
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+
+        String expected = "test string 1 another string the final string";
+
+        assertEquals(expected, StringToolkit.combine(input));
+    }
+
+    @Test
+    public void testCombineEndsWithEmptyString() {
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+        input.add("");
+
+        String expected = "test string 1 another string the final string ";
+
+        assertEquals(expected, StringToolkit.combine(input));
+    }
+
+    @Test
+    public void testCombineNoEol() {
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+
+        String expected = "test string 1another stringthe final string";
+
+        assertEquals(expected, StringToolkit.combine(input, null));
+    }
+
+    @Test
+    public void testCombineEmptyEol() {
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+
+        String expected = "test string 1another stringthe final string";
+
+        assertEquals(expected, StringToolkit.combine(input, BLANK));
+    }
+
+    @Test
+    public void testCombineWithWindowsEol() {
+
+        String eol = "\r\n";
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+
+        String expected = "test string 1\r\nanother string\r\nthe final string";
+
+        assertEquals(expected, StringToolkit.combine(input, eol));
+    }
+
+    @Test
+    public void testCombineWithLinuxEol() {
+
+        String eol = "\n";
+
+        List<String> input = new ArrayList<>();
+        input.add("test string 1");
+        input.add("another string");
+        input.add("the final string");
+
+        String expected = "test string 1\nanother string\nthe final string";
+
+        assertEquals(expected, StringToolkit.combine(input, eol));
     }
 
     @Test

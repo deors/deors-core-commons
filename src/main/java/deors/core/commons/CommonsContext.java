@@ -33,6 +33,11 @@ public final class CommonsContext extends AbstractContext {
     public static final String BLANK = ""; //$NON-NLS-1$
 
     /**
+     * A string containing a single space character.
+     */
+    public static final String SPACE = " "; //$NON-NLS-1$
+
+    /**
      * Default buffer size. Configurable in the properties file using the key
      * <code>commons.defaultBufferSize</code>. Default value is <code>4096</code>.
      *
