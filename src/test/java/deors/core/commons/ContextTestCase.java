@@ -3,6 +3,7 @@ package deors.core.commons;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
@@ -56,7 +57,7 @@ public class ContextTestCase {
 
         assertEquals("xxx", CommonsContext.getConfigurationProperty("nokey", "xxx"));
 
-        assertEquals(true, CommonsContext.getConfigurationProperty("nokey", true));
+        assertTrue(CommonsContext.getConfigurationProperty("nokey", true));
 
         assertEquals('0', CommonsContext.getConfigurationProperty("nokey", '0'));
 
@@ -153,9 +154,9 @@ public class ContextTestCase {
 
         Context c = new DummyContext();
 
-        assertEquals(true, c.getIConfigurationProperty("logOnInitialization", false));
+        assertTrue(c.getIConfigurationProperty("logOnInitialization", false));
 
-        assertEquals(true, c.getIConfigurationProperty("logOnSilentError", false));
+        assertTrue(c.getIConfigurationProperty("logOnSilentError", false));
     }
 
     @Test
