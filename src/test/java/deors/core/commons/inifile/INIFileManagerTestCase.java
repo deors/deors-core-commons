@@ -3,6 +3,7 @@ package deors.core.commons.inifile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -59,17 +60,17 @@ public class INIFileManagerTestCase {
 
         INIFileManager ifm = new INIFileManager(new File("target/test-classes/scheduler.ini"));
 
-        assertTrue(ifm.getKeys().size() == 1);
+        assertSame(1, ifm.getKeys().size());
         assertEquals("default", ifm.getKeys().get(0));
         assertEquals("default section is skipped", ifm.getValue("default"));
 
-        assertTrue(ifm.getKeys("task").size() == 4);
+        assertSame(4, ifm.getKeys("task").size());
         assertEquals("start", ifm.getKeys("task").get(2));
         assertEquals("22:00:00", ifm.getValue("task", "start"));
 
         assertEquals("xx", ifm.getValue("notfound", "notfound", "xx"));
 
-        assertTrue(ifm.getSections().size() == 3);
+        assertSame(3, ifm.getSections().size());
     }
 
     @Test
@@ -78,17 +79,17 @@ public class INIFileManagerTestCase {
 
         INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        assertTrue(ifm.getKeys().size() == 1);
+        assertSame(1, ifm.getKeys().size());
         assertEquals("default", ifm.getKeys().get(0));
         assertEquals("default section is skipped", ifm.getValue("default"));
 
-        assertTrue(ifm.getKeys("task").size() == 4);
+        assertSame(4, ifm.getKeys("task").size());
         assertEquals("start", ifm.getKeys("task").get(2));
         assertEquals("22:00:00", ifm.getValue("task", "start"));
 
         assertEquals("xx", ifm.getValue("notfound", "notfound", "xx"));
 
-        assertTrue(ifm.getSections().size() == 3);
+        assertSame(3, ifm.getSections().size());
     }
 
     @Test
@@ -100,11 +101,11 @@ public class INIFileManagerTestCase {
         ifm.addEntry("otherdef", "othervalue");
         ifm.addEntry("section", "key", "value");
 
-        assertTrue(ifm.getKeys().size() == 2);
+        assertSame(2, ifm.getKeys().size());
         assertEquals("otherdef", ifm.getKeys().get(1));
         assertEquals("othervalue", ifm.getValue("otherdef"));
 
-        assertTrue(ifm.getKeys("section").size() == 1);
+        assertSame(1, ifm.getKeys("section").size());
         assertEquals("key", ifm.getKeys("section").get(0));
         assertEquals("value", ifm.getValue("section", "key"));
     }
@@ -182,7 +183,7 @@ public class INIFileManagerTestCase {
 
         ifm.addEntry("section", "key", "value", comments);
 
-        assertTrue(ifm.getComments("section", "key").size() == 2);
+        assertSame(2, ifm.getComments("section", "key").size());
     }
 
     @Test
@@ -245,7 +246,7 @@ public class INIFileManagerTestCase {
         comments.add("for the .key entry");
 
         assertTrue(ifm.addEntry(null, "key", "value", comments));
-        assertTrue(ifm.getComments("key").size() == 2);
+        assertSame(2, ifm.getComments("key").size());
     }
 
     @Test
@@ -433,7 +434,7 @@ public class INIFileManagerTestCase {
         ifm.addEntry("section", "key", "initvalue");
         ifm.updateEntry("section", "key", "value", comments);
 
-        assertTrue(ifm.getComments("section", "key").size() == 2);
+        assertSame(2, ifm.getComments("section", "key").size());
     }
 
     @Test

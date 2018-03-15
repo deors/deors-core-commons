@@ -1,7 +1,7 @@
 package deors.core.commons;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class AbstractDaemonTestCase {
         } catch (InterruptedException ie) {
         }
 
-        assertEquals(100, daemon.getCount());
+        assertSame(100, daemon.getCount());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class AbstractDaemonTestCase {
 
         daemon.stopDaemon();
 
-        assertTrue(daemon.getCount() != 100);
+        assertNotSame(100, daemon.getCount());
     }
 
     public static class MyDaemon
