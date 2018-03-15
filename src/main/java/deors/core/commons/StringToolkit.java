@@ -243,7 +243,7 @@ public final class StringToolkit {
             return BLANK;
         }
 
-        boolean addEol = (eol != null && !eol.isEmpty());
+        boolean addEol = eol != null && !eol.isEmpty();
 
         StringBuilder combined = new StringBuilder();
         for (int i = 0, n = inputStrings.size(); i < n; i++) {
