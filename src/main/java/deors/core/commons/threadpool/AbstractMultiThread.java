@@ -50,11 +50,11 @@ public abstract class AbstractMultiThread
     /**
      * Releases this thread to the pool.
      *
-     * @throws java.lang.InstantiationException an instantiation exception
-     * @throws java.lang.IllegalAccessException an illegal access exception
+     * @throws InstantiationException the thread class is abstract
+     * @throws IllegalAccessException the thread class constructor is not accessible
      */
     public void release()
-        throws java.lang.InstantiationException, java.lang.IllegalAccessException {
+        throws InstantiationException, IllegalAccessException {
         if (owner != null) {
             owner.release();
         }

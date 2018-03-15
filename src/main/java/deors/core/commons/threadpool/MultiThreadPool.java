@@ -5,15 +5,15 @@ import java.util.Stack;
 /**
  * Thread pool implementation used to control the parallel execution of multi-threaded tasks.
  *
- * <p>Threads intending to use the pool must subclass the <code>AbstractMultiThread</code>
- * abstract class.
+ * <p>Threads intending to use the pool must subclass the <code>MultiThread</code> interface
+ * or the <code>AbstractMultiThread</code> abstract class.
  *
  * @author deors
  * @version 1.0
  *
  * @param <T> the type of the objects that will be pooled by any given instance of this class
  */
-public final class MultiThreadPool<T extends AbstractMultiThread> {
+public final class MultiThreadPool<T extends MultiThread> {
 
     /**
      * Stack with the available threads in the pool.
@@ -36,8 +36,8 @@ public final class MultiThreadPool<T extends AbstractMultiThread> {
      *
      * @param seedClass the class used to build the pool
      *
-     * @throws InstantiationException an instantiation exception
-     * @throws IllegalAccessException an illegal access exception
+     * @throws InstantiationException the thread class is abstract
+     * @throws IllegalAccessException the thread class constructor is not accessible
      *
      * @see MultiThreadPool#DEFAULT_POOL_SIZE
      */
@@ -54,8 +54,8 @@ public final class MultiThreadPool<T extends AbstractMultiThread> {
      * @param seedClass the class used to build the pool
      * @param poolSize the pool size
      *
-     * @throws InstantiationException an instantiation exception
-     * @throws IllegalAccessException an illegal access exception
+     * @throws InstantiationException the thread class is abstract
+     * @throws IllegalAccessException the thread class constructor is not accessible
      */
     public MultiThreadPool(Class<T> seedClass, int poolSize)
         throws InstantiationException, IllegalAccessException {
@@ -112,11 +112,11 @@ public final class MultiThreadPool<T extends AbstractMultiThread> {
 
     /**
      * Releases a thread to the pool. This method is invoked when a thread ends its execution. The
-     * method creates a new instance of the seed class and sets its owner to this thread pool. Tnen
+     * method creates a new instance of the seed class and sets its owner to this thread pool. Then
      * the stack is notified that there is a new available thread.
      *
-     * @throws InstantiationException an instantiation exception
-     * @throws IllegalAccessException an illegal access exception
+     * @throws InstantiationException the thread class is abstract
+     * @throws IllegalAccessException the thread class constructor is not accessible
      */
     void release()
         throws InstantiationException, IllegalAccessException {

@@ -26,8 +26,8 @@ public interface MultiThread {
     /**
      * Releases this thread to the pool.
      *
-     * @throws java.lang.InstantiationException an instantiation exception
-     * @throws java.lang.IllegalAccessException an illegal access exception
+     * @throws InstantiationException the thread class is abstract
+     * @throws IllegalAccessException the thread class constructor is not accessible
      */
     void release() throws InstantiationException, IllegalAccessException;
 }
