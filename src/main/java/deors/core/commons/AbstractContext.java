@@ -111,6 +111,7 @@ public abstract class AbstractContext implements Context {
                     if (configuredValue.equals(validValues[i])) {
                         retValue = configuredValue;
                         lookInBase = false;
+                        break;
                     }
                 }
             } catch (MissingResourceException mre) {
