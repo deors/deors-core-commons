@@ -158,7 +158,6 @@ public abstract class AbstractFileTool {
      *
      * @return the number of errors found while processing files
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public int doProcess() {
 
         try {
@@ -169,9 +168,7 @@ public abstract class AbstractFileTool {
             } else {
                 logError(getMessage("FTOOL_ERR_STARTING_POINT")); //$NON-NLS-1$
             }
-        // CHECKSTYLE:OFF
         } catch (Throwable t) {
-        // CHECKSTYLE:ON
             // in the case a tool implementation throws an unchecked exception
             // the process should be flagged as aborted and always return the error count
             aborted = true;

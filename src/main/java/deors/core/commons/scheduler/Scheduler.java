@@ -57,7 +57,6 @@ public final class Scheduler
     /**
      * The scheduler thread.
      */
-    @SuppressWarnings("PMD.AvoidUsingVolatile")
     volatile Thread schedulerThread;
 
     /**
@@ -464,7 +463,6 @@ public final class Scheduler
      * start and stop in the scheduled times. When a task is stopped it is re-scheduled the same
      * time in the following day.
      */
-    @SuppressWarnings("PMD.CompareObjectsWithEquals")
     public void run() {
 
         Thread thisThread = Thread.currentThread();

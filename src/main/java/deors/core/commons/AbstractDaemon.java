@@ -18,7 +18,6 @@ public abstract class AbstractDaemon
     /**
      * The daemon thread.
      */
-    @SuppressWarnings("PMD.AvoidUsingVolatile")
     protected volatile Thread daemonThread;
 
     /**
@@ -77,7 +76,6 @@ public abstract class AbstractDaemon
      * the current execution thread, and finally, before the thread end, if the daemon thread is
      * <code>null</code>, the method <code>daemonStop</code> is executed.
      */
-    @SuppressWarnings("PMD.CompareObjectsWithEquals")
     public void run() {
 
         Thread tmpThread = Thread.currentThread();

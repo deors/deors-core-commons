@@ -1179,7 +1179,6 @@ public final class SchedulerServlet
      * @param task the task information
      * @param replacements the replacements map
      */
-    @SuppressWarnings("PMD.ConfusingTernary")
     private void prepareTaskInformation(SchedulerTask task, Map<String, String> replacements) {
 
         if (task.isDaemonTask()) {

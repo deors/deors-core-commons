@@ -27,7 +27,6 @@ public final class ConfigurationToolkit {
      *
      * @return the configuration property value
      */
-    @SuppressWarnings("PMD.ConfusingTernary")
     public static String getConfigurationProperty(String sysKey, String envKey, String defValue) {
 
         String retValue = defValue;
@@ -53,7 +52,6 @@ public final class ConfigurationToolkit {
      *
      * @return the configuration property value
      */
-    @SuppressWarnings("PMD.ConfusingTernary")
     public static boolean getConfigurationProperty(String sysKey, String envKey, boolean defValue) {
 
         boolean retValue = defValue;

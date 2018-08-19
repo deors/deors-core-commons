@@ -92,14 +92,12 @@ public abstract class SchedulerTask
     /**
      * The task thread.
      */
-    @SuppressWarnings("PMD.AvoidUsingVolatile")
     volatile Thread taskThread;
 
     /**
      * The task thread saved for killing it if needed (e.g. the thread
      * is not responding to the stop signal).
      */
-    @SuppressWarnings("PMD.AvoidUsingVolatile")
     volatile Thread taskThread4Kill;
 
     /**
@@ -308,10 +306,6 @@ public abstract class SchedulerTask
      *
      * @see SchedulerTask#taskLogic()
      */
-    @SuppressWarnings({
-        "PMD.CompareObjectsWithEquals",
-        "PMD.AvoidCatchingThrowable"
-    })
     public void run() {
 
         Thread thisThread = Thread.currentThread();
@@ -327,9 +321,7 @@ public abstract class SchedulerTask
 
             throw td;
 
-        // CHECKSTYLE:OFF
         } catch (Throwable t) {
-        // CHECKSTYLE:ON
 
             taskThread = null;
 
@@ -442,7 +434,6 @@ public abstract class SchedulerTask
      *
      * @see SchedulerTask#taskPrepareStop()
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     protected void taskAutoStop() {
 
         if (executing && !stopping) {
@@ -466,9 +457,7 @@ public abstract class SchedulerTask
 
                 LOG.info(getMessage("SCHED_LOG_TASK_STOPPED", getTaskName())); //$NON-NLS-1$
 
-            // CHECKSTYLE:OFF
             } catch (Throwable t) {
-            // CHECKSTYLE:ON
 
                 LOG.info(getMessage("SCHED_LOG_ERR_TASK_STOPPING", getTaskName(), t.toString())); //$NON-NLS-1$
             }
@@ -529,7 +518,6 @@ public abstract class SchedulerTask
      *
      * @see SchedulerTask#taskPrepareStart()
      */
-    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     void taskStart() {
 
         if (!starting && !executing && !stopping) {
@@ -549,9 +537,7 @@ public abstract class SchedulerTask
 
                 LOG.info(getMessage("SCHED_LOG_TASK_STARTED", getTaskName())); //$NON-NLS-1$
 
-            // CHECKSTYLE:OFF
             } catch (Throwable t) {
-            // CHECKSTYLE:ON
 
                 taskThread = null;
 
