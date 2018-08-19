@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ public class MultiThreadPoolTestCase {
 
     @Test
     public void testMultiThread()
-        throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+        throws IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
 
         MultiThreadPool<MyMultiThread> pool = new MultiThreadPool<>(MyMultiThread.class, 5);
 
@@ -36,7 +38,7 @@ public class MultiThreadPoolTestCase {
 
     @Test
     public void testMultiThreadDefaultSize()
-        throws IllegalArgumentException, IllegalAccessException, InstantiationException {
+        throws IllegalArgumentException, IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
 
         MultiThreadPool<MyMultiThread> pool = new MultiThreadPool<>(MyMultiThread.class);
 
@@ -84,10 +86,9 @@ public class MultiThreadPoolTestCase {
             } finally {
                 try {
                     release();
-                } catch (IllegalAccessException iae) {
-                    iae.printStackTrace();
-                } catch (InstantiationException ie) {
-                    ie.printStackTrace();
+                } catch (IllegalAccessException | InstantiationException | InvocationTargetException
+                         | NoSuchMethodException | SecurityException e) {
+                    e.printStackTrace();
                 }
             }
         }

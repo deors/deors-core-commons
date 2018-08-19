@@ -1,5 +1,6 @@
 package deors.core.commons.threadpool;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 
 /**
@@ -38,11 +39,14 @@ public final class MultiThreadPool<T extends MultiThread> {
      *
      * @throws InstantiationException the thread class is abstract
      * @throws IllegalAccessException the thread class constructor is not accessible
+     * @throws InvocationTargetException the thread class constructor throwed an exception
+     * @throws NoSuchMethodException the thread class constructor does not exist
+     * @throws SecurityException the thread class constructor access is denied
      *
      * @see MultiThreadPool#DEFAULT_POOL_SIZE
      */
     public MultiThreadPool(Class<T> seedClass)
-        throws InstantiationException, IllegalAccessException {
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         this(seedClass, DEFAULT_POOL_SIZE);
     }
@@ -56,16 +60,19 @@ public final class MultiThreadPool<T extends MultiThread> {
      *
      * @throws InstantiationException the thread class is abstract
      * @throws IllegalAccessException the thread class constructor is not accessible
+     * @throws InvocationTargetException the thread class constructor throwed an exception
+     * @throws NoSuchMethodException the thread class constructor does not exist
+     * @throws SecurityException the thread class constructor access is denied
      */
     public MultiThreadPool(Class<T> seedClass, int poolSize)
-        throws InstantiationException, IllegalAccessException {
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         super();
 
         this.seedClass = seedClass;
 
         for (int i = 0; i < poolSize; i++) {
-            T thread = seedClass.newInstance();
+            T thread = seedClass.getConstructor().newInstance();
             thread.setOwner(this);
             threadStack.push(thread);
         }
@@ -117,12 +124,15 @@ public final class MultiThreadPool<T extends MultiThread> {
      *
      * @throws InstantiationException the thread class is abstract
      * @throws IllegalAccessException the thread class constructor is not accessible
+     * @throws InvocationTargetException the thread class constructor throwed an exception
+     * @throws NoSuchMethodException the thread class constructor does not exist
+     * @throws SecurityException the thread class constructor access is denied
      */
     void release()
-        throws InstantiationException, IllegalAccessException {
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         synchronized (threadStack) {
-            T thread = seedClass.newInstance();
+            T thread = seedClass.getConstructor().newInstance();
             thread.setOwner(this);
             threadStack.push(thread);
             threadStack.notifyAll();
