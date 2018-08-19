@@ -91,10 +91,10 @@ public class Base64ToolkitTestCase {
         throws UnsupportedEncodingException {
 
         assertEquals("b3JpZ2luYWwgc3RyaW5n" + NEW_LINE, Base64Toolkit.encode("original string", "ISO-8859-1"));
-        assertEquals("4ent8/rx" + NEW_LINE, Base64Toolkit.encode("αινσϊρ", "ISO-8859-1"));
+        assertEquals("4ent8/rx" + NEW_LINE, Base64Toolkit.encode("Γ‘Γ©Γ­Γ³ΓΊΓ±", "ISO-8859-1"));
 
         assertEquals("b3JpZ2luYWwgc3RyaW5n" + NEW_LINE, Base64Toolkit.encode("original string", "UTF-8"));
-        assertEquals("w6HDqcOtw7PDusOx" + NEW_LINE, Base64Toolkit.encode("αινσϊρ", "UTF-8"));
+        assertEquals("w6HDqcOtw7PDusOx" + NEW_LINE, Base64Toolkit.encode("Γ‘Γ©Γ­Γ³ΓΊΓ±", "UTF-8"));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class Base64ToolkitTestCase {
     public void testDecodeBytesInvalid()
         throws IOException {
 
-        assertArrayEquals(new byte[0], Base64Toolkit.decode("αινσϊρ".getBytes()));
+        assertArrayEquals(new byte[0], Base64Toolkit.decode("Γ‘Γ©Γ­Γ³ΓΊΓ±".getBytes()));
         assertArrayEquals(new byte[0], Base64Toolkit.decode("()&%$".getBytes()));
     }
 
@@ -151,7 +151,7 @@ public class Base64ToolkitTestCase {
     public void testDecodeStringInvalid()
         throws IOException {
 
-        assertEquals("", Base64Toolkit.decode("αινσϊρ"));
+        assertEquals("", Base64Toolkit.decode("Γ‘Γ©Γ­Γ³ΓΊΓ±"));
         assertEquals("", Base64Toolkit.decode("()&%$"));
     }
 
@@ -178,10 +178,10 @@ public class Base64ToolkitTestCase {
         throws UnsupportedEncodingException {
 
         assertEquals("original string", Base64Toolkit.decode("b3JpZ2luYWwgc3RyaW5n", "ISO-8859-1"));
-        assertEquals("αινσϊρ", Base64Toolkit.decode("4ent8/rx", "ISO-8859-1"));
+        assertEquals("Γ‘Γ©Γ­Γ³ΓΊΓ±", Base64Toolkit.decode("4ent8/rx", "ISO-8859-1"));
 
         assertEquals("original string", Base64Toolkit.decode("b3JpZ2luYWwgc3RyaW5n", "UTF-8"));
-        assertEquals("αινσϊρ", Base64Toolkit.decode("w6HDqcOtw7PDusOx", "UTF-8"));
+        assertEquals("Γ‘Γ©Γ­Γ³ΓΊΓ±", Base64Toolkit.decode("w6HDqcOtw7PDusOx", "UTF-8"));
     }
 
     @Test
@@ -190,7 +190,7 @@ public class Base64ToolkitTestCase {
 
         thrown.expect(IOException.class);
         thrown.expectMessage(CommonsContext.getMessage("B64TK_ERR_READING_DATA"));
-        ByteArrayInputStream bais = new ByteArrayInputStream("αινσϊρ".getBytes());
+        ByteArrayInputStream bais = new ByteArrayInputStream("Γ‘Γ©Γ­Γ³ΓΊΓ±".getBytes());
         ByteArrayOutputStream baos = new ByteArrayOutputStream(100);
         Base64Toolkit.decode(bais, baos);
     }

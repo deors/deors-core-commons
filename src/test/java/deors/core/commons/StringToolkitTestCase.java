@@ -677,32 +677,32 @@ public class StringToolkitTestCase {
 
         String s = "string formatted for HTML\r"
             + "<tag-name>\n\r  \u000Bmultiple spaces\n"
-            + "&\ttab space\r\nαινσϊΥ";
+            + "&\ttab space\r\nΓ‘Γ©Γ­Γ³ΓΊΓ±";
         String r = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
             + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
             + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
             + "tab&nbsp;space<br>&#225;&#233;&#237;"
-            + "&#243;&#250;&#213;";
+            + "&#243;&#250;&#241;";
         assertEquals(r, StringToolkit.formatForHTMLViewing(s));
 
         String s2 = "\r\nstring formatted for HTML\r"
             + "<tag-name>\n\r  \u000Bmultiple spaces\n"
-            + "&\ttab space\r\nαινσϊΥ";
+            + "&\ttab space\r\nΓ‘Γ©Γ­Γ³ΓΊΓ±";
         String r2 = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
             + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
             + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
             + "tab&nbsp;space<br>&#225;&#233;&#237;"
-            + "&#243;&#250;&#213;";
+            + "&#243;&#250;&#241;";
         assertEquals(r2, StringToolkit.formatForHTMLViewing(s2));
 
         String s3 = "\n\rstring formatted for HTML\r"
             + "<tag-name>\n\r  \u000Bmultiple spaces\n"
-            + "&\ttab space\r\nαινσϊΥ";
+            + "&\ttab space\r\nΓ‘Γ©Γ­Γ³ΓΊΓ±";
         String r3 = "string&nbsp;formatted&nbsp;for&nbsp;HTML<br>"
             + "&lt;tag-name&gt;<br>&nbsp;&nbsp;&nbsp;multiple"
             + "&nbsp;spaces<br>&amp;&nbsp;&nbsp;&nbsp;&nbsp;"
             + "tab&nbsp;space<br>&#225;&#233;&#237;"
-            + "&#243;&#250;&#213;";
+            + "&#243;&#250;&#241;";
         assertEquals(r3, StringToolkit.formatForHTMLViewing(s3));
     }
 
@@ -711,11 +711,11 @@ public class StringToolkitTestCase {
 
         String s = "string formatted for XML\r"
             + "<tag-name>\n\r  multiple spaces\n"
-            + "&\ttab space\r\nαινσϊΥ";
+            + "&\ttab space\r\nΓ‘Γ©Γ­Γ³ΓΊΓ±";
         String r = "string formatted for XML\r"
             + "&lt;tag-name&gt;\n\r  multiple spaces\n"
             + "&amp;\ttab space\r\n&#225;&#233;&#237;"
-            + "&#243;&#250;&#213;";
+            + "&#243;&#250;&#241;";
         assertEquals(r, StringToolkit.formatForXML(s));
     }
 
