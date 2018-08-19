@@ -110,11 +110,14 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>${pitest.version}</version>
                 <configuration>
+                    <jvmArgs>
+                        <value>${jmockit.utAgentConfig}</value>
+                    </jvmArgs>
                     <excludedTests>
                         <param>*IntegrationTestCase</param>
                     </excludedTests>
@@ -129,7 +132,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
