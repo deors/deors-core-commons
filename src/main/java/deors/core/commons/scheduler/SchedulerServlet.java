@@ -553,6 +553,8 @@ public final class SchedulerServlet
 
             String command = request.getParameter(PARAM_COMMAND);
 
+            LOG.info(getMessage("SCHED_SERVLET_LOG_COMMAND", command)); //$NON-NLS-1$
+
             if (MODE_HELP.equalsIgnoreCase(command)) {
                 help = true;
             } else if (MODE_START.equalsIgnoreCase(command)) {
