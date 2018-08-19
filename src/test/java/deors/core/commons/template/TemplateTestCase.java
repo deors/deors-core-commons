@@ -1,10 +1,5 @@
 package deors.core.commons.template;
 
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.eq;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -21,12 +16,18 @@ import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.integration.junit4.JMockit;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 import deors.core.commons.template.Template;
 import deors.core.commons.template.TemplateException;
 
+@RunWith(JMockit.class)
 public class TemplateTestCase {
 
     @Rule
@@ -89,7 +90,7 @@ public class TemplateTestCase {
         assertNotNull(t.getTemplateSource());
 
         Map<String, String> replacements = new HashMap<String, String>();
-        replacements.put("lÌnea", "valor-de-lÌnea");
+        replacements.put("l√≠nea", "valor-de-l√≠nea");
         replacements.put("tiene", "valor-de-tiene");
         replacements.put("final", "valor-de-final");
         replacements.put("de", "valor-de-de");
@@ -99,12 +100,12 @@ public class TemplateTestCase {
 
         List<String> expected = new ArrayList<String>();
         expected.add("prueba de template");
-        expected.add("esta lÌnea no tiene tokens");
-        expected.add("esta lÌnea tiene [[ un car·cter de apertura");
-        expected.add("esta valor-de-lÌnea tiene uno ] de cierre");
-        expected.add("esta lÌnea tiene un [token no cerrado");
-        expected.add("esta lÌnea valor-de-tiene un token");
-        expected.add("esta lÌnea valor-de-tiene tres [tokens] uno justo al valor-de-final");
+        expected.add("esta l√≠nea no tiene tokens");
+        expected.add("esta l√≠nea tiene [[ un car√°cter de apertura");
+        expected.add("esta valor-de-l√≠nea tiene uno ] de cierre");
+        expected.add("esta l√≠nea tiene un [token no cerrado");
+        expected.add("esta l√≠nea valor-de-tiene un token");
+        expected.add("esta l√≠nea valor-de-tiene tres [tokens] uno justo al valor-de-final");
         expected.add("una [[ mezla valor-de-de [ cosas");
         expected.add("pruebas valor-de-mas completas valor-de-son valor-de-necesarias final");
         expected.add("pruebas [[mas] completas valor-de-son valor-de-necesarias");
@@ -123,7 +124,7 @@ public class TemplateTestCase {
         assertNotNull(t.getTemplateSource());
 
         Map<String, String> replacements = new HashMap<String, String>();
-        replacements.put("lÌnea", "valor-de-lÌnea");
+        replacements.put("l√≠nea", "valor-de-l√≠nea");
         replacements.put("tiene", "valor-de-tiene");
         replacements.put("final", "valor-de-final");
         replacements.put("de", "valor-de-de");
@@ -133,12 +134,12 @@ public class TemplateTestCase {
 
         List<String> expected = new ArrayList<String>();
         expected.add("prueba de template");
-        expected.add("esta lÌnea no tiene tokens");
-        expected.add("esta lÌnea tiene [[ un car·cter de apertura");
-        expected.add("esta valor-de-lÌnea tiene uno ] de cierre");
-        expected.add("esta lÌnea tiene un [token no cerrado");
-        expected.add("esta lÌnea valor-de-tiene un token");
-        expected.add("esta lÌnea valor-de-tiene tres [tokens] uno justo al valor-de-final");
+        expected.add("esta l√≠nea no tiene tokens");
+        expected.add("esta l√≠nea tiene [[ un car√°cter de apertura");
+        expected.add("esta valor-de-l√≠nea tiene uno ] de cierre");
+        expected.add("esta l√≠nea tiene un [token no cerrado");
+        expected.add("esta l√≠nea valor-de-tiene un token");
+        expected.add("esta l√≠nea valor-de-tiene tres [tokens] uno justo al valor-de-final");
         expected.add("una [[ mezla valor-de-de [ cosas");
         expected.add("pruebas valor-de-mas completas valor-de-son valor-de-necesarias final");
         expected.add("pruebas [[mas] completas valor-de-son valor-de-necesarias");
@@ -163,12 +164,12 @@ public class TemplateTestCase {
 
         List<String> expected = new ArrayList<String>();
         expected.add("prueba de template");
-        expected.add("esta lÌnea no tiene tokens");
-        expected.add("esta lÌnea tiene [[ un car·cter de apertura");
-        expected.add("esta [lÌnea] tiene uno ] de cierre");
-        expected.add("esta lÌnea tiene un [token no cerrado");
-        expected.add("esta lÌnea [tiene] un token");
-        expected.add("esta lÌnea [tiene] tres [tokens] uno justo al [final]");
+        expected.add("esta l√≠nea no tiene tokens");
+        expected.add("esta l√≠nea tiene [[ un car√°cter de apertura");
+        expected.add("esta [l√≠nea] tiene uno ] de cierre");
+        expected.add("esta l√≠nea tiene un [token no cerrado");
+        expected.add("esta l√≠nea [tiene] un token");
+        expected.add("esta l√≠nea [tiene] tres [tokens] uno justo al [final]");
         expected.add("una [[ mezla [de] [ cosas");
         expected.add("pruebas [mas] completas [son] [necesarias] final");
         expected.add("pruebas [[mas] completas [son] [necesarias]");
@@ -206,16 +207,14 @@ public class TemplateTestCase {
     }
 
     @Test(expected = TemplateException.class)
-    public void testLoadTemplateError()
+    public void testLoadTemplateError(@Mocked InputStream mockedInputStream)
         throws TemplateException, IOException {
+        
+        new Expectations() {{
+            mockedInputStream.read(withAny(new byte[]{}), 0, 8192);
+            result = new IOException("error");
+        }};
 
-        InputStream is = createMock(InputStream.class);
-
-        is.close();
-        expect(is.read(anyObject(byte[].class), eq(0), eq(8192))).andThrow(new IOException("error"));
-
-        replay(is);
-
-        new Template(is);
+        new Template(mockedInputStream);
     }
 }

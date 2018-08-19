@@ -105,6 +105,7 @@ public final class CommonsContext extends AbstractContext {
      * @return the only class instance
      */
     public static CommonsContext getContext() {
+
         return contextInstance;
     }
 
