@@ -20,14 +20,12 @@ import org.junit.runner.RunWith;
 
 import mockit.Expectations;
 import mockit.Mocked;
-import mockit.integration.junit4.JMockit;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 import deors.core.commons.template.Template;
 import deors.core.commons.template.TemplateException;
 
-@RunWith(JMockit.class)
 public class TemplateTestCase {
 
     @Rule
