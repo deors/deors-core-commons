@@ -465,24 +465,25 @@ public abstract class SchedulerTask
     }
 
     /**
-     * Kills the task. This method uses the deprecated <code>java.lang.Thread.stop()</code> method
-     * to stop the running thread and invokes the task <code>taskAutoStop()</code> method to try
-     * to perform the task stop logic.
+     * Kills the task. In the past this method used the deprecated <code>java.lang.Thread.stop()</code>
+     * method to stop the running thread. Although that method has still not been removed
+     * from JDK, it throws an <code>java.lang.UnsupportedOperationException</code>.
+     * Therefore, this method will just invoke the task <code>taskAutoStop()</code> method to try
+     * to perform the task stop logic in an orderly fashion.
      *
      * @see java.lang.Thread#stop()
      * @see SchedulerTask#taskAutoStop()
      */
-    @SuppressWarnings("deprecation")
     void taskKill() {
 
         LOG.info(getMessage("SCHED_LOG_TASK_KILLING", getTaskName())); //$NON-NLS-1$
 
-        if (taskThread != null) {
+        /*if (taskThread != null) {
             taskThread.stop();
         }
         if (taskThread4Kill != null) {
             taskThread4Kill.stop();
-        }
+        }*/
         taskAutoStop();
 
         LOG.info(getMessage("SCHED_LOG_TASK_KILLED", getTaskName())); //$NON-NLS-1$
