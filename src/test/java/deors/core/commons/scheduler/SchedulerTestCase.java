@@ -343,7 +343,7 @@ public class SchedulerTestCase {
     public void testScheduleErrorInvalidClass() {
 
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("class deors.core.commons.scheduler.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.scheduler.SchedulerTestCase$InvalidTask.<init>(java.lang.String, java.lang.String, java.util.Calendar, java.util.Calendar)");
+        thrown.expectMessage("class deors.core.commons.scheduler.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.scheduler.SchedulerTestCase$InvalidTask.<init>(java.lang.String,java.lang.String,java.util.Calendar,java.util.Calendar)");
 
         Scheduler sch = new Scheduler();
         sch.scheduleTask(
