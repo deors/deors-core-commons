@@ -1,4 +1,4 @@
 /**
- * Custom appenders for Log4j.
+ * Custom appenders for Logback.
  */
 package deors.core.commons.log;

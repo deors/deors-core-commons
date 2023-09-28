@@ -7,19 +7,21 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
+
 import deors.core.commons.classloader.ParentLastURLClassLoader;
-import deors.core.commons.log.Log4jMemoryAppender;
+import deors.core.commons.log.LogbackMemoryAppender;
 import deors.core.commons.scheduler.Scheduler;
 import deors.core.commons.scheduler.SchedulerTask;
 
@@ -626,8 +628,8 @@ public class SchedulerTestCase {
     @Test
     public void testScheduleErrorStarting() {
 
-        synchronized (Log4jMemoryAppender.class) {
-            Log4jMemoryAppender.clear();
+        synchronized (LogbackMemoryAppender.class) {
+            LogbackMemoryAppender.clear();
 
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
@@ -645,18 +647,16 @@ public class SchedulerTestCase {
                 }
             } while (sch.getTask("testScheduleErrorStarting").isStarting());
 
-            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
-            assertMessageEndingWithExists(events, "error starting testScheduleErrorStarting: java.lang.Exception: 5 is not my favorite number");
-
-            Log4jMemoryAppender.clear();
+            assertMessageEndingWithExists("error starting testScheduleErrorStarting: java.lang.Exception: 5 is not my favorite number");
+            LogbackMemoryAppender.clear();
         }
     }
 
     @Test
     public void testScheduleErrorStopping() {
 
-        synchronized (Log4jMemoryAppender.class) {
-            Log4jMemoryAppender.clear();
+        synchronized (LogbackMemoryAppender.class) {
+            LogbackMemoryAppender.clear();
 
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
@@ -672,18 +672,17 @@ public class SchedulerTestCase {
             } catch (InterruptedException ie) {
             }
 
-            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
-            assertMessageEndingWithExists(events, "error stopping testScheduleErrorStopping: java.lang.Exception: 5 is not my favorite number");
+            assertMessageEndingWithExists("error stopping testScheduleErrorStopping: java.lang.Exception: 5 is not my favorite number");
 
-            Log4jMemoryAppender.clear();
+            LogbackMemoryAppender.clear();
         }
     }
 
     @Test
     public void testScheduleErrorRunning() {
 
-        synchronized (Log4jMemoryAppender.class) {
-            Log4jMemoryAppender.clear();
+        synchronized (LogbackMemoryAppender.class) {
+            LogbackMemoryAppender.clear();
 
             Scheduler sch = new Scheduler();
             sch.scheduleTask(
@@ -699,10 +698,9 @@ public class SchedulerTestCase {
             } catch (InterruptedException ie) {
             }
 
-            List<LoggingEvent> events = Log4jMemoryAppender.getEventList();
-            assertMessageEndingWithExists(events, "unexpected error running testScheduleErrorRunning: java.lang.RuntimeException: 5 is not my favorite number");
+            assertMessageEndingWithExists("unexpected error running testScheduleErrorRunning: java.lang.RuntimeException: 5 is not my favorite number");
 
-            Log4jMemoryAppender.clear();
+            LogbackMemoryAppender.clear();
         }
     }
 
@@ -745,11 +743,13 @@ public class SchedulerTestCase {
         assertNull(task);
     }
 
-    private void assertMessageEndingWithExists(List<LoggingEvent> events, String message) {
+    private void assertMessageEndingWithExists(String message) {
+
+        List<ILoggingEvent> events = LogbackMemoryAppender.getEventList();
 
         boolean found = false;
 
-        for (LoggingEvent event : events) {
+        for (ILoggingEvent event : events) {
             if (event.getMessage().toString().endsWith(message)) {
                 found = true;
                 break;

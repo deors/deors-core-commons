@@ -1,0 +1,36 @@
+<configuration>
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoding>UTF-8</encoding>
+    <encoder>
+      <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="memory" class="deors.core.commons.log.LogbackMemoryAppender"/>
+
+  <logger name="deors.core.commons.log.LogbackMemoryAppenderTestCase" level="debug">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.SchedulerTask" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.TaskInJar" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.SchedulerTestCase$MyTask" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.SchedulerTestCase$ErrorStartingTask" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.SchedulerTestCase$ErrorRunningTask" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+  <logger name="deors.core.commons.scheduler.SchedulerTestCase$ErrorStoppingTask" level="info">
+    <appender-ref ref="memory"/>
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="stdout"/>
+  </root>
+</configuration>
