@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import deors.core.commons.io.ExtensionFileFilter;
-
 public class ExtensionFileFilterTestCase {
 
     public ExtensionFileFilterTestCase() {

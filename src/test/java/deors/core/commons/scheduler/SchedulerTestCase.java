@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
@@ -22,8 +21,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 
 import deors.core.commons.classloader.ParentLastURLClassLoader;
 import deors.core.commons.log.LogbackMemoryAppender;
-import deors.core.commons.scheduler.Scheduler;
-import deors.core.commons.scheduler.SchedulerTask;
 
 public class SchedulerTestCase {
 

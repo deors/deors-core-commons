@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import deors.core.commons.CommonsContext;
-import deors.core.commons.base64.Base64Toolkit;
 
 public class Base64ToolkitTestCase {
 

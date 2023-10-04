@@ -16,15 +16,12 @@ import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 
 import mockit.Expectations;
 import mockit.Mocked;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
-import deors.core.commons.template.Template;
-import deors.core.commons.template.TemplateException;
 
 public class TemplateTestCase {
 

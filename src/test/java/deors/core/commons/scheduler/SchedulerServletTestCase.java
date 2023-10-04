@@ -28,9 +28,6 @@ import mockit.Expectations;
 import mockit.Mocked;
 
 import deors.core.commons.io.IOToolkit;
-import deors.core.commons.scheduler.Scheduler;
-import deors.core.commons.scheduler.SchedulerServlet;
-import deors.core.commons.scheduler.SchedulerTask;
 
 public class SchedulerServletTestCase {
 

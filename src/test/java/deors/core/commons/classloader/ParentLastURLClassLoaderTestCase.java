@@ -15,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import deors.core.commons.classloader.ParentLastURLClassLoader;
 import deors.core.commons.io.IOToolkit;
 
 public class ParentLastURLClassLoaderTestCase {
