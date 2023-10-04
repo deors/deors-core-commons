@@ -38,7 +38,7 @@ public class LogbackMemoryAppender
      */
     @Override
     protected void append(ILoggingEvent event) {
-System.out.println("***"+event.toString());
+
         EVENT_LIST.add(event);
     }
 
