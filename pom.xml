@@ -7,7 +7,7 @@
 
     <groupId>deors.core</groupId>
     <artifactId>deors-core-commons</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>deors-core-commons</name>
