@@ -24,7 +24,7 @@
 
         <junit.version>5.11.4</junit.version>
         <jmockit.version>1.45</jmockit.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.13</jacoco.version>
         <sonarjava.version>5.10.2.17019</sonarjava.version>
         <pitest.version>1.17.1</pitest.version>
         <pitest-junit5.version>1.2.1</pitest-junit5.version>
