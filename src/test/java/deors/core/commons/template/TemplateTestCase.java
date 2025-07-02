@@ -16,21 +16,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 
-@ExtendWith(MockitoExtension.class)
 public class TemplateTestCase {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Mock
+    private InputStream mockedInputStream;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     private static final String TEMPLATE_1_FILE_NAME = "/test1.tmpl";
     private static final String TEMPLATE_2_FILE_NAME = "/test2.tmpl";
@@ -206,7 +213,7 @@ public class TemplateTestCase {
     }
 
     @Test(expected = TemplateException.class)
-    public void testLoadTemplateError(@Mock InputStream mockedInputStream)
+    public void testLoadTemplateError()
         throws TemplateException, IOException {
         
         when(mockedInputStream.read(any(byte[].class), anyInt(), anyInt()))
