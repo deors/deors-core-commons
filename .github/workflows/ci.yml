@@ -20,17 +20,17 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Cache Maven dependencies
+    - name: Set up Maven dependency cache
       uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2-
-        
-    - name: Maven compile and unit test
+
+    - name: Run Maven compile and unit test
       run: mvn test
 
-    - name: Generate test report
+    - name: Generate unit test report
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
@@ -38,6 +38,9 @@ jobs:
         path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
+
+    - name: Run dependency scan
+      run: mvn dependency-check:check
 
     - name: Cache compiled classes
       uses: actions/cache@v4
@@ -66,14 +69,14 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Cache Maven dependencies
+    - name: Set up Maven dependency cache
       uses: actions/cache@v4
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-deploy
         restore-keys: ${{ runner.os }}-m2-
 
-    - name: Cache compiled classes
+    - name: Restore compiled classes cache
       uses: actions/cache@v4
       with:
         path: |
@@ -83,15 +86,13 @@ jobs:
         key: ${{ runner.os }}-compiled-${{ github.sha }}
         restore-keys: ${{ runner.os }}-compiled-${{ github.sha }}
 
-    - name: Package and publish to GitHub Packages
-      run: mvn deploy -DskipTests
+    - name: Package artifacts
+      run: mvn package -DskipTests
+
+    - name: Install artifacts to cached Maven repository
+      run: mvn install:install
+
+    - name: Publish artifacts to GitHub Packages
+      run: mvn deploy:deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Cache packaged artifacts
-      uses: actions/cache@v4
-      with:
-        path: |
-          target/*.jar
-        key: ${{ runner.os }}-artifacts-${{ github.sha }}
-        restore-keys: ${{ runner.os }}-artifacts-
