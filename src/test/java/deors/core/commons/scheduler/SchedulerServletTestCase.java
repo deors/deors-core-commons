@@ -1,7 +1,8 @@
 package deors.core.commons.scheduler;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,37 +19,30 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mockit.Expectations;
-import mockit.Mocked;
-
 import deors.core.commons.io.IOToolkit;
 
+@ExtendWith(MockitoExtension.class)
 public class SchedulerServletTestCase {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     public SchedulerServletTestCase() {
-
         super();
     }
 
     @Test
-    public void testServletCommandNull(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandNull(@Mock HttpServletRequest request, @Mock HttpServletResponse response)
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
 
-        new Expectations() {{
-            request.getParameter("command");            result = null;
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn(null);
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -57,12 +51,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
