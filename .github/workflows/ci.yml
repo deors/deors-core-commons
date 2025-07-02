@@ -34,7 +34,7 @@ jobs:
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Unit test report
+        name: unit-test-report
         path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
