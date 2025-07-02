@@ -19,10 +19,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
@@ -90,8 +90,8 @@ public class SchedulerServletTestCase {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
 
-        when(request.getParameter("command")).thenReturn("");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        
+
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.doGet(request, response);
@@ -148,9 +148,8 @@ public class SchedulerServletTestCase {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
 
-        when(request.getParameter("command")).thenReturn("start");
-        when(request.getParameter("iniFileName")).thenReturn("");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        
+        
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.doGet(request, response);
@@ -177,9 +176,8 @@ public class SchedulerServletTestCase {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
 
-        when(request.getParameter("command")).thenReturn("start");
-        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        
+
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.doGet(request, response);
@@ -191,9 +189,8 @@ public class SchedulerServletTestCase {
             assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
 
             assertTrue("expected task 'task' not found", ss.existsTask("task"));
-        when(request.getParameter("command")).thenReturn("start");
-        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler-missing.ini");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+        } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
             testSleep();
@@ -221,9 +218,8 @@ public class SchedulerServletTestCase {
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
-        when(request.getParameter("command")).thenReturn("start", "stop", "start");
-        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini", "", "");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp), new PrintWriter(temp2), new PrintWriter(temp3));
+            testSleep();
+            temp.delete();
         }
     }
 
@@ -258,10 +254,8 @@ public class SchedulerServletTestCase {
             assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
         } finally {
             ss.stopAllTasks();
-        when(request.getParameter("command")).thenReturn("start");
-        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
-        when(config.getInitParameter("iniFileName")).thenReturn("");
+            ss.resetScheduler();
+            testSleep();
             temp1.delete();
             temp2.delete();
             temp3.delete();
@@ -284,8 +278,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-        when(request.getParameter("command")).thenReturn("stop");
-        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
+            assertTrue("expected status not found", s.contains("<b>Scheduler already started</b><br/>"));
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
