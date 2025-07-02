@@ -7,7 +7,7 @@ on:
     branches: [ master, main ]
 
 jobs:
-  test:
+  compile-and-unit-tests:
     runs-on: ubuntu-latest
     
     steps:
