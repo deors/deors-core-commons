@@ -23,15 +23,12 @@
         <logback.version>1.5.18</logback.version>
 
         <junit.version>5.10.0</junit.version>
-        <jmockit.version>1.45</jmockit.version>
+        <mockito.version>5.5.0</mockito.version>
         <jacoco.version>0.8.10</jacoco.version>
         <sonarjava.version>5.10.2.17019</sonarjava.version>
         <pitest.version>1.15.0</pitest.version>
         <pitest-junit5.version>1.2.0</pitest-junit5.version>
         <dependency-check.version>8.4.0</dependency-check.version>
-
-        <jmockit.path>${settings.localRepository}/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</jmockit.path>
-        <jmockit.agentConfig>-javaagent:${jmockit.path}</jmockit.agentConfig>
 
         <jacoco.path>${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar</jacoco.path>
         <jacoco.utReport>${project.build.directory}/jacoco.exec</jacoco.utReport>
@@ -62,7 +59,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
                 <configuration>
-                    <argLine>${jmockit.agentConfig} ${jacoco.utAgentConfig}</argLine>
+                    <argLine>${jacoco.utAgentConfig}</argLine>
                     <excludes>
                         <exclude>**/*IntegrationTestCase.java</exclude>
                     </excludes>
@@ -99,7 +96,7 @@
                 <version>${pitest.version}</version>
                 <configuration>
                     <jvmArgs>
-                        <value>${jmockit.agentConfig}</value>
+                        <value>${jacoco.utAgentConfig}</value>
                     </jvmArgs>
                     <excludedTestClasses>
                         <param>*IntegrationTestCase</param>
@@ -199,9 +196,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <version>${jmockit.version}</version>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

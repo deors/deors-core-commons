@@ -2,6 +2,9 @@ package deors.core.commons.template;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,13 +19,14 @@ import java.util.Map;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import mockit.Expectations;
-import mockit.Mocked;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 
+@ExtendWith(MockitoExtension.class)
 public class TemplateTestCase {
 
     @Rule
@@ -202,13 +206,11 @@ public class TemplateTestCase {
     }
 
     @Test(expected = TemplateException.class)
-    public void testLoadTemplateError(@Mocked InputStream mockedInputStream)
+    public void testLoadTemplateError(@Mock InputStream mockedInputStream)
         throws TemplateException, IOException {
         
-        new Expectations() {{
-            mockedInputStream.read(withAny(new byte[]{}), 0, 8192);
-            result = new IOException("error");
-        }};
+        when(mockedInputStream.read(any(byte[].class), anyInt(), anyInt()))
+            .thenThrow(new IOException("error"));
 
         new Template(mockedInputStream);
     }
