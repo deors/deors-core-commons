@@ -18,12 +18,12 @@
 
         <java.version>21</java.version>
 
-        <servlet.version>6.0.0</servlet.version>
+        <servlet.version>3.0.1</servlet.version>
 
         <logback.version>1.5.15</logback.version>
 
         <junit.version>5.11.4</junit.version>
-        <jmockit.version>1.50</jmockit.version>
+        <jmockit.version>1.45</jmockit.version>
         <mockito.version>5.15.2</mockito.version>
         <jacoco.version>0.8.13</jacoco.version>
         <sonarjava.version>5.10.2.17019</sonarjava.version>
@@ -169,8 +169,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>provided</scope>
         </dependency>
