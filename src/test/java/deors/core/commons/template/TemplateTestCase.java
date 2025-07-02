@@ -2,6 +2,8 @@ package deors.core.commons.template;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -202,13 +204,12 @@ public class TemplateTestCase {
     }
 
     @Test(expected = TemplateException.class)
-    public void testLoadTemplateError(@Mocked InputStream mockedInputStream)
+    public void testLoadTemplateError()
         throws TemplateException, IOException {
         
-        new Expectations() {{
-            mockedInputStream.read(withAny(new byte[]{}), 0, 8192);
-            result = new IOException("error");
-        }};
+        InputStream mockedInputStream = mock(InputStream.class);
+        when(mockedInputStream.read(any(byte[].class), eq(0), eq(8192)))
+            .thenThrow(new IOException("error"));
 
         new Template(mockedInputStream);
     }
