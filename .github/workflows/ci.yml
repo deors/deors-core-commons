@@ -28,7 +28,7 @@ jobs:
         restore-keys: ${{ runner.os }}-m2-
 
     - name: Run Maven compile and unit test
-      run: mvn test
+      run: mvn test org.jacoco:jacoco-maven-plugin:report
 
     - name: Generate unit test report
       uses: dorny/test-reporter@v1
