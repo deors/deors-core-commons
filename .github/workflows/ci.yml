@@ -24,7 +24,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-m2-${{ github.sha }}
         restore-keys: ${{ runner.os }}-m2-
 
     - name: Run Maven compile and unit test
@@ -73,7 +73,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}-deploy
+        key: ${{ runner.os }}-m2-${{ github.sha }}-deploy
         restore-keys: ${{ runner.os }}-m2-
 
     - name: Restore compiled classes cache
@@ -90,9 +90,9 @@ jobs:
       run: mvn package -DskipTests
 
     - name: Install artifacts to cached Maven repository
-      run: mvn install:install
+      run: mvn jar:jar install:install
 
     - name: Publish artifacts to GitHub Packages
-      run: mvn deploy:deploy
+      run: mvn jar:jar deploy:deploy
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
