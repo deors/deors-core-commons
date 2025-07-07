@@ -43,7 +43,7 @@ jobs:
         fail-on-error: true
 
     - name: Run dependency scan
-      run: mvn dependency-check:check
+      run: mvn dependency-check:check -Dnvd.api.key=${{ secrets.NVD_API_KEY }}
 
     - name: Cache compiled classes
       uses: actions/cache@v4
