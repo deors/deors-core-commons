@@ -16,14 +16,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <java.version>21</java.version>
+        <java.version>24</java.version>
 
         <servlet.version>3.0.1</servlet.version>
 
         <logback.version>1.5.18</logback.version>
 
         <junit.version>5.13.3</junit.version>
-        <jmockit.version>1.45</jmockit.version>
+        <jmockit.version>1.50</jmockit.version>
         <jacoco.version>0.8.13</jacoco.version>
         <pitest.version>1.20.0</pitest.version>
         <pitest-junit5.version>1.2.3</pitest-junit5.version>
