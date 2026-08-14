@@ -1,11 +1,11 @@
 package deors.core.commons.io;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,14 +17,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IOToolkitTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public IOToolkitTestCase() {
 
@@ -71,24 +67,27 @@ public class IOToolkitTestCase {
     public void testCompareStreamsNull()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.compareStreams(null, null);
+        assertThrows(IOException.class, () -> {
+            IOToolkit.compareStreams(null, null);
+        });
     }
 
     @Test
     public void testCompareStreamsNull2()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.compareStreams(new ByteArrayInputStream(new byte[0]), null);
+        assertThrows(IOException.class, () -> {
+            IOToolkit.compareStreams(new ByteArrayInputStream(new byte[0]), null);
+        });
     }
 
     @Test
     public void testCompareStreamsNull3()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.compareStreams(null, new ByteArrayInputStream(new byte[0]));
+        assertThrows(IOException.class, () -> {
+            IOToolkit.compareStreams(null, new ByteArrayInputStream(new byte[0]));
+        });
     }
 
     @Test
@@ -165,25 +164,28 @@ public class IOToolkitTestCase {
     public void testCopyStreamNull()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        thrown.expectMessage("Stream closed");
-        IOToolkit.copyStream(null, null);
+        Exception ex = assertThrows(IOException.class, () -> {
+            IOToolkit.copyStream(null, null);
+        });
+        assertTrue(ex.getMessage().contains("Stream closed"));
     }
 
     @Test
     public void testCopyStreamNull2()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
-        IOToolkit.copyStream(new ByteArrayInputStream(new byte[0]), null);
+        assertThrows(NullPointerException.class, () -> {
+            IOToolkit.copyStream(new ByteArrayInputStream(new byte[0]), null);
+        });
     }
 
     @Test
     public void testCopyStreamNull3()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.copyStream(null, new ByteArrayOutputStream());
+        assertThrows(IOException.class, () -> {
+            IOToolkit.copyStream(null, new ByteArrayOutputStream());
+        });
     }
 
     @Test
@@ -241,8 +243,9 @@ public class IOToolkitTestCase {
     public void testReadStreamNull()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.readStream(null);
+        assertThrows(IOException.class, () -> {
+            IOToolkit.readStream(null);
+        });
     }
 
     @Test
@@ -260,8 +263,9 @@ public class IOToolkitTestCase {
     public void testReadFileNull()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
-        IOToolkit.readFile(null);
+        assertThrows(NullPointerException.class, () -> {
+            IOToolkit.readFile(null);
+        });
     }
 
     @Test
@@ -280,8 +284,9 @@ public class IOToolkitTestCase {
     public void testReadTextStreamNull()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
-        IOToolkit.readTextStream(null);
+        assertThrows(NullPointerException.class, () -> {
+            IOToolkit.readTextStream(null);
+        });
     }
 
     @Test
@@ -304,8 +309,9 @@ public class IOToolkitTestCase {
     public void testReadTextFileNull()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
-        IOToolkit.readTextFile(null);
+        assertThrows(NullPointerException.class, () -> {
+            IOToolkit.readTextFile(null);
+        });
     }
 
     @Test
@@ -329,8 +335,9 @@ public class IOToolkitTestCase {
     public void testWriteStreamNull()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        IOToolkit.writeStream(null);
+        assertThrows(IOException.class, () -> {
+            IOToolkit.writeStream(null);
+        });
     }
 
     @Test
@@ -350,8 +357,9 @@ public class IOToolkitTestCase {
     public void testWriteFileNull()
         throws IOException {
 
-        thrown.expect(NullPointerException.class);
-        IOToolkit.writeFile(null);
+        assertThrows(NullPointerException.class, () -> {
+            IOToolkit.writeFile(null);
+        });
     }
 
     @Test

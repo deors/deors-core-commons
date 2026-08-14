@@ -1,7 +1,7 @@
 package deors.core.commons.scheduler;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,37 +18,64 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mockit.Expectations;
-import mockit.Mocked;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import static org.mockito.Mockito.when;
 
 import deors.core.commons.io.IOToolkit;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class SchedulerServletTestCase {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Mock
+    private HttpServletRequest request;
+
+    @Mock
+    private HttpServletResponse response;
+
+    @Mock
+    private ServletConfig config;
+
+    @Mock
+    private HttpServletRequest request2;
+
+    @Mock
+    private HttpServletResponse response2;
+
+    @Mock
+    private HttpServletRequest request3;
+
+    @Mock
+    private HttpServletResponse response3;
 
     public SchedulerServletTestCase() {
 
         super();
     }
 
+    @BeforeEach
+    public void setUp() {
+
+        SchedulerServlet.stopAllTasks();
+        SchedulerServlet.resetScheduler();
+    }
+
     @Test
-    public void testServletCommandNull(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandNull()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = null;
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -57,12 +84,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -72,15 +99,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandEmpty(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandEmpty()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -89,12 +113,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -104,15 +128,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandHelp(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandHelp()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "help";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("help");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -121,12 +142,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -136,16 +157,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartEmpty(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartEmpty()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "start";
-            request.getParameter("iniFileName");        result = "";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("start");
+        when(request.getParameter("iniFileName")).thenReturn("");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
         
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -154,11 +172,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -168,16 +186,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartWithFile(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartWithFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "start";
-            request.getParameter("iniFileName");        result = "target/test-classes/scheduler.ini";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("start");
+        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -186,11 +201,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -200,16 +215,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartMissingFile(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartMissingFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "start";
-            request.getParameter("iniFileName");        result = "target/test-classes/missing.ini";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("start");
+        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/missing.ini");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -218,8 +230,7 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected error message not found",
-                s.contains("[scheduler] the configuration file is either missing or inaccessible:"));
+            assertTrue(s.contains("[scheduler] the configuration file is either missing or inaccessible:"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -229,33 +240,25 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartAgain(
-            @Mocked HttpServletRequest request1, @Mocked HttpServletResponse response1,
-            @Mocked HttpServletRequest request2, @Mocked HttpServletResponse response2,
-            @Mocked HttpServletRequest request3, @Mocked HttpServletResponse response3)
+    public void testServletCommandStartAgain()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp1 = File.createTempFile("deors.core.commons.", ".test");
         File temp2 = File.createTempFile("deors.core.commons.", ".test");
         File temp3 = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request1.getParameter("command");            result = "start";
-            request1.getParameter("iniFileName");        result = "target/test-classes/scheduler.ini";
-            response1.getWriter();                       result = new PrintWriter(temp1);
-
-            request2.getParameter("command");            result = "stop";
-            response2.getWriter();                       result = new PrintWriter(temp2);
-
-            request3.getParameter("command");            result = "start";
-            request3.getParameter("iniFileName");        result = "";
-            response3.getWriter();                       result = new PrintWriter(temp3);
-        }};
+        when(request.getParameter("command")).thenReturn("start");
+        when(request.getParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp1));
+        when(request2.getParameter("command")).thenReturn("stop");
+        when(response2.getWriter()).thenReturn(new PrintWriter(temp2));
+        when(request3.getParameter("command")).thenReturn("start");
+        when(request3.getParameter("iniFileName")).thenReturn("");
+        when(response3.getWriter()).thenReturn(new PrintWriter(temp3));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
             // stars scheduler with ini file including tasks
-            ss.doGet(request1, response1);
+            ss.doGet(request, response);
 
             // stops scheduler
             ss.doGet(request2, response2);
@@ -266,11 +269,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp3);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -282,16 +285,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartAlreadyInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStartAlreadyInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "start";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("start");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -301,8 +301,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler already started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler already started</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -312,15 +312,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopNotInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStopNotInit()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "stop";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("stop");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -329,11 +326,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -343,16 +340,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopIfInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopIfInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "stop";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("stop");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -362,8 +356,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler stopped</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler stopped</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -373,17 +367,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "stop";
-            request.getParameter("taskName");           result = "task";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("stop");
+        when(request.getParameter("taskName")).thenReturn("task");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -394,8 +385,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task was asked to stop</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task was asked to stop</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -405,17 +396,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "stop";
-            request.getParameter("taskName");           result = "task1";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("stop");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -425,8 +413,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -436,16 +424,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveNoTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "remove";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("remove");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -455,9 +440,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task name not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -467,17 +452,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "remove";
-            request.getParameter("taskName");           result = "task1";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("remove");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -493,8 +475,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 was asked to stop and removed from scheduler</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 was asked to stop and removed from scheduler</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -504,17 +486,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "remove";
-            request.getParameter("taskName");           result = "task1";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("remove");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -524,9 +503,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -536,16 +515,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillNoTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "kill";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("kill");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -555,9 +531,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task name not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -567,17 +543,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "kill";
-            request.getParameter("taskName");           result = "task1";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("kill");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -588,8 +561,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 killed</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 killed</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -599,17 +572,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "kill";
-            request.getParameter("taskName");           result = "task1";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("kill");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -619,9 +589,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -631,16 +601,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddNoData(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "add";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("add");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -650,13 +617,13 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task class not found", s.contains("Task class name not informed<br/>"));
-            assertTrue("expected error message for task description not found", s.contains("Task description not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not informed<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task class name not informed<br/>"), "expected error message for task class not found");
+            assertTrue(s.contains("Task description not informed<br/>"), "expected error message for task description not found");
+            assertTrue(s.contains("Task start time not informed<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not informed<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -666,18 +633,15 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddBadDates(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "add";
-            request.getParameter("taskStartTime");      result = "bad";
-            request.getParameter("taskStopTime");       result = "bad";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("add");
+        when(request.getParameter("taskStartTime")).thenReturn("bad");
+        when(request.getParameter("taskStopTime")).thenReturn("bad");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -687,13 +651,13 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task class not found", s.contains("Task class name not informed<br/>"));
-            assertTrue("expected error message for task description not found", s.contains("Task description not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not valid<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not valid<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task class name not informed<br/>"), "expected error message for task class not found");
+            assertTrue(s.contains("Task description not informed<br/>"), "expected error message for task description not found");
+            assertTrue(s.contains("Task start time not valid<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not valid<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -703,21 +667,18 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddBadClass(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddBadClass()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "add";
-            request.getParameter("taskName");           result = "task1";
-            request.getParameter("taskClassName");      result = "bad";
-            request.getParameter("taskDescription");    result = "description";
-            request.getParameter("taskStartTime");      result = "*";
-            request.getParameter("taskStopTime");       result = "*";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("add");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(request.getParameter("taskClassName")).thenReturn("bad");
+        when(request.getParameter("taskDescription")).thenReturn("description");
+        when(request.getParameter("taskStartTime")).thenReturn("*");
+        when(request.getParameter("taskStopTime")).thenReturn("*");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -727,9 +688,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("class bad not found: java.lang.ClassNotFoundException: bad<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("class bad not found: java.lang.ClassNotFoundException: bad<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -739,21 +700,18 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddOk(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "add";
-            request.getParameter("taskName");           result = "task1";
-            request.getParameter("taskClassName");      result = "deors.core.commons.scheduler.SchedulerServletTestCase$MyTask";
-            request.getParameter("taskDescription");    result = "description";
-            request.getParameter("taskStartTime");      result = "*";
-            request.getParameter("taskStopTime");       result = "*";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("add");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(request.getParameter("taskClassName")).thenReturn("deors.core.commons.scheduler.SchedulerServletTestCase$MyTask");
+        when(request.getParameter("taskDescription")).thenReturn("description");
+        when(request.getParameter("taskStartTime")).thenReturn("*");
+        when(request.getParameter("taskStopTime")).thenReturn("*");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -763,8 +721,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 scheduled</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -774,16 +732,13 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleNoData(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "schedule";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("schedule");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -793,11 +748,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not informed<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task start time not informed<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not informed<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -807,17 +762,14 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleBadDates(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "schedule";
-            request.getParameter("taskStartTime");      result = "bad";
-            request.getParameter("taskStopTime");       result = "bad";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getParameter("command")).thenReturn("schedule");
+        when(request.getParameter("taskStartTime")).thenReturn("bad");
+        when(request.getParameter("taskStopTime")).thenReturn("bad");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -827,11 +779,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not valid<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not valid<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task start time not valid<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not valid<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -841,19 +793,16 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "schedule";
-            request.getParameter("taskName");           result = "task1";
-            request.getParameter("taskStartTime");      result = "*";
-            request.getParameter("taskStopTime");       result = "*";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("schedule");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(request.getParameter("taskStartTime")).thenReturn("*");
+        when(request.getParameter("taskStopTime")).thenReturn("*");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -863,9 +812,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -875,19 +824,16 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleOk(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getParameter("command");            result = "schedule";
-            request.getParameter("taskName");           result = "task1";
-            request.getParameter("taskStartTime");      result = "*";
-            request.getParameter("taskStopTime");       result = "*";
-            response.getWriter();                       result = new PrintWriter(temp);
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(request.getParameter("command")).thenReturn("schedule");
+        when(request.getParameter("taskName")).thenReturn("task1");
+        when(request.getParameter("taskStartTime")).thenReturn("*");
+        when(request.getParameter("taskStopTime")).thenReturn("*");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
@@ -898,8 +844,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 scheduled</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -909,15 +855,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseNotInitializedNoMessages(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseNotInitializedNoMessages()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getRequestURI();                    result = "/testURI";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getRequestURI()).thenReturn("/testURI");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         Method mCreate = SchedulerServlet.class.getDeclaredMethod("createServletResponse", HttpServletRequest.class, HttpServletResponse.class, List.class, List.class, boolean.class);
         mCreate.setAccessible(true);
@@ -937,11 +880,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -951,15 +894,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseNotInitializedWithMessages(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseNotInitializedWithMessages()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getRequestURI();                    result = "/testURI";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getRequestURI()).thenReturn("/testURI");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         Method mCreate = SchedulerServlet.class.getDeclaredMethod("createServletResponse", HttpServletRequest.class, HttpServletResponse.class, List.class, List.class, boolean.class);
         mCreate.setAccessible(true);
@@ -980,16 +920,16 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertTrue("expected message 'test 1' not found", s.contains("<b>message test 1</b><br/>"));
-            assertTrue("expected message 'test 2' not found", s.contains("<b>message test 2</b><br/>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected message 'error 1' not found", s.contains("error test 1<br/>"));
-            assertTrue("expected message 'error 2' not found", s.contains("error test 2<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertTrue(s.contains("<b>message test 1</b><br/>"), "expected message 'test 1' not found");
+            assertTrue(s.contains("<b>message test 2</b><br/>"), "expected message 'test 2' not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("error test 1<br/>"), "expected message 'error 1' not found");
+            assertTrue(s.contains("error test 2<br/>"), "expected message 'error 2' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -999,15 +939,12 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseInitialized(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseInitialized()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
-
-        new Expectations() {{
-            request.getRequestURI();                    result = "/testURI";
-            response.getWriter();                       result = new PrintWriter(temp);
-        }};
+        when(request.getRequestURI()).thenReturn("/testURI");
+        when(response.getWriter()).thenReturn(new PrintWriter(temp));
 
         Method mCreate = SchedulerServlet.class.getDeclaredMethod("createServletResponse", HttpServletRequest.class, HttpServletResponse.class, List.class, List.class, boolean.class);
         mCreate.setAccessible(true);
@@ -1040,12 +977,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected message for task1 header not found", s.contains("Task <b>task1</b> (idle)"));
-            assertTrue("expected message for task1 is a deamon not found", s.contains("&nbsp;&nbsp;info: task is a <i>daemon</i>"));
-            assertTrue("expected button to start task1 not found", s.contains("onclick=\"taskStart('task1')\"/>&nbsp;&nbsp;"));
-            assertTrue("expected message for task2 header not found", s.contains("Task <b>task2</b> (idle)"));
-            assertTrue("expected message for task2 is scheduled not found", s.contains("&nbsp;&nbsp;info: task is scheduled from "));
-            assertTrue("expected button to start task2 not found", s.contains("onclick=\"taskStart('task2')\"/>&nbsp;&nbsp;"));
+            assertTrue(s.contains("Task <b>task1</b> (idle)"), "expected message for task1 header not found");
+            assertTrue(s.contains("&nbsp;&nbsp;info: task is a <i>daemon</i>"), "expected message for task1 is a deamon not found");
+            assertTrue(s.contains("onclick=\"taskStart('task1')\"/>&nbsp;&nbsp;"), "expected button to start task1 not found");
+            assertTrue(s.contains("Task <b>task2</b> (idle)"), "expected message for task2 header not found");
+            assertTrue(s.contains("&nbsp;&nbsp;info: task is scheduled from "), "expected message for task2 is scheduled not found");
+            assertTrue(s.contains("onclick=\"taskStart('task2')\"/>&nbsp;&nbsp;"), "expected button to start task2 not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1055,19 +992,16 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitWithFile(@Mocked ServletConfig config)
+    public void testServletInitWithFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
-
-        new Expectations() {{
-            config.getInitParameter("iniFileName");     result = "target/test-classes/scheduler.ini";
-        }};
+        when(config.getInitParameter("iniFileName")).thenReturn("target/test-classes/scheduler.ini");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.init(config);
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1076,15 +1010,15 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitNoFile(@Mocked ServletConfig config)
+    public void testServletInitNoFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.init(config);
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1093,19 +1027,16 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitBlankFile(@Mocked ServletConfig config)
+    public void testServletInitBlankFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
-
-        new Expectations() {{
-            config.getInitParameter("iniFileName");     result = "";
-        }};
+        when(config.getInitParameter("iniFileName")).thenReturn("");
 
         SchedulerServlet ss = new SchedulerServlet();
         try {
             ss.init(config);
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1114,24 +1045,22 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitInvalidFile(@Mocked ServletConfig config)
+    public void testServletInitInvalidFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
+        when(config.getInitParameter("iniFileName")).thenReturn("target/test-classes/scheduler-err1.ini");
 
-        new Expectations() {{
-            config.getInitParameter("iniFileName");     result = "target/test-classes/scheduler-err1.ini";
-        }};
+        Exception ex = assertThrows(ServletException.class, () -> {
 
-        thrown.expect(ServletException.class);
-        thrown.expectMessage("[scheduler] the configuration file content is not valid: java.lang.IllegalArgumentException: class name for task task not found");
-
-        SchedulerServlet ss = new SchedulerServlet();
-        try {
-            ss.init(config);
-        } finally {
-            ss.stopAllTasks();
-            ss.resetScheduler();
-            testSleep();
-        }
+            SchedulerServlet ss = new SchedulerServlet();
+            try {
+                ss.init(config);
+            } finally {
+                ss.stopAllTasks();
+                ss.resetScheduler();
+                testSleep();
+            }
+            });
+        assertTrue(ex.getMessage().contains("[scheduler] the configuration file content is not valid: java.lang.IllegalArgumentException: class name for task task not found"));
     }
 
     private void testSleep() {

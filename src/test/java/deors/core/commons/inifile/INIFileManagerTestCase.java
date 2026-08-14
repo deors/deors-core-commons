@@ -1,10 +1,10 @@
 package deors.core.commons.inifile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,16 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import deors.core.commons.io.IOToolkit;
 
 public class INIFileManagerTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public INIFileManagerTestCase() {
 
@@ -32,25 +28,27 @@ public class INIFileManagerTestCase {
     public void testConstructorFileNotExists()
         throws IOException {
 
-        thrown.expect(FileNotFoundException.class);
-        thrown.expectMessage("not found");
+        Exception ex = assertThrows(FileNotFoundException.class, () -> {
 
-        File f = IOToolkit.createTempFile(false);
-        f.delete();
+            File f = IOToolkit.createTempFile(false);
+            f.delete();
 
-        new INIFileManager(f);
+            new INIFileManager(f);
+        });
+        assertTrue(ex.getMessage().contains("not found"));
     }
 
     @Test
     public void testConstructorDirectory()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("is a directory");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        File f = new File(".");
+            File f = new File(".");
 
-        new INIFileManager(f);
+            new INIFileManager(f);
+        });
+        assertTrue(ex.getMessage().contains("is a directory"));
     }
 
     @Test
@@ -126,48 +124,52 @@ public class INIFileManagerTestCase {
     public void testAddNoException1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.addEntry(null, "value");
+            ifm.addEntry(null, "value");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testAddNoException2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.addEntry("", "value");
+            ifm.addEntry("", "value");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testAddNoException3()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.addEntry("key", null);
+            ifm.addEntry("key", null);
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
     public void testAddNoException4()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.addEntry("key", "");
+            ifm.addEntry("key", "");
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
@@ -252,24 +254,26 @@ public class INIFileManagerTestCase {
     public void testGetWhenNoKey1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.getValue(null, null);
+            ifm.getValue(null, null);
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testGetWhenNoKey2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.getValue(null, "");
+            ifm.getValue(null, "");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
@@ -286,24 +290,26 @@ public class INIFileManagerTestCase {
     public void testHasEntryNoKey1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        assertTrue(ifm.hasEntry(null, null));
+            assertTrue(ifm.hasEntry(null, null));
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testHasEntryNoKey2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        assertTrue(ifm.hasEntry(null, ""));
+            assertTrue(ifm.hasEntry(null, ""));
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
@@ -335,24 +341,26 @@ public class INIFileManagerTestCase {
     public void testHasValueNo1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.hasValue(null, null);
+            ifm.hasValue(null, null);
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
     public void testHasValueNo2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.hasValue(null, "");
+            ifm.hasValue(null, "");
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
@@ -372,24 +380,26 @@ public class INIFileManagerTestCase {
     public void testRemoveEntryNoKey1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.removeEntry(null);
+            ifm.removeEntry(null);
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testRemoveEntryNoKey2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.removeEntry("");
+            ifm.removeEntry("");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
@@ -454,48 +464,52 @@ public class INIFileManagerTestCase {
     public void testUpdateNoKey1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.updateEntry(null, "newvalue");
+            ifm.updateEntry(null, "newvalue");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testUpdateNoKey2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the key is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.updateEntry("", "newvalue");
+            ifm.updateEntry("", "newvalue");
+        });
+        assertTrue(ex.getMessage().contains("the key is null or blank"));
     }
 
     @Test
     public void testUpdateNoValue1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.updateEntry("default", null);
+            ifm.updateEntry("default", null);
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
     public void testUpdateNoValue2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("the value is null or blank");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
+            INIFileManager ifm = new INIFileManager("target/test-classes/scheduler.ini");
 
-        ifm.updateEntry("default", "");
+            ifm.updateEntry("default", "");
+        });
+        assertTrue(ex.getMessage().contains("the value is null or blank"));
     }
 
     @Test
@@ -515,17 +529,18 @@ public class INIFileManagerTestCase {
     public void testUpdateFileNotWritable()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("is not writable");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        File f = File.createTempFile("deors.core.commons.", ".test");
-        f.setReadOnly();
+            File f = File.createTempFile("deors.core.commons.", ".test");
+            f.setReadOnly();
 
-        INIFileManager ifm = new INIFileManager(f);
+            INIFileManager ifm = new INIFileManager(f);
 
-        ifm.addEntry("key", "value");
+            ifm.addEntry("key", "value");
 
-        ifm.updateFile();
+            ifm.updateFile();
+        });
+        assertTrue(ex.getMessage().contains("is not writable"));
     }
 
     @Test

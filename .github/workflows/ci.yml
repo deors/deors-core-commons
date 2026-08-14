@@ -30,6 +30,9 @@ jobs:
     - name: Run Maven compile and unit test
       run: mvn test
 
+    - name: Run mutation tests
+      run: mvn pitest:mutationCoverage
+
     - name: Run JaCoCo code coverage report
       run: mvn org.jacoco:jacoco-maven-plugin:report
 

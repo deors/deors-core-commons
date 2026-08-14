@@ -1,7 +1,7 @@
 package deors.core.commons.classloader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,16 +11,12 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import deors.core.commons.io.IOToolkit;
 
 public class ParentLastURLClassLoaderTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public ParentLastURLClassLoaderTestCase() {
 
@@ -31,8 +27,9 @@ public class ParentLastURLClassLoaderTestCase {
     @Test
     public void testNull() {
 
-        thrown.expect(NullPointerException.class);
-        new ParentLastURLClassLoader(null);
+        assertThrows(NullPointerException.class, () -> {
+            new ParentLastURLClassLoader(null);
+        });
     }
 
     @Test
