@@ -3,6 +3,7 @@ package deors.core.commons.scheduler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Calendar;
@@ -97,6 +98,19 @@ public class SchedulerTaskTestCase {
         assertFalse(task.isExecuting());
     }
 
+    @Test
+    public void testRunRethrowsError() {
+
+        Calendar now = Calendar.getInstance();
+        Calendar later = Calendar.getInstance();
+        later.add(Calendar.HOUR_OF_DAY, 1);
+
+        ErrorTask task = new ErrorTask("myTaskName", "myTaskDescription", now, later);
+
+        assertThrows(AssertionError.class, task::run);
+        assertNull(task.taskThread);
+    }
+
     public static class MyTask
         extends SchedulerTask {
 
@@ -136,6 +150,30 @@ public class SchedulerTaskTestCase {
         protected void taskPrepareStop() throws Throwable {
 
             LOG.info("stopping task");
+        }
+    }
+
+    public static class ErrorTask
+        extends SchedulerTask {
+
+        public ErrorTask(String taskName, String taskDescription, Calendar taskStartTime,
+                         Calendar taskStopTime) {
+
+            super(taskName, taskDescription, taskStartTime, taskStopTime);
+        }
+
+        @Override
+        protected void taskLogic() {
+
+            throw new AssertionError("error in task logic");
+        }
+
+        @Override
+        protected void taskPrepareStart() throws Throwable {
+        }
+
+        @Override
+        protected void taskPrepareStop() throws Throwable {
         }
     }
 }

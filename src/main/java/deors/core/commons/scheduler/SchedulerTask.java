@@ -287,12 +287,12 @@ public abstract class SchedulerTask
             while (thisThread == taskThread) {
                 taskLogic();
             }
-        } catch (ThreadDeath td) {
+        } catch (Error error) {
             taskThread = null;
 
             LOG.info(getMessage("SCHED_LOG_TASK_KILLED_VM", getTaskName())); //$NON-NLS-1$
 
-            throw td;
+            throw error;
 
         } catch (Throwable t) {
 

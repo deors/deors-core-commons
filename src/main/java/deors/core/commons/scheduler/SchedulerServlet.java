@@ -1222,13 +1222,12 @@ public final class SchedulerServlet
     }
 
     /**
-     * Kills a task. If the task does not exist or it is not running, the method does nothing. The
-     * killing is done in another thread, because the servlet catches the
-     * <code>java.lang.TreadDeath</code> error and does not throw it, so the thread does not stop.
+     * Kills a task. If the task does not exist or it is not running, the method does nothing.
+     * The kill request is executed in a separate thread so servlet request processing is not
+     * blocked while scheduler shutdown logic runs.
      *
      * @param taskName the task name
      *
-     * @see java.lang.ThreadDeath
      */
     public static void killTask(String taskName) {
 
