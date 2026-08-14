@@ -2,6 +2,8 @@ package deors.core.commons.template;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,18 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import mockit.Expectations;
-import mockit.integration.junit5.JMockitExtension;
-import mockit.Mocked;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 
-@ExtendWith(JMockitExtension.class)
 public class TemplateTestCase {
 
     private static final String TEMPLATE_1_FILE_NAME = "/test1.tmpl";
@@ -204,14 +198,21 @@ public class TemplateTestCase {
     }
 
     @Test
-    public void testLoadTemplateError(@Mocked InputStream mockedInputStream)
-        throws TemplateException, IOException {
-        
-        new Expectations() {{
-            mockedInputStream.read(withAny(new byte[]{}), 0, 8192);
-            result = new IOException("error");
-        }};
+    public void testLoadTemplateError()
+        throws TemplateException {
 
-        assertThrows(TemplateException.class, () -> new Template(mockedInputStream));
+        InputStream errorStream = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                throw new IOException("simulated read error");
+            }
+
+            @Override
+            public int read(byte[] b, int off, int len) throws IOException {
+                throw new IOException("simulated read error");
+            }
+        };
+
+        assertThrows(TemplateException.class, () -> new Template(errorStream));
     }
 }
