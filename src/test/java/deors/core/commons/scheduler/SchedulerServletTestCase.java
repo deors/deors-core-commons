@@ -34,6 +34,27 @@ import deors.core.commons.io.IOToolkit;
 @ExtendWith(JMockitExtension.class)
 public class SchedulerServletTestCase {
 
+    @Mocked
+    private HttpServletRequest request;
+
+    @Mocked
+    private HttpServletResponse response;
+
+    @Mocked
+    private ServletConfig config;
+
+    @Mocked
+    private HttpServletRequest request2;
+
+    @Mocked
+    private HttpServletResponse response2;
+
+    @Mocked
+    private HttpServletRequest request3;
+
+    @Mocked
+    private HttpServletResponse response3;
+
     public SchedulerServletTestCase() {
 
         super();
@@ -47,7 +68,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandNull(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandNull()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -79,7 +100,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandEmpty(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandEmpty()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -111,7 +132,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandHelp(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandHelp()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -143,7 +164,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartEmpty(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartEmpty()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -175,7 +196,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartWithFile(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartWithFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -207,7 +228,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartMissingFile(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStartMissingFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -235,10 +256,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartAgain(
-            @Mocked HttpServletRequest request1, @Mocked HttpServletResponse response1,
-            @Mocked HttpServletRequest request2, @Mocked HttpServletResponse response2,
-            @Mocked HttpServletRequest request3, @Mocked HttpServletResponse response3)
+    public void testServletCommandStartAgain()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp1 = File.createTempFile("deors.core.commons.", ".test");
@@ -246,9 +264,9 @@ public class SchedulerServletTestCase {
         File temp3 = File.createTempFile("deors.core.commons.", ".test");
 
         new Expectations() {{
-            request1.getParameter("command");            result = "start";
-            request1.getParameter("iniFileName");        result = "target/test-classes/scheduler.ini";
-            response1.getWriter();                       result = new PrintWriter(temp1);
+            request.getParameter("command");            result = "start";
+            request.getParameter("iniFileName");        result = "target/test-classes/scheduler.ini";
+            response.getWriter();                       result = new PrintWriter(temp1);
 
             request2.getParameter("command");            result = "stop";
             response2.getWriter();                       result = new PrintWriter(temp2);
@@ -261,7 +279,7 @@ public class SchedulerServletTestCase {
         SchedulerServlet ss = new SchedulerServlet();
         try {
             // stars scheduler with ini file including tasks
-            ss.doGet(request1, response1);
+            ss.doGet(request, response);
 
             // stops scheduler
             ss.doGet(request2, response2);
@@ -288,7 +306,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStartAlreadyInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStartAlreadyInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -318,7 +336,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopNotInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletCommandStopNotInit()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -349,7 +367,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopIfInit(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopIfInit()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -379,7 +397,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -411,7 +429,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandStopMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandStopMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -442,7 +460,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveNoTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -473,7 +491,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -510,7 +528,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandRemoveMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandRemoveMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -542,7 +560,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillNoTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillNoTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -573,7 +591,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -605,7 +623,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandKillMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandKillMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -637,7 +655,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddNoData(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -672,7 +690,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddBadDates(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -709,7 +727,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddBadClass(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddBadClass()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -745,7 +763,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandAddOk(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandAddOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -780,7 +798,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleNoData(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleNoData()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -813,7 +831,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleBadDates(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleBadDates()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -847,7 +865,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleMissingTask(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleMissingTask()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -881,7 +899,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletCommandScheduleOk(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response, @Mocked ServletConfig config)
+    public void testServletCommandScheduleOk()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -915,7 +933,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseNotInitializedNoMessages(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseNotInitializedNoMessages()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -957,7 +975,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseNotInitializedWithMessages(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseNotInitializedWithMessages()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -1005,7 +1023,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletResponseInitialized(@Mocked HttpServletRequest request, @Mocked HttpServletResponse response)
+    public void testServletResponseInitialized()
         throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException, IOException {
 
         File temp = File.createTempFile("deors.core.commons.", ".test");
@@ -1061,7 +1079,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitWithFile(@Mocked ServletConfig config)
+    public void testServletInitWithFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         new Expectations() {{
@@ -1082,7 +1100,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitNoFile(@Mocked ServletConfig config)
+    public void testServletInitNoFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         SchedulerServlet ss = new SchedulerServlet();
@@ -1099,7 +1117,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitBlankFile(@Mocked ServletConfig config)
+    public void testServletInitBlankFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         new Expectations() {{
@@ -1120,7 +1138,7 @@ public class SchedulerServletTestCase {
     }
 
     @Test
-    public void testServletInitInvalidFile(@Mocked ServletConfig config)
+    public void testServletInitInvalidFile()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException, ServletException {
 
         new Expectations() {{
