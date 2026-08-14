@@ -1,7 +1,7 @@
 package deors.core.commons.scheduler;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,25 +18,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mockit.Expectations;
+import mockit.integration.junit5.JMockitExtension;
 import mockit.Mocked;
 
 import deors.core.commons.io.IOToolkit;
 
+@ExtendWith(JMockitExtension.class)
 public class SchedulerServletTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public SchedulerServletTestCase() {
 
         super();
+    }
+
+    @BeforeEach
+    public void setUp() {
+
+        SchedulerServlet.resetScheduler();
     }
 
     @Test
@@ -57,12 +63,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -89,12 +95,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -121,12 +127,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertFalse("unexpected error message found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"[ACTION]\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertFalse(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "unexpected error message found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -154,11 +160,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -186,11 +192,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -218,8 +224,7 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected error message not found",
-                s.contains("[scheduler] the configuration file is either missing or inaccessible:"));
+            assertTrue(s.contains("[scheduler] the configuration file is either missing or inaccessible:"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -266,11 +271,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp3);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler started</b><br/>"), "expected status not found");
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -301,8 +306,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler already started</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler already started</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -329,11 +334,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -362,8 +367,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler stopped</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler stopped</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -394,8 +399,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task was asked to stop</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task was asked to stop</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -425,8 +430,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -455,9 +460,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task name not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -493,8 +498,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 was asked to stop and removed from scheduler</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 was asked to stop and removed from scheduler</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -524,9 +529,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -555,9 +560,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task name not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -588,8 +593,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 killed</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 killed</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -619,9 +624,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -650,13 +655,13 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task class not found", s.contains("Task class name not informed<br/>"));
-            assertTrue("expected error message for task description not found", s.contains("Task description not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not informed<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task class name not informed<br/>"), "expected error message for task class not found");
+            assertTrue(s.contains("Task description not informed<br/>"), "expected error message for task description not found");
+            assertTrue(s.contains("Task start time not informed<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not informed<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -687,13 +692,13 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task class not found", s.contains("Task class name not informed<br/>"));
-            assertTrue("expected error message for task description not found", s.contains("Task description not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not valid<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not valid<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task class name not informed<br/>"), "expected error message for task class not found");
+            assertTrue(s.contains("Task description not informed<br/>"), "expected error message for task description not found");
+            assertTrue(s.contains("Task start time not valid<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not valid<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -727,9 +732,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("class bad not found: java.lang.ClassNotFoundException: bad<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("class bad not found: java.lang.ClassNotFoundException: bad<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -763,8 +768,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 scheduled</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -793,11 +798,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not informed<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not informed<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task start time not informed<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not informed<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -827,11 +832,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message for task name not found", s.contains("Task name not informed<br/>"));
-            assertTrue("expected error message for task start not found", s.contains("Task start time not valid<br/>"));
-            assertTrue("expected error message for task stop not found", s.contains("Task stop time not valid<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task name not informed<br/>"), "expected error message for task name not found");
+            assertTrue(s.contains("Task start time not valid<br/>"), "expected error message for task start not found");
+            assertTrue(s.contains("Task stop time not valid<br/>"), "expected error message for task stop not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -863,9 +868,9 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected error message not found", s.contains("Task task1 does not exist<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("Task task1 does not exist<br/>"), "expected error message not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -898,8 +903,8 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Task task1 scheduled</b><br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Task task1 scheduled</b><br/>"), "expected status not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -937,11 +942,11 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -980,16 +985,16 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected title not found", s.contains("<title>Scheduler Command Center</title>"));
-            assertTrue("expected status not found", s.contains("<b>Scheduler not running</b><br/>"));
-            assertTrue("expected form not found", s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"));
-            assertTrue("expected button not found", s.contains("<input type=\"button\" name=\"start\" value=\"start\""));
-            assertTrue("expected configuration header not found", s.contains("<b>Configuration parameters</b>"));
-            assertTrue("expected message 'test 1' not found", s.contains("<b>message test 1</b><br/>"));
-            assertTrue("expected message 'test 2' not found", s.contains("<b>message test 2</b><br/>"));
-            assertTrue("expected error header not found", s.contains("<b>Error(s) with configuration parameters</b><br/>"));
-            assertTrue("expected message 'error 1' not found", s.contains("error test 1<br/>"));
-            assertTrue("expected message 'error 2' not found", s.contains("error test 2<br/>"));
+            assertTrue(s.contains("<title>Scheduler Command Center</title>"), "expected title not found");
+            assertTrue(s.contains("<b>Scheduler not running</b><br/>"), "expected status not found");
+            assertTrue(s.contains("<form id=\"commandForm\" name=\"commandForm\" method=\"post\" action=\"/testURI\">"), "expected form not found");
+            assertTrue(s.contains("<input type=\"button\" name=\"start\" value=\"start\""), "expected button not found");
+            assertTrue(s.contains("<b>Configuration parameters</b>"), "expected configuration header not found");
+            assertTrue(s.contains("<b>message test 1</b><br/>"), "expected message 'test 1' not found");
+            assertTrue(s.contains("<b>message test 2</b><br/>"), "expected message 'test 2' not found");
+            assertTrue(s.contains("<b>Error(s) with configuration parameters</b><br/>"), "expected error header not found");
+            assertTrue(s.contains("error test 1<br/>"), "expected message 'error 1' not found");
+            assertTrue(s.contains("error test 2<br/>"), "expected message 'error 2' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1040,12 +1045,12 @@ public class SchedulerServletTestCase {
             byte[] output = IOToolkit.readFile(temp);
             String s = new String(output);
 
-            assertTrue("expected message for task1 header not found", s.contains("Task <b>task1</b> (idle)"));
-            assertTrue("expected message for task1 is a deamon not found", s.contains("&nbsp;&nbsp;info: task is a <i>daemon</i>"));
-            assertTrue("expected button to start task1 not found", s.contains("onclick=\"taskStart('task1')\"/>&nbsp;&nbsp;"));
-            assertTrue("expected message for task2 header not found", s.contains("Task <b>task2</b> (idle)"));
-            assertTrue("expected message for task2 is scheduled not found", s.contains("&nbsp;&nbsp;info: task is scheduled from "));
-            assertTrue("expected button to start task2 not found", s.contains("onclick=\"taskStart('task2')\"/>&nbsp;&nbsp;"));
+            assertTrue(s.contains("Task <b>task1</b> (idle)"), "expected message for task1 header not found");
+            assertTrue(s.contains("&nbsp;&nbsp;info: task is a <i>daemon</i>"), "expected message for task1 is a deamon not found");
+            assertTrue(s.contains("onclick=\"taskStart('task1')\"/>&nbsp;&nbsp;"), "expected button to start task1 not found");
+            assertTrue(s.contains("Task <b>task2</b> (idle)"), "expected message for task2 header not found");
+            assertTrue(s.contains("&nbsp;&nbsp;info: task is scheduled from "), "expected message for task2 is scheduled not found");
+            assertTrue(s.contains("onclick=\"taskStart('task2')\"/>&nbsp;&nbsp;"), "expected button to start task2 not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1066,8 +1071,8 @@ public class SchedulerServletTestCase {
         try {
             ss.init(config);
 
-            assertTrue("expected task 'task' not found", ss.existsTask("task"));
-            assertTrue("expected task 'daemon' not found", ss.existsTask("daemon"));
+            assertTrue(ss.existsTask("task"), "expected task 'task' not found");
+            assertTrue(ss.existsTask("daemon"), "expected task 'daemon' not found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1083,8 +1088,8 @@ public class SchedulerServletTestCase {
         try {
             ss.init(config);
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1104,8 +1109,8 @@ public class SchedulerServletTestCase {
         try {
             ss.init(config);
 
-            assertFalse("unexpected task 'task' found", ss.existsTask("task"));
-            assertFalse("unexpected task 'daemon' found", ss.existsTask("daemon"));
+            assertFalse(ss.existsTask("task"), "unexpected task 'task' found");
+            assertFalse(ss.existsTask("daemon"), "unexpected task 'daemon' found");
         } finally {
             ss.stopAllTasks();
             ss.resetScheduler();
@@ -1121,18 +1126,19 @@ public class SchedulerServletTestCase {
             config.getInitParameter("iniFileName");     result = "target/test-classes/scheduler-err1.ini";
         }};
 
-        thrown.expect(ServletException.class);
-        thrown.expectMessage("[scheduler] the configuration file content is not valid: java.lang.IllegalArgumentException: class name for task task not found");
+        Exception ex = assertThrows(ServletException.class, () -> {
 
-        SchedulerServlet ss = new SchedulerServlet();
-        try {
-            ss.init(config);
-        } finally {
-            ss.stopAllTasks();
-            ss.resetScheduler();
-            testSleep();
-        }
-    }
+            SchedulerServlet ss = new SchedulerServlet();
+            try {
+                ss.init(config);
+            } finally {
+                ss.stopAllTasks();
+                ss.resetScheduler();
+                testSleep();
+            }
+            });
+        assertTrue(ex.getMessage().contains("[scheduler] the configuration file content is not valid: java.lang.IllegalArgumentException: class name for task task not found"));
+}
 
     private void testSleep() {
         try {

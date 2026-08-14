@@ -1,18 +1,15 @@
 package deors.core.commons;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateComparatorTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public DateComparatorTestCase() {
 
@@ -22,62 +19,69 @@ public class DateComparatorTestCase {
     @Test
     public void testNullConstructor() {
 
-        thrown.expect(NullPointerException.class);
-        new DateComparator(null);
+        assertThrows(NullPointerException.class, () -> {
+            new DateComparator(null);
+        });
     }
 
     @Test
     public void testNullCompare() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS"));
-        DateComparator dc = new DateComparator();
-        dc.compare(null, Calendar.getInstance().getTime());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator();
+            dc.compare(null, Calendar.getInstance().getTime());
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS")));
     }
 
     @Test
     public void testNullCompare2() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS"));
-        DateComparator dc = new DateComparator();
-        dc.compare(Calendar.getInstance().getTime(), null);
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator();
+            dc.compare(Calendar.getInstance().getTime(), null);
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS")));
     }
 
     @Test
     public void testInvalidClass() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS"));
-        DateComparator dc = new DateComparator();
-        dc.compare(new Object(), Calendar.getInstance().getTime());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator();
+            dc.compare(new Object(), Calendar.getInstance().getTime());
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS")));
     }
 
     @Test
     public void testInvalidClass2() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS"));
-        DateComparator dc = new DateComparator();
-        dc.compare(Calendar.getInstance().getTime(), new Object());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator();
+            dc.compare(Calendar.getInstance().getTime(), new Object());
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_CLASS")));
     }
 
     @Test
     public void testInvalidStringDefaultFormat() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_STRING", "2009/2/30 1:00:00"));
-        DateComparator dc = new DateComparator();
-        dc.compare(Calendar.getInstance().getTime(), "2009/2/30 1:00:00");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator();
+            dc.compare(Calendar.getInstance().getTime(), "2009/2/30 1:00:00");
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_STRING", "2009/2/30 1:00:00")));
     }
 
     @Test
     public void testInvalidStringOtherFormat() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(CommonsContext.getMessage("DTCMP_ERR_INVALID_STRING", "20/9/2330 25:35:00"));
-        DateComparator dc = new DateComparator("dd/MM/yyyy HH:mm:ss");
-        dc.compare("20/9/2330 25:35:00", Calendar.getInstance().getTime());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            DateComparator dc = new DateComparator("dd/MM/yyyy HH:mm:ss");
+            dc.compare("20/9/2330 25:35:00", Calendar.getInstance().getTime());
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("DTCMP_ERR_INVALID_STRING", "20/9/2330 25:35:00")));
     }
 
     @Test

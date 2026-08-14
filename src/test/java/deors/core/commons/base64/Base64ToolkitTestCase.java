@@ -1,27 +1,23 @@
 package deors.core.commons.base64;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import deors.core.commons.CommonsContext;
 
 public class Base64ToolkitTestCase {
 
     private static final String NEW_LINE = "\n";
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public Base64ToolkitTestCase() {
 
@@ -63,16 +59,18 @@ public class Base64ToolkitTestCase {
     @Test
     public void testEncodeStringNull() {
 
-        thrown.expect(NullPointerException.class);
-        Base64Toolkit.encode((String) null);
+        assertThrows(NullPointerException.class, () -> {
+            Base64Toolkit.encode((String) null);
+        });
     }
 
     @Test
     public void testEncodeStringNoEncoding()
         throws UnsupportedEncodingException {
 
-        thrown.expect(UnsupportedEncodingException.class);
-        Base64Toolkit.encode("string", "no-encoding");
+        assertThrows(UnsupportedEncodingException.class, () -> {
+            Base64Toolkit.encode("string", "no-encoding");
+        });
     }
 
     @Test
@@ -142,8 +140,9 @@ public class Base64ToolkitTestCase {
     @Test
     public void testDecodeStringNull() {
 
-        thrown.expect(NullPointerException.class);
-        Base64Toolkit.decode((String) null);
+        assertThrows(NullPointerException.class, () -> {
+            Base64Toolkit.decode((String) null);
+        });
     }
 
     @Test
@@ -158,8 +157,9 @@ public class Base64ToolkitTestCase {
     public void testDecodeStringNoEncoding()
         throws UnsupportedEncodingException {
 
-        thrown.expect(UnsupportedEncodingException.class);
-        Base64Toolkit.decode("string", "no-encoding");
+        assertThrows(UnsupportedEncodingException.class, () -> {
+            Base64Toolkit.decode("string", "no-encoding");
+        });
     }
 
     @Test
@@ -187,18 +187,21 @@ public class Base64ToolkitTestCase {
     public void testDecodeStreamsInvalid()
         throws IOException {
 
-        thrown.expect(IOException.class);
-        thrown.expectMessage(CommonsContext.getMessage("B64TK_ERR_READING_DATA"));
-        ByteArrayInputStream bais = new ByteArrayInputStream("áéíóúñ".getBytes());
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(100);
-        Base64Toolkit.decode(bais, baos);
+        Exception ex = assertThrows(IOException.class, () -> {
+            ByteArrayInputStream bais = new ByteArrayInputStream("áéíóúñ".getBytes());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(100);
+            Base64Toolkit.decode(bais, baos);
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("B64TK_ERR_READING_DATA")));
     }
+
     @Test
     public void testIsBase64StringNoEncoding()
         throws UnsupportedEncodingException {
 
-        thrown.expect(UnsupportedEncodingException.class);
-        Base64Toolkit.isBase64("string", "no-encoding");
+        assertThrows(UnsupportedEncodingException.class, () -> {
+            Base64Toolkit.isBase64("string", "no-encoding");
+        });
     }
 
     @Test

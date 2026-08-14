@@ -1,7 +1,7 @@
 package deors.core.commons.template;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,20 +13,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import mockit.Expectations;
+import mockit.integration.junit5.JMockitExtension;
 import mockit.Mocked;
 
 import deors.core.commons.CommonsContext;
 import deors.core.commons.io.IOToolkit;
 
+@ExtendWith(JMockitExtension.class)
 public class TemplateTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private static final String TEMPLATE_1_FILE_NAME = "/test1.tmpl";
     private static final String TEMPLATE_2_FILE_NAME = "/test2.tmpl";
@@ -40,20 +40,22 @@ public class TemplateTestCase {
     public void testConstructorNull()
         throws TemplateException {
 
-        thrown.expect(NullPointerException.class);
+        assertThrows(NullPointerException.class, () -> {
 
-        new Template(null);
+            new Template(null);
+        });
     }
 
     @Test
     public void testNoTemplate()
         throws TemplateException {
 
-        thrown.expect(TemplateException.class);
-        thrown.expectMessage(CommonsContext.getMessage("TMPL_ERR_NEED_LOAD"));
+        Exception ex = assertThrows(TemplateException.class, () -> {
 
-        Template t = new Template();
-        t.processTemplate(new HashMap<String, String>());
+            Template t = new Template();
+            t.processTemplate(new HashMap<String, String>());
+        });
+        assertTrue(ex.getMessage().contains(CommonsContext.getMessage("TMPL_ERR_NEED_LOAD")));
     }
 
     @Test
@@ -201,7 +203,7 @@ public class TemplateTestCase {
         file.delete();
     }
 
-    @Test(expected = TemplateException.class)
+    @Test
     public void testLoadTemplateError(@Mocked InputStream mockedInputStream)
         throws TemplateException, IOException {
         
@@ -210,6 +212,6 @@ public class TemplateTestCase {
             result = new IOException("error");
         }};
 
-        new Template(mockedInputStream);
+        assertThrows(TemplateException.class, () -> new Template(mockedInputStream));
     }
 }

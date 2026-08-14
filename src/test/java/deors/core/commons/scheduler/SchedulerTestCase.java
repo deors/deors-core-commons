@@ -1,19 +1,18 @@
 package deors.core.commons.scheduler;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +22,6 @@ import deors.core.commons.classloader.ParentLastURLClassLoader;
 import deors.core.commons.log.LogbackMemoryAppender;
 
 public class SchedulerTestCase {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public SchedulerTestCase() {
 
@@ -299,84 +295,90 @@ public class SchedulerTestCase {
     @Test
     public void testScheduleErrorNoClass() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task to be scheduled is new and the class name or the description is not informed");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "taskName",
-            (Class<?>) null,
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "taskName",
+                (Class<?>) null,
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("task to be scheduled is new and the class name or the description is not informed"));
     }
 
     @Test
     public void testScheduleErrorNoDescription() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task to be scheduled is new and the class name or the description is not informed");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorNoDescription",
-            MyTask.class,
-            "",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorNoDescription",
+                MyTask.class,
+                "",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("task to be scheduled is new and the class name or the description is not informed"));
     }
 
     @Test
     public void testScheduleErrorNoDescription2() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task to be scheduled is new and the class name or the description is not informed");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorNoDescription2",
-            MyTask.class,
-            null,
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorNoDescription2",
+                MyTask.class,
+                null,
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("task to be scheduled is new and the class name or the description is not informed"));
     }
 
     @Test
     public void testScheduleErrorInvalidClass() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("class deors.core.commons.scheduler.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.scheduler.SchedulerTestCase$InvalidTask.<init>(java.lang.String,java.lang.String,java.util.Calendar,java.util.Calendar)");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorInvalidClass",
-            InvalidTask.class,
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorInvalidClass",
+                InvalidTask.class,
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("class deors.core.commons.scheduler.SchedulerTestCase$InvalidTask not valid: java.lang.NoSuchMethodException: deors.core.commons.scheduler.SchedulerTestCase$InvalidTask.<init>(java.lang.String,java.lang.String,java.util.Calendar,java.util.Calendar)"));
     }
 
     @Test
     public void testScheduleErrorInvalidClass2() {
 
-        thrown.expect(ClassCastException.class);
+        assertThrows(ClassCastException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorInvalidClass2",
-            Invalid2Task.class,
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorInvalidClass2",
+                Invalid2Task.class,
+                "taskDescription",
+                null, null);
+        });
     }
 
     @Test
     public void testScheduleErrorInvalidClass3() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("catch this!");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleErrorInvalidClass3",
-            Invalid3Task.class,
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleErrorInvalidClass3",
+                Invalid3Task.class,
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("catch this!"));
     }
 
     @Test
@@ -426,43 +428,46 @@ public class SchedulerTestCase {
     @Test
     public void testScheduleByNameErrorNoClass() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task to be scheduled is new and the class name or the description is not informed");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleByNameErrorNoClass",
-            "",
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleByNameErrorNoClass",
+                "",
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("task to be scheduled is new and the class name or the description is not informed"));
     }
 
     @Test
     public void testScheduleByNameErrorNoClass2() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task to be scheduled is new and the class name or the description is not informed");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleByNameErrorNoClass2",
-            (String) null,
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleByNameErrorNoClass2",
+                (String) null,
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("task to be scheduled is new and the class name or the description is not informed"));
     }
 
     @Test
     public void testScheduleByNameErrorNotFound() {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("class NotFoundTask not found: java.lang.ClassNotFoundException: NotFoundTask");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        Scheduler sch = new Scheduler();
-        sch.scheduleTask(
-            "testScheduleByNameErrorNotFound",
-            "NotFoundTask",
-            "taskDescription",
-            null, null);
+            Scheduler sch = new Scheduler();
+            sch.scheduleTask(
+                "testScheduleByNameErrorNotFound",
+                "NotFoundTask",
+                "taskDescription",
+                null, null);
+        });
+        assertTrue(ex.getMessage().contains("class NotFoundTask not found: java.lang.ClassNotFoundException: NotFoundTask"));
     }
 
     @Test
@@ -482,70 +487,77 @@ public class SchedulerTestCase {
     public void testScheduleFileError1()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("class name for task task not found");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err1.ini");
+            new Scheduler("target/test-classes/scheduler-err1.ini");
+        });
+        assertTrue(ex.getMessage().contains("class name for task task not found"));
     }
 
     @Test
     public void testScheduleFileError2()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("description for task task not found");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err2.ini");
+            new Scheduler("target/test-classes/scheduler-err2.ini");
+        });
+        assertTrue(ex.getMessage().contains("description for task task not found"));
     }
 
     @Test
     public void testScheduleFileError3()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("start time for task task not found");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err3.ini");
+            new Scheduler("target/test-classes/scheduler-err3.ini");
+        });
+        assertTrue(ex.getMessage().contains("start time for task task not found"));
     }
 
     @Test
     public void testScheduleFileError4()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("stop time for task task not found");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err4.ini");
+            new Scheduler("target/test-classes/scheduler-err4.ini");
+        });
+        assertTrue(ex.getMessage().contains("stop time for task task not found"));
     }
 
     @Test
     public void testScheduleFileError5()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task start time not valid");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err5.ini");
+            new Scheduler("target/test-classes/scheduler-err5.ini");
+        });
+        assertTrue(ex.getMessage().contains("task start time not valid"));
     }
 
     @Test
     public void testScheduleFileError6()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task stop time not valid");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err6.ini");
+            new Scheduler("target/test-classes/scheduler-err6.ini");
+        });
+        assertTrue(ex.getMessage().contains("task stop time not valid"));
     }
 
     @Test
     public void testScheduleFileError7()
         throws IOException {
 
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("task stop time not valid");
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
 
-        new Scheduler("target/test-classes/scheduler-err7.ini");
+            new Scheduler("target/test-classes/scheduler-err7.ini");
+        });
+        assertTrue(ex.getMessage().contains("task stop time not valid"));
     }
 
     @Test
@@ -752,7 +764,7 @@ public class SchedulerTestCase {
                 break;
             }
         }
-        assertTrue("expected message not found", found);
+        assertTrue(found, "expected message not found");
     }
 
     public static class InvalidTask {
