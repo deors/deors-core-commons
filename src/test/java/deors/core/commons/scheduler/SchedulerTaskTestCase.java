@@ -3,6 +3,7 @@ package deors.core.commons.scheduler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Calendar;
 
@@ -67,6 +68,33 @@ public class SchedulerTaskTestCase {
         assertEquals(task.getTaskStopTime(), evenLater);
         assertEquals(task.getTaskNextStartTime(), later);
         assertEquals(task.getTaskNextStopTime(), evenLater);
+    }
+
+    @Test
+    public void testClose() {
+
+        Calendar now = Calendar.getInstance();
+        Calendar later = Calendar.getInstance();
+        later.add(Calendar.HOUR_OF_DAY, 1);
+
+        MyTask task = new MyTask("myTaskName", "myTaskDescription", now, later);
+        task.taskStart();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        assertTrue(task.isExecuting());
+
+        task.close();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        assertFalse(task.isExecuting());
     }
 
     public static class MyTask

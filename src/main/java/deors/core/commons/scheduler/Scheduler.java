@@ -45,7 +45,8 @@ import deors.core.commons.inifile.INIFileManager;
  * @version 1.0
  */
 public final class Scheduler
-    extends Thread {
+    extends Thread
+    implements AutoCloseable {
 
     /**
      * The task list.
@@ -125,31 +126,6 @@ public final class Scheduler
      * Scheduler thread sleep time.
      */
     private static final long SCHEDULER_SLEEP_TIME = 100;
-
-    /**
-     * The finalize guardian.
-     */
-    final Object finalizeGuardian = new Object() {
-
-        /**
-         * Finalizes the object by stopping the current running tasks and the scheduler process.
-         *
-         * @throws Throwable a throwable object
-         *
-         * @see Object#finalize()
-         */
-        protected void finalize()
-            // CHECKSTYLE:OFF
-            throws Throwable {
-            // CHECKSTYLE:ON
-
-            try {
-                stopAllTasks();
-            } finally {
-                super.finalize();
-            }
-        }
-    };
 
     /**
      * Default constructor. No tasks are scheduled.
@@ -586,6 +562,15 @@ public final class Scheduler
 
         schedulerThread = new Thread(this);
         schedulerThread.start();
+    }
+
+    /**
+     * Closes the scheduler by stopping all running tasks and ending the scheduler thread.
+     */
+    @Override
+    public void close() {
+
+        stopAllTasks();
     }
 
     /**

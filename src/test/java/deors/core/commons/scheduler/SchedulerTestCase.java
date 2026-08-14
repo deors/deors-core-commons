@@ -218,6 +218,42 @@ public class SchedulerTestCase {
     }
 
     @Test
+    public void testClose() {
+
+        Calendar start = Calendar.getInstance();
+        start.add(Calendar.MILLISECOND, 100);
+        Calendar stop = Calendar.getInstance();
+        stop.add(Calendar.MILLISECOND, 900);
+
+        Scheduler sch = new Scheduler();
+        sch.scheduleTask(
+            "testClose",
+            MyTask.class,
+            "taskDescription",
+            start, stop);
+        sch.startScheduler();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ie) {
+        }
+
+        SchedulerTask task = sch.getTask("testClose");
+
+        assertTrue(task.isExecuting());
+
+        sch.close();
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ie) {
+        }
+
+        assertFalse(task.isExecuting());
+        assertFalse(sch.existsTask("testClose"));
+    }
+
+    @Test
     public void testReschedule() {
 
         Calendar start = Calendar.getInstance();

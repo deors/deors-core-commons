@@ -2,6 +2,7 @@ package deors.core.commons;
 
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -42,6 +43,22 @@ public class AbstractDaemonTestCase {
         daemon.stopDaemon();
 
         assertNotSame(100, daemon.getCount());
+    }
+
+    @Test
+    public void testDaemonClose() {
+
+        MyDaemon daemon = new MyDaemon();
+        daemon.startDaemon();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        daemon.close();
+
+        assertNull(daemon.daemonThread);
     }
 
     public static class MyDaemon
