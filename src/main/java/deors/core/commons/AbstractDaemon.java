@@ -13,38 +13,13 @@ package deors.core.commons;
  * @version 1.0
  */
 public abstract class AbstractDaemon
-    extends Thread {
+    extends Thread
+    implements AutoCloseable {
 
     /**
      * The daemon thread.
      */
     protected volatile Thread daemonThread;
-
-    /**
-     * The finalizer guardian.
-     */
-    final Object finalizerGuardian = new Object() {
-
-        /**
-         * Finalizes the object by stopping the daemon.
-         *
-         * @throws java.lang.Throwable a throwable object
-         *
-         * @see java.lang.Object#finalize()
-         */
-        protected void finalize()
-            // CHECKSTYLE:OFF
-            throws java.lang.Throwable {
-            // CHECKSTYLE:ON
-
-            try {
-                daemonThread = null;
-                daemonStop();
-            } finally {
-                super.finalize();
-            }
-        }
-    };
 
     /**
      * Default constructor.
@@ -68,6 +43,15 @@ public abstract class AbstractDaemon
     public void stopDaemon() {
 
         daemonThread = null;
+    }
+
+    /**
+     * Closes the daemon by stopping the execution logic.
+     */
+    @Override
+    public void close() {
+
+        stopDaemon();
     }
 
     /**

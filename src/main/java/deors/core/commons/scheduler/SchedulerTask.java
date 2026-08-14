@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public abstract class SchedulerTask
-    implements Runnable {
+    implements Runnable, AutoCloseable {
 
     /**
      * The task execution flag.
@@ -126,33 +126,6 @@ public abstract class SchedulerTask
      * Text used in the <code>toString()</code> method to surround the task description.
      */
     private static final String TASK_DESCRIPTION_START = " ("; //$NON-NLS-1$
-
-    /**
-     * The finalizer guardian.
-     */
-    final Object finalizerGuardian = new Object() {
-
-        /**
-         * Finalizes the object by stopping the task.
-         *
-         * @throws java.lang.Throwable a throwable object
-         *
-         * @see java.lang.Object#finalize()
-         */
-        protected void finalize()
-            // CHECKSTYLE:OFF
-            throws java.lang.Throwable {
-            // CHECKSTYLE:ON
-
-            try {
-                if (isExecuting()) {
-                    taskAutoStop();
-                }
-            } finally {
-                super.finalize();
-            }
-        }
-    };
 
     /**
      * Task constructor.
@@ -427,6 +400,15 @@ public abstract class SchedulerTask
      */
     public void setTaskStopTime(Calendar taskStopTime) {
         this.taskStopTime = taskStopTime;
+    }
+
+    /**
+     * Closes the task by stopping the execution thread.
+     */
+    @Override
+    public void close() {
+
+        taskAutoStop();
     }
 
     /**
