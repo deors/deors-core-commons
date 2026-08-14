@@ -38,32 +38,5 @@ public class ConfigurationToolkitTestCase {
             ConfigurationToolkit.getConfigurationProperty("yes.exist", "NOT_EXIST", false));
         System.setProperty("yes.exist", "");
     }
-
-    /*@Test
-    public void testStringPropertyEnvValue() {
-
-        new Expectations(System.class) {{
-            System.getenv("YES_EXIST");
-            result = "envval";
-            System.getProperty("not.exist");
-            result = null;
-        }};
-
-        assertEquals("envval",
-            ConfigurationToolkit.getConfigurationProperty("not.exist", "YES_EXIST", "otherval"));
-    }
- 
-    @Test
-    public void testBooleanPropertyEnvValue() {
-
-        new Expectations(System.class) {{
-            System.getenv("YES_EXIST");
-            result = "True";
-            System.getProperty("not.exist");
-            result = null;
-        }};
-
-        assertTrue(
-            ConfigurationToolkit.getConfigurationProperty("not.exist", "YES_EXIST", false));
-    }*/
 }
+
