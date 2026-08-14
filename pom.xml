@@ -98,7 +98,6 @@
                         <param>*IntegrationTestCase</param>
                         <param>*$*</param>
                     </excludedTestClasses>
-                    <skipFailingTests>true</skipFailingTests>
                     <outputFormats>
                         <outputFormat>XML</outputFormat>
                     </outputFormats>
