@@ -42,6 +42,7 @@ public class SchedulerServletTestCase {
     @BeforeEach
     public void setUp() {
 
+        SchedulerServlet.stopAllTasks();
         SchedulerServlet.resetScheduler();
     }
 
@@ -1138,7 +1139,7 @@ public class SchedulerServletTestCase {
             }
             });
         assertTrue(ex.getMessage().contains("[scheduler] the configuration file content is not valid: java.lang.IllegalArgumentException: class name for task task not found"));
-}
+    }
 
     private void testSleep() {
         try {
